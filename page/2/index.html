@@ -73,6 +73,312 @@
     <div class="outer">
       <section id="main">
   
+    <article id="post-Why_you_need_O3_and_ICC" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/05/24/Why_you_need_O3_and_ICC/" class="article-date">
+  <time datetime="2018-05-24T15:45:14.000Z" itemprop="datePublished">2018-05-24</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/05/24/Why_you_need_O3_and_ICC/">比起C++性能榨汁机，你可能更需要的是 -O3 和 ICC</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>前两天看到一个文章系列：《C++性能榨汁机》，其中前面四篇（<a href="http://irootlee.com/juicer_branch_predictor4/" target="_blank" rel="external">第四篇</a>）在讲分支预测和如何避免分支预测带来的性能下降问题。文章大体的思路是对的，只是我觉得手写条件传送代码实在是有点奇技淫巧，在绝大部分的情况下是不应该提倡的。我觉得比起条件传送代码，用 SIMD 加上掩码才是更直观的操作。我还是用原文的代码来说明这个问题。<br></p>
+        
+          <p class="article-more-link">
+            <a href="/2018/05/24/Why_you_need_O3_and_ICC/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://enigmahuang.github.io/2018/05/24/Why_you_need_O3_and_ICC/" data-id="ck49agg5s001jossi6qxjt47t" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ICC/">ICC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SIMD/">SIMD</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+<!--gitment 评论-->
+
+<!--gitment 评论 end-->
+  
+    <article id="post-Poisson2D_FEM" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/02/04/Poisson2D_FEM/" class="article-date">
+  <time datetime="2018-02-04T16:47:33.000Z" itemprop="datePublished">2018-02-04</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/02/04/Poisson2D_FEM/">2D Poisson 方程与 Finite Element Method</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>上周上 Advanced Scientific Computing 的时候老板讲了 2D Poisson 的有限元法，用的是四边形等参数单元。他布置的作业是写第一类边界条件的求解器。由于我印象中 FEM 用三角网格比较多，因此自己又对照着写了三角形等参数单元的版本，以及把第三类边界条件的情况也做了出来。下面是一点笔记，主要包括计算用到的公式和方法。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/02/04/Poisson2D_FEM/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://enigmahuang.github.io/2018/02/04/Poisson2D_FEM/" data-id="ck49agg4p001dossiab3nnu1b" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PDE/">PDE</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+<!--gitment 评论-->
+
+<!--gitment 评论 end-->
+  
+    <article id="post-CUDA_OpenCL_compare" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/13/CUDA_OpenCL_compare/" class="article-date">
+  <time datetime="2018-01-13T15:28:37.000Z" itemprop="datePublished">2018-01-13</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/13/CUDA_OpenCL_compare/">CUDA 与 OpenCL 简明对比</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>又称『如何一把梭在 CUDA 和 OpenCL 之间进行转换』。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/01/13/CUDA_OpenCL_compare/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://enigmahuang.github.io/2018/01/13/CUDA_OpenCL_compare/" data-id="ck49agg180009ossiewsudoh0" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenCL/">OpenCL</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+<!--gitment 评论-->
+
+<!--gitment 评论 end-->
+  
+    <article id="post-AMG_Introduce" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2018/01/01/AMG_Introduce/" class="article-date">
+  <time datetime="2018-01-01T21:37:21.000Z" itemprop="datePublished">2018-01-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2018/01/01/AMG_Introduce/">代数多重网格（Algebraic Multigrid）简介</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>代数多重网格（AMG）是利用几何多重网格（Geometric Multigrid, GMG）的一些重要原则和理念发展起来的不依赖于实际几何网格的多重网格方法。它继承了几何多重网格的主要优点，并且可以被用于更多类型的线性方程组。本文将介绍 Classic AMG 的基本算法并忽略数学推导过程。</p>
+        
+          <p class="article-more-link">
+            <a href="/2018/01/01/AMG_Introduce/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://enigmahuang.github.io/2018/01/01/AMG_Introduce/" data-id="ck49agg0j0001ossiyelfeypp" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Multigrid/">Multigrid</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+<!--gitment 评论-->
+
+<!--gitment 评论 end-->
+  
+    <article id="post-HPCG_3_Notes" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/27/HPCG_3_Notes/" class="article-date">
+  <time datetime="2017-12-27T13:26:33.000Z" itemprop="datePublished">2017-12-27</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/27/HPCG_3_Notes/">HPCG 3.0 reference implementation 阅读笔记</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>HPCG (High-Performance Conjugate Gradient) 是如今主要的 HPC 系统性能测试基准之一，是一个精简的大型稀疏方程组并行求解器，包含了区域分解（Domain Decomposition）、多重网格（Multigrid）和预条件子（Preconditioner）这些重要的线性方程组求解技术。我在学完 MATH 6644 这门课以及自己动手写了 3D Multigrid 以后，我便一直想看看 HPCG 是如何实现的（虽然我还没学过 DD）。下面的记录是我阅读 HPCG 3.0 官方参考实现的源代码的笔记，源代码参见 <a href="https://github.com/hpcg-benchmark/hpcg" target="_blank" rel="external">GitHub</a> .</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/12/27/HPCG_3_Notes/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/" data-id="ck49agg1c000aossi11apvsfk" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Multigrid/">Multigrid</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PDE/">PDE</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+<!--gitment 评论-->
+
+<!--gitment 评论 end-->
+  
+    <article id="post-PoissonEqu_FDMCD_Multigrid" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2017/12/01/PoissonEqu_FDMCD_Multigrid/" class="article-date">
+  <time datetime="2017-12-01T16:45:10.000Z" itemprop="datePublished">2017-12-01</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 itemprop="name">
+      <a class="article-title" href="/2017/12/01/PoissonEqu_FDMCD_Multigrid/">泊松方程的中心差分格式与多重网格法</a>
+    </h1>
+  
+
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>这个学期上 MATH 6644 接触了多重网格（Multigrid, MG）法，觉得这是一个很有意思的方法。课程作业和期末项目的选项之一就是用 MG 加速泊松方程中心差分格式的求解。虽然我期末项目选了另一个题目，然而我也写了一下这个。这篇东西算是一点小的总结。</p>
+        
+          <p class="article-more-link">
+            <a href="/2017/12/01/PoissonEqu_FDMCD_Multigrid/#more">Read More</a>
+          </p>
+        
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://enigmahuang.github.io/2017/12/01/PoissonEqu_FDMCD_Multigrid/" data-id="ck49agg4h001bossibjjj5iu3" class="article-share-link">分享到</a>
+      
+
+      
+
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Multigrid/">Multigrid</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/PDE/">PDE</a></li></ul>
+
+    </footer>
+  </div>
+  
+</article>
+
+
+
+<!--gitment 评论-->
+
+<!--gitment 评论 end-->
+  
     <article id="post-AVX-SIMD" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
     <a href="/2017/09/29/AVX-SIMD/" class="article-date">
@@ -105,7 +411,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/09/29/AVX-SIMD/" data-id="ck49631hq0003e8si049rnf21" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/09/29/AVX-SIMD/" data-id="ck49agg0z0006ossij8gc8zt5" class="article-share-link">分享到</a>
       
 
       
@@ -156,7 +462,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/08/26/Install-Arch-on-USBKey/" data-id="ck49631id000he8si3gmrawwz" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/08/26/Install-Arch-on-USBKey/" data-id="ck49agg1s000hossiwejh8xk7" class="article-share-link">分享到</a>
       
 
       
@@ -208,7 +514,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/" data-id="ck49631j50019e8si495wi5ny" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/" data-id="ck49agg66001oossijcs4mqeb" class="article-share-link">分享到</a>
       
 
       
@@ -259,7 +565,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/07/06/my-CUDA-SGEMM/" data-id="ck49631j9001ce8si7lsvo24q" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/07/06/my-CUDA-SGEMM/" data-id="ck49agg5z001lossiod0itrik" class="article-share-link">分享到</a>
       
 
       
@@ -278,397 +584,10 @@
 
 <!--gitment 评论 end-->
   
-    <article id="post-MPI3-HP-NCC" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/27/MPI3-HP-NCC/" class="article-date">
-  <time datetime="2017-06-27T18:55:21.000Z" itemprop="datePublished">2017-06-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/27/MPI3-HP-NCC/">MPI-3 学习笔记（三）：Hybrid Programming, Neighborhood Collective Communication</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>MPI-3 混合编程（Hybrid Programming）与邻居集合通信（Neighborhood Collective Communication）特性学习笔记。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/06/27/MPI3-HP-NCC/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/06/27/MPI3-HP-NCC/" data-id="ck49631in000se8sig1yhydfm" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-<!--gitment 评论-->
-
-<!--gitment 评论 end-->
-  
-    <article id="post-MPI3-OSC" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/26/MPI3-OSC/" class="article-date">
-  <time datetime="2017-06-27T02:46:19.000Z" itemprop="datePublished">2017-06-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/26/MPI3-OSC/">MPI-3 学习笔记（二）：One-sided Communication</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>MPI-3 单边通信（One-sided Communication）特性学习笔记。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/06/26/MPI3-OSC/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/06/26/MPI3-OSC/" data-id="ck49631ir000we8si6a98rbir" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-<!--gitment 评论-->
-
-<!--gitment 评论 end-->
-  
-    <article id="post-MPI3-NCC" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/26/MPI3-NCC/" class="article-date">
-  <time datetime="2017-06-27T00:46:08.000Z" itemprop="datePublished">2017-06-26</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/26/MPI3-NCC/">MPI-3 学习笔记（一）：Nonblocking Collective Communication</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>MPI-3 非阻塞集合通信（Nonblocking Collective Communication）特性学习笔记。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/06/26/MPI3-NCC/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/" data-id="ck49631ip000ue8sihmagnlvy" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-<!--gitment 评论-->
-
-<!--gitment 评论 end-->
-  
-    <article id="post-Sorting-and-Cache" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/24/Sorting-and-Cache/" class="article-date">
-  <time datetime="2017-06-24T18:12:13.000Z" itemprop="datePublished">2017-06-24</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/06/24/Sorting-and-Cache/">排序与 Cache Miss</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近学完了 CSE 6220 这门课，补完了一些基础理论知识。这门课有6个 lab work，最后一个 Cache-Oblivious Sorting 有些意思，记录一点我的思考。</p>
-        
-          <p class="article-more-link">
-            <a href="/2017/06/24/Sorting-and-Cache/#more">Read More</a>
-          </p>
-        
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/06/24/Sorting-and-Cache/" data-id="ck49631j10016e8si4xr8ohsz" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Cache/">Cache</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Sorting/">Sorting</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-<!--gitment 评论-->
-
-<!--gitment 评论 end-->
-  
-    <article id="post-ASC17" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/17/ASC17/" class="article-date">
-  <time datetime="2017-05-17T15:45:14.000Z" itemprop="datePublished">2017-05-17</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/17/ASC17/">不正经的围观群众与吃喝玩乐——我的 ASC17 之旅</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>时光流转，熬过了半年从零开始的学英语生活，又到1月ASC开球的时候。凑了三年热闹，我自然也不会放过这最后一年。好在今年不用我下场，毕竟我自己作死选了个说难不难说水不水的毕设题目。我又贪玩，中间跑出去日本浪了半个月。所以，又要拖累叶总了，他又要管比赛，又要管我的论文，我真是给他添了太多麻烦了。</p>
-<p>今年的ASC比赛非常奇特，我们也遇到了很多新的问题。第一个问题便是人选：不知为何，今年新报名参加选拔的小朋友人数比去年大幅下降，好在里面还是有勤劳能干的，加上有三个大三的同学有去年的观赛经验，我们的人手才将将够用。第二，题目和平台都很新。初赛的题目有三道：Knight’s Landing 上的HPL，太湖光上的海浪波，以及机器学习的题目。HPL或者HPCG是往年惯例了，然而今年却要跑去KNL上做，只因改算法代码的那道题被太湖光抢了，总得拿点什么来安慰Intel。海浪波去年已经比过了，清华的老师还做了个太湖光上冲 Golden Bell 奖的版本出来，今年在太湖光上比这道题，还真是够看得起我们这些毛头小子的。那道机器学习的题就真是前所未见了，你说一个比赛谁跑得快的超算比赛怎么好端端的就去搞机器学习的玄学了呢？而且放着 TensorFlow 不用，去用百度去年10月才开源的Paddle，司马昭之心啊。HPL惯例是写个脚本遍历参数，大家都省心，只是郑州大学的KNL集群有些节点跑出来的结果总是飘忽不定。组委会自然是『推荐』我们去改 Linpack 的源代码的，然而没有谁会傻到去和硬件厂商自己的优化叫板。我照例去帮要改代码的海浪波，叶总得去硬啃他也不怎么熟悉的机器学习。我主要是去看论文和公式，顺带帮小朋友们干些杂活。无奈清华冲 GB 的论文写得太简练，一些关键的地方我也只能揣着糊涂当明白。小朋友们忙别的的时候，我硬着头皮把计算的核心部分从 F90 翻译到了C，毕竟大家对 C 都更熟悉。翻译的过程我很明显感受到海浪波的代码的确是科学家写出来的代码，有很多可以理解的快速实现方法，为日后的优化留下了不少空间。我们的代码上从核进行加速的过程一直不顺利，初赛的时候只有部分计算核心上去了，而且还没有做向量化。能进决赛，实在幸运。</p>
-<p>进了决赛，题目更加有趣了。七道题目里，有常规的跑分专用HPL &amp; HPCG（仍旧是在自己搭建的集群上），有初赛的海浪波和Paddle，有保留节目Mystery，多加的两个分别是单KNL节点限定的LAMMPS和在自己的集群上跑的第三代基因测序拼接对比软件Falcon。KNL 上的 LAMMPS Intel自己本身就做过优化，所以我们动不了多少，仍是以调参数为主（当然，组委会是非常『推荐』我们去改代码的，初赛的时候他们还『推荐』我们去改 Linpack 的代码呢，真是呵呵）。Falcon就比较麻烦了：这货与其说是并行计算，不如说是分布式计算。Falcon没有用MPI做底层，完全是按输入切分任务，然后通过 Python 脚本来控制任务流，依赖 torque 等作业调度系统来进行并发任务调度。我们花了很长时间来 setup 我们的作业调度系统和弄清楚 Falcon 的业务逻辑。中间我有半个月跑去日本浪了，回来以后基本就进入看戏模式，偶尔帮忙做些技术试验。我们有一点做得很不好的是，始终没找到方法对 Falcon 的整个计算过程中不同的进程和函数的耗时进行采集和综合分析，导致我们只盯了一两个大头并且没有取得什么进展。海浪波那边，他们进了决赛以后，重构了从核代码的整体框架，到后来写了差不多 100K 的从核代码，对应原来约 20K 的 F90，真是辛苦两个小朋友了。硬件设备方面，我们仍旧只有最便宜的 SATA SSD，以及到出发前两天才借到的 Tesla P100。比起 K80，P100 好用不少：待机功耗和满载功耗都降低了，而且只是单芯片，性能损失没有那么大。然而我们没有多少时间测试 P100 的玩法，只能去到现场再测了。</p>
-<p>今年决赛在无锡超算中心，毕竟是国家队的场地，吃喝住行都安排得非常好。报到以后，不管是正选队员还是观赛人员，都一视同仁，发给制服、饭票和太湖光的纪念U盘。住的地方是五星级酒店——隔壁的同样高端的国际公寓。我跟着叶总上了他13楼的单间看，小半个无锡都收归眼底了，跟不用说只在一公里之外的无锡超算中心。里面还有各式豪华装备，包括有某些特殊功能的马桶盖。每天三餐都是自助餐，菜品少一点也不是什么值得挑剔的地方了。</p>
-<p><img src="/2017/05/17/ASC17/1.jpg" alt=""><br><img src="/2017/05/17/ASC17/2.jpg" alt=""><br><img src="/2017/05/17/ASC17/3.jpg" alt=""></p>
-<p>前两天装机调试，从场上的情况看，各队都遇到点问题。虽然今年用的服务器型号和去年的一样，但是浪潮的工程师说他们已经重新设计了一次主板。我们一开始被坑了是因为我们都没见过SAS 卡长什么样子，不知道要拔下来，结果装好系统的硬盘插上去死活启动不了，差点就要重装了。我们在装 P100 的时候，也被风道和供电线走线问题卡住了，还好赶紧抓了工作人员来问。到第一天下午，我们就基本把系统搭起来，并且开始测试。场上也有很多队伍很有意思：第一次进决赛的中国海洋大学居然还带了加速卡版本的 KNL 过来测试（虽然最后也没有用）；上交熟门熟路改造风道和换硅脂散热，还把他们所有的节点都命名为『baohua-x』（x是数字编号），真是太暴力了。我们的系统最后应该是有一些散热的问题，因为高功耗跑了一段时间以后，即使开风扇吹凉了，系统待机功耗还是比刚开机的时候高了差不多两百瓦。到第二天测试收尾，准备正式比赛的时候，我们其实还有相当多的东西没有测完。于是 HCH 和 WZM 跑去打印了一张忧郁猫的图片，贴在我们的机柜上。事实证明，在接下来的两天里，这只猫为他们赢得了很高的回头率。第二天下午我还抽空到下面的太湖之光机房区参观了一下，然而只能隔着玻璃看。清华的同学就不一样，毕竟有自己人，WangMiao 直接就有师兄带着进去打开机柜来看了，真是羡煞我也！</p>
-<p><img src="/2017/05/17/ASC17/4.jpg" alt=""><br><img src="/2017/05/17/ASC17/5.jpg" alt=""><br><img src="/2017/05/17/ASC17/6.jpg" alt=""><br><img src="/2017/05/17/ASC17/7.jpg" alt="我们这种没有 PCI-E SSD 的穷队连 SSD 都要分批次分规格买……"></p>
-<p>到第一天正式开赛，我们第一枪打 HPL 和 HPCG 基本都达到预想，接下来就是开跑 Falcon 了。Falcon 的两个小算例跑完以后，我们直接上第三个 20+ G的大算例。之前我们在其他机器上跑过 thaliana 的数据，也是 20G 左右，所以我们大概能估计决赛这个算例的耗时。然而，悲剧发生了——跑了一半有多以后，我们的集群有一台机器挂了。到现在我们都没有搞明白为什么会挂，猜测可能是 NFS 的问题。这暴露了我们另一个准备系统时的缺点：我们依赖监控软件 Paramon，并行科技的人跟我们说 Paramon 支持 E5v4 系列，然而实际上我们根本看不到微架构信息和内存带宽占用信息，以及 Paramon 的 I/O 监控也做得不好，所以我们今年看监控能看到的信息少了很多。跑挂了一个大算例让我们浪费了将近两个小时的时间，这个时候叶总果断决定切掉这个算例去跑神秘应用。神秘应用是一个流体力学计算程序，第一个小算例容易跑，第二个我们也是跑不完，非常遗憾。每年的神秘应用都不求调优，只要能正确装好程序和依赖库，就行了。今年我们大概是有什么地方没有装好，跑得相当慢。北航今年倒是老实有福气，Falcon 第三个算例直接不跑，然后憋着一口气跑完了神秘应用的所有三个算例。Falcon 全部算例都跑完的好像只有上交。</p>
-<p>到第二天比赛，赛场的氛围就完全不一样了。一方面，这一天在各队自己的集群上要跑的只有 Paddle。我们原本担心决赛的数据会很大，而我们并没有配好集群版的 Paddle ——这货的集群版只支持 Docker，我们配的时候遇到了诸多问题，这些问题通通都没有社区和手册可以解决，百度就是在拿这些参加比赛的学生来踩地雷和『测试驱动的文档补完』（甚至到后来，在 GitHub 开 issue 作者都不回复了）。结果拿到数据一看，就比初赛的大了一倍而已，各队就放心用单节点来跑了，于是功耗监控显示屏自然也一片和谐——我们戏称，第二天跑的是 Green500。另一方面，昨天的成绩出来了，这就有很多耐人寻味的故事了。清华的确非常专业，在四道题上都取得了很好的成绩，第一天已经甩开其他队伍20多分，已经提前把冠军纳入囊中了。我们很惨，Falcon 和神秘应用都沉船了。上交也惨，Falcon 也沉船了——被清华摁在地上摩擦，跑了所有15分的算例只拿到了3分（我们是跑了9分的拿了2分），由此可见清华对 Falcon 的优化有多好。HPL 和 HPCG 的 3KW 功耗下的世界纪录又一次被破了，这次是被潍坊学院破的。他们只打这两题，其他都放弃了——对，神秘和 Falcon 连送分的小算例都不跑，直接放弃。嘛，他们也算达到目的了——破了纪录，出了名，这就够了。像我们这些只有8块P100的队伍真的就心有余而力不足了，没10块卡根本冲不了记录。第二天最后收机器之前，上交还做了一回疯狗，放开所有功耗限制，直接跑了个 4400W 出来，引得其他队伍跟着一起疯狗。</p>
-<p><img src="/2017/05/17/ASC17/8.jpg" alt=""></p>
-<p>正式开赛的两天我在现场滴流转，见了不少熟识的老师，也见到一些别样的风采。最值得大书特书的是东南大学，在一众的和尚队里，东南大学竟然5个队员里有4个是妹子！高达80%的队员是妹子！男女比例1:4！而且东南大学的妹子们看上去的确是妹子，不像国防科大的妹子，看起来有一股肃穆庄严的气息（以及能一个人抬一台服务器下来的力气）。</p>
-<p><img src="/2017/05/17/ASC17/9.jpg" alt=""></p>
-<p>华沙大学队伍里有个小哥穿得非常风骚，还长着一张外国人网红脸，也颇为引人注目。第二天 Jack Dongarra 来的时候，我又厚着脸皮去要签名了，除了签名还要到了一段话。</p>
-<p><img src="/2017/05/17/ASC17/10.jpg" alt=""></p>
-<p>第五天的展示，我在门外听了我们的，今年的小朋友们讲得比我去年好得多了，真是羞煞我也。下午颁奖是最令人落寞的环节，因为我们一个奖也没有，即使是总分第四，也没什么用。晚上的聚餐是最酣畅愉快的时候，因为各队终于可以相互交流一起吐槽了。今年的海浪波我们和清华在三个算例上互有胜负，但是加起来还是输了一丁点，也该是我把15年的好运还给清华了，祝贺他们拿了 e-Prize！后面第三名已经被我们拉开了四五倍的距离了，再往后甚至有慢了我们几百倍的。这道题其实对外国的队伍非常不公平，因为太湖之光的基础语言编译手册没有英文版的，只有一份简单的上机指南有英文的，外国队伍要使用从核加速就只能上 OpenACC 这种凑合用的东西。Falcon 这道题，各队真是尽显奇招，思路清奇各有不同，然而还是清华抓得最有效，一刀砍掉了不少冗余的计算。可惜东南大学的同学们颁奖完了就回南京去了，没来聚餐，要不然怕是要成为场上的明星队伍。到后半场，华沙网红小哥拿着白酒（每桌配了一支红酒一支白酒，白酒是梦之蓝）四处跟人干杯和吹水，我和 WangMiao 逮着他一顿猛灌，小哥喝得不知道怎么形容某些题目和代码的时候连『brainfuck』都出来了。</p>
-<p>周六，我们和清华、台湾清华惯例一起出去玩，这是14年开始的，只有16年中断了一年。我们就近去了鼋头渚，在那边走了大半天。可能是由于有雾霾，我并不觉得太湖有多美，所以也没拍什么照片。倒是我在路边第一次见到了中国樱桃，我还摘了两颗尝了一下，略酸，没有什么甜味。</p>
-<p>我四年的ASC之旅到此就落下帷幕了。很遗憾，我终究没有机会去一次ISC和SC。希望以后在美帝念书的时候，我能去SC开会，然后见到母校的队伍吧。就像叶总14年的时候说的：</p>
-<p><img src="/2017/05/17/ASC17/11.jpg" alt=""></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/05/17/ASC17/" data-id="ck49631hi0001e8si5h3yg8nq" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HPC/">HPC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Travel/">Travel</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-<!--gitment 评论-->
-
-<!--gitment 评论 end-->
-  
-    <article id="post-Japan-Trip-2017-4" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/05/13/Japan-Trip-2017-4/" class="article-date">
-  <time datetime="2017-05-13T15:45:14.000Z" itemprop="datePublished">2017-05-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2017/05/13/Japan-Trip-2017-4/">2017 日本游记，四：奈良 &amp; 大阪</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <a id="more"></a>
-<h2 id="4-月-4-日"><a href="#4-月-4-日" class="headerlink" title="4 月 4 日"></a>4 月 4 日</h2><p>我们在奈良住了五天，最后一日才来游览奈良，因为奈良的景点比较少且比较集中，行李可以寄存到近铁奈良站，游览完以后我们可以直接坐近铁到大阪。奈良的主要景点都集中在奈良公园附近，奈良市区里的什么平成宫迹我们坐近铁路过的时候看到就是一片平地，可餐馆性与两年前我们去的马王堆汉墓坑绝对有得一拼。<br>我一直觉得，对于我们这种不是专业看文物和古建筑的游客来说，在奈良，逗鹿玩才是主要的，参观其他景点都是次要的。景点不会自己走过来给你看，而且我们去的头两个景点都各有不顺：兴福寺主殿在修，只能外面看看；奈良国立博物馆新馆正在筹备，老馆里有不少青铜器展出，但是一则不给拍照，二则有来自中国大陆的大声议论的中学语文老师们。兴福寺有个千年木塔倒是还值得照一下。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/1.jpg" alt=""></p>
-<p>相比之下，奈良的鹿有着更高的『可用性』：奈良有一千两百多只野生鹿，分布在奈良公园周边，作为受到保护的文物四处走动。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/2.jpg" alt=""></p>
-<p>奈良的鹿大抵是极幸运的，不仅能逃脱吃省人的虎口，还能让吃省人屈尊喂食。只消花150円，就可以买到10块专门生产的鹿仙贝，引得一大片鹿围过来。特别是在早上，鹿还比较饿的时候，它们会围攻游客，会去闻游客的包里是不是有鹿仙贝，甚至还会抢游客手里的纸来吃。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/5.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/4.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/3.jpg" alt=""></p>
-<p>奈良官方游览地图里提醒游客，不要让鹿吃掉这张地图，因为吃了纸会导致他们消化不良。有些时候如果鹿吃得着急了，你又不愿意一整块地喂给它，它就可能直接撞过来了。所有鹿的角都被锯掉了，那些没来得及锯的小鹿，鹿茸摸起来非常暖，但是也很容易激怒他们。我就被撞过一次，好在那头鹿比较小。<br>走去春日大社的路上，我们遇到了一个小惊喜——冰室神社的樱花。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/6.jpg" alt=""></p>
-<p>在京都的受挫使得我们对樱花的期待大大下降了，春日神社的樱花却开得极好，而且是很大的一棵垂樱。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/7.jpg" alt=""></p>
-<p>春日大社和之前走的日本神社并无什么不同。然而，我总算见到一个不是在收钱的红白巫女小姐姐了！见了那么多只是想让我买御守的巫女以后，我已经不指望能看到三叶那样可爱的跳神乐舞的红白巫女小姐姐了，不是坐在那里收钱的都已经很令我满足了。不少游客也纷纷掏出手机拍巫女小姐姐，拍得人家很不好意思。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/8.jpg" alt=""></p>
-<p>中午随便吃了点，我们便从山上绕行去东大寺。途中，我遇到了最聪明的一只鹿：它站在路边围栏里不肯下来，伸长了脖子还把舌头也申了出来，等着我把鹿仙贝放到它舌头上去。有些小鹿整天畏缩在围栏后面，我想喂都喂不到。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/9.jpg" alt=""></p>
-<p>东大寺唯一的特点大概是大，非常大，是我在日本看到的最大的主殿和主佛，而且是可以拍照的！绕场一圈以后发现殿里有根柱子底下挖了个洞让大家钻，也不知道是什么意味。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/10.jpg" alt=""></p>
-<p>外面还有一根很大的金鞭，嗯，金鞭……</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/11.jpg" alt=""></p>
-<p>从东大寺出来，我们在奈良的主要行程就走完了。时间尚早，我们自然是继续喂鹿。然而到了下午嘛，鹿都吃饱了，没有鹿理我们了，有些还开始用关爱智障的眼神看我了。最后我们剩了两块鹿仙贝，只好揉碎了去喂鸽子。后来回来看到微博说，有些鹿甚至被喂到怀疑鹿生了……</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/12.jpg" alt=""></p>
-<p>告别奈良，告别每天来回走四公里的近铁通勤，我们前往日本之旅的最后一站，商业之都大阪。</p>
-<p>为了省钱，我们在大阪还是继续住汽车旅馆。虽然在大阪不用每天多走四公里，但是在大阪的汽车酒店在某些方面比奈良的更惨：没有WiFi，没有书桌，晚上睡觉有一盏灯还不能完全关掉。好在包早餐，省得我们继续吃全家的面包。放下行李，天还没黑，我们便去心斋桥道顿堀一带吃晚饭和转悠。<br>作为大阪最中心最旺盛的商业区，心斋桥道顿堀着实托得起大阪商业之都的地位。我们寻寻觅觅，在商店街里找到了一家蛋包饭，圆了我想吃蛋包饭的执念。严格说起来，这家的蛋包饭并不是『蛋包饭』，因为蛋并没有完全包住饭。但是蛋包饭却很对得起它名字里的『传说的』，因为这一叠饭里有饭友意面有猪扒有沙拉有鸡蛋还有两种酱料，而且价格居然还不到1000円，让人在吃撑之余，不得不为大阪的商人鼓掌称赞。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/13.jpg" alt=""></p>
-<p>这一顿蛋包饭也唤醒了我心中沉睡的念头：我在东京不敢买东西，来了大阪开始蠢蠢欲动了。好在落落及时出手打救了我：他饭后还点了一个价格堪比蛋包饭的芭菲，让我见识了一会之余，也让我重新认识清楚了自己的钱包。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/14.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/15.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/16.jpg" alt=""></p>
-<p>得，买不起，走走看看总不会像在云南一样被赶出去吧。蟹道乐也是非常出名的店，可惜我们已经吃不起了……</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/17.jpg" alt=""></p>
-<p>在街上逛了一圈，回程的时候，我们买的大阪2日周游卡便闪亮登场了。在东京，在箱根，在京都，我们都买了类似的通票，然而接下来两天的实践证明，比起精明的大阪商人，之前我们买的通票和周游券都弱爆了！后事如何，下文分解。</p>
-<h2 id="4-月-5-日"><a href="#4-月-5-日" class="headerlink" title="4 月 5 日"></a>4 月 5 日</h2><p>在大阪的第一顿早餐，我尝试了日式的鲑鱼烧定食，落落则选择了传统的面包牛奶。这是我第一次早餐的时候吃正餐一样的东西，令我莫名其妙地有了一种仪式感；可惜鲑鱼烧得太咸了。<br>我们在大阪第一个游玩的景点，自然是大阪城：不仅是看天守阁，旁边的大阪城公园和西之庭院也是赏樱胜地。我知道大阪，还是在刚刚上小学的时候，刚刚开始玩《大航海时代四》，里面见到的。随后，开始玩光荣的其他游戏，逐渐接触战国时代，大阪自然给我留下了更多的记忆。信长、秀吉、家康三人中，我偏爱平民关白秀吉，对大阪城自然也爱猴及屋。如今终于要登城了，自然有些激动。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/18.jpg" alt=""></p>
-<p>天守阁里有电子展览的《关原合战》长画（然而我忘记拍了），还标注了哪一团人是谁，要不然真是看煞我这个眼盲。要是现场有一台电脑能让我打一次全战幕府2的最高难度关原之战战役通关就好了。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/19.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/20.jpg" alt="即使在今天，天守阁顶层也可以登高望远"></p>
-<p>从天守阁下来，我们终于看到了满开的樱花。多说无益，直接上图。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/21.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/22.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/23.jpg" alt=""></p>
-<p>大阪城公园就是大阪历史博物馆，我们自然不会错过。这博物馆也有点意思，从最顶楼开始一直往下走，便一路从难波看到石山本愿寺再到大坂和大阪了。然而整个博物馆里，最吸引我的大概还是日本矿山分布图——总有一种我要为穿越回去做准备的感觉。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/24.jpg" alt=""></p>
-<p>大阪除了大阪城公园，鹤见绿地公园也有不少的樱花。这里的樱花虽然并不是全部连城一片，但每一片都开满了，而且我们还看到了浪漫的樱吹雪——呃，不是白雪，是粉红色的。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/25.jpg" alt=""></p>
-<p>我们又顺便把旁边的热带植物馆给逛了一圈。我第一次见到了活着的大王莲，以及其他一些奇特的植物。这里看到的东西，比箱根山上那个要多得多了。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/26.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/27.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/28.jpg" alt=""></p>
-<p>到下午两点，我们回到道顿堀，到鹤桥风月吃著名的大阪烧。大阪烧的主体是一坨切丝的蔬菜，在铁板上煎得差不多了，再两侧分别加上一些切得很薄的类似肉片的东西和一只鸡蛋继续煎，最后再涂上浓厚的酱料——可以理解为大号的煎蔬菜饼。老实说，最后吃的基本都是酱料的味道，蔬菜并没有什么特点。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/29.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/30.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/31.jpg" alt=""></p>
-<p>饭后坐了道顿堀的游船，很短的一段，都是在市区中心里游走。好在讲解的大叔会讲一点英文。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/32.jpg" alt=""></p>
-<p>坐完游船，距离天黑尚早，我们不想那么早去梅田，我便先处理了一下我被迫接受的代购任务——帮老妈找洗面奶。老妈只是在微信上给我发了一张照片，别的信息一问三不知，我也只能拿着照片去问。我在心斋桥里走了9间药妆店，前后一个小时，第一次有宾至如归的感觉——里面买东西的八成是中国大叔大妈，导购小姐姐九成都是中国人，或者操着一口流利的中文。我在人潮中战战兢兢，生怕阻碍了大妈们的大宗商品交易。最后我并没有找到要买的洗面奶，倒是切身体会了一次中国大妈的威力。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/33.jpg" alt="『宾至如归』"></p>
-<p>我的另一项购物任务，帮水工找旧版的《风之谷》漫画，也同样艰巨，然而在大阪终于得偿所愿。我从药妆店里惶恐地出逃后，来到了大阪的一家 book off 旧书店，非常幸运地找到了《风之谷》。而且，更幸运的是，刚好有完整的一套！一算价格，比中亚的新版还便宜，那还等什么，买它丫的全套呀！</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/34.jpg" alt="还有几本剩的……"></p>
-<p>晚上我们在梅田一带吃饭和看夜景。看夜景主要是两处，Hep Five 摩天轮和梅田空中瞭望台。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/35.jpg" alt=""></p>
-<p>这摩天轮我也是好多年没有坐了，搞不好有十年了。不知为何，坐缆车我不会感到害怕，如今坐摩天轮反而有些心惊，大概是摩天轮下面是空的吊篮一掉必死无疑，缆车距离地面不远掉下去没事（当然还有一个理由可以强行扯过来，就是天知道会不会乱入到柯南的世界里，摩天轮被整个打掉）。梅田空中瞭望台有些意思，因为它的顶层是露天的，环绕一圈视角特别好，而且路上铺上了很多荧光石，晚上看起来有如漫步银河一般。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/36.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/37.jpg" alt=""></p>
-<p>回程的路上，我们算了一笔账，看看今天大阪二日周游券为我们省了多少钱：交通1200円，吃饭折扣200円，门票4500円，也就是周游券为我们每人支付了5900円。是的，今天所有的交通，所有的游览景点，我们都不用自己另外掏钱；吃的两顿正餐，也都有折扣。大阪二日周游券多少钱一张？3300円。虽然我买了周游券付了钱，但是这一天下来，总让我觉得我在白嫖。说得好听一点，就叫无料之王吧。</p>
-<h2 id="4-月-6-日"><a href="#4-月-6-日" class="headerlink" title="4 月 6 日"></a>4 月 6 日</h2><p>今天的第一站，四天王寺。还是那句话，审美疲劳。四天王寺唯一好看一点的是中间的五重塔，还可以让我们爬上去看——结果上去全部都是神主牌位。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/38.jpg" alt=""></p>
-<p>走走走，赶紧走，别打扰人家了。四天王寺池子，池边有樱花，池里有王八，我还没见过那么多的乌龟在一个池子里一起晒太阳呢。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/39.jpg" alt=""></p>
-<p>说句实话，对我们而言，四天王寺还不如旁边的天王寺动物园好看。好嘛，这一逛，落落可就为他在东京皇居前起的那几个鸟名，什么『白毛黑肚鸟』，给找到了合法性依据——你看，动物园里不也有『红背红尾鸟』这样的嘛。动物园里最郁闷的，大概是那几只狼了，连出卖野性的表演机会都没有，整日只能晒太阳，哈士奇都过得比他们好啊。我们也顺便上去旁边的通天阁看了一下——反正也是不用自己掏钱，来都来了——然而商业气息太重，而且观景效果不如梅田，勉强算是看过白天的大阪了。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/40.jpg" alt=""></p>
-<p>我们下午的行程都在大阪港。在那边，我终于吃到了正宗的蛋包饭——真的是薄薄的一层蛋包着一坨番茄酱混过的饭，此外再无他物。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/41.jpg" alt=""></p>
-<p>在大阪港，我们总算迎来了第一个也是唯一一个需要我们自己掏门票的景点：大阪海游（水族）馆。我已经有起码10年没有去过水族馆了，这次来得也是不虚呀。大阪海游馆好像是世界上最大的几个水族馆之一，设计非常奇特：中间是一个大水池，有大量太平洋的生物，包括巨大的鲸鲨和各种扁平的飞碟鱼；游客从顶部环绕而下，一边看中间的大水池，一边看两侧其他海区的展示池，海狮海豹乃至非洲的陆上动物都有，真是大千世界齐聚一堂呀。有些奇大无比腿脚瘦长的蟹，还颇有外星生物的感觉。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/42.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/43.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/44.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/45.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/46.jpg" alt=""></p>
-<p>海族馆还有个有趣的地方，就是有个浅池子，允许游客在洗手以后摸里面的鲨鱼背和蝠鲼背，前者摸上去粗糙，后者摸起来滑得停不下手。<br>从海游馆里出来，我们直接登上了旁边的圣玛丽观光帆船，1600円的船票又一次不需要自己出。可惜圣玛丽只在港口里绕圈圈，不能开出去一些，所以并没有看到多少东西。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/47.jpg" alt=""></p>
-<p>我们之后坐的天保山摩天轮反而能看得更远，毕竟这也是世界十大摩天轮之一。在摩天轮上眺望，从难波，到石山本愿寺，到大坂，到京阪神奈都市圈，尽收眼底了。浪花之梦，露落露消。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/48.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/49.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/50.jpg" alt=""></p>
-<p>我们在日本的游玩景点，天保山摩天轮已是最后一个。然而今晚住的地方，还是值得一说的。我们在最后一晚住了一次民宿——因为次日要在关西空港赶早班机，所以住在了空港附近的一个中国夫妇开的民宿『松庭别院』里。这也是我第一次睡榻榻米，起码不用担心滚下床的问题。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/51.jpg" alt=""></p>
-<p>松庭别院不小，有十个房间，后面还有一个小庭院。店老板原本在北京给日本游客做导游，后来来了这里开旅馆，生活轻松惬意得多。</p>
-<p><img src="/2017/05/13/Japan-Trip-2017-4/52.jpg" alt=""><br><img src="/2017/05/13/Japan-Trip-2017-4/53.jpg" alt=""></p>
-<p>晚上洗了澡，我们和老板闲聊，解开了一个心中疑惑：日本蔬菜水果那么贵，日本人怎么解决维生素摄入问题？老板说，日本人平时都是直接买超市里的蔬果汁喝。这和我们完全是天壤之别——我们从来不相信超市里卖的那些蔬菜汁水果汁能有效补充维生素，我想大多数国人也是如此；然而日本人却被迫反过来。这就真的是国情有别了。我们最后做的事情，便是在房间里瓜分战利品——其实主要是一堆纪念册、门票和游览指南，毕竟我们两个穷鬼，也买不起太多别的东西了。<br>后记<br>日本之旅得以成行，实在万幸。对于日本这个『邻居』，我们有太多的想象、误解和刻板印象，也有太多的井蛙观天。只有自己实实在在来看过一次，感受过一次，才能祛除那些形形色色的魅影。我来，我见，我实证。</p>
-
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/05/13/Japan-Trip-2017-4/" data-id="ck49631ij000ne8sid3qgv04k" class="article-share-link">分享到</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Japan/">Japan</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Travel/">Travel</a></li></ul>
-
-    </footer>
-  </div>
-  
-</article>
-
-
-
-<!--gitment 评论-->
-
-<!--gitment 评论 end-->
-  
 
 
   <nav id="page-nav">
-    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/3/">下一页 &raquo;</a>
+    <a class="extend prev" rel="prev" href="/">&laquo; 上一页</a><a class="page-number" href="/">1</a><span class="page-number current">2</span><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/3/">下一页 &raquo;</a>
   </nav>
 </section>
       
@@ -680,7 +599,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签</h3>
     <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">6</span></li></ul>
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
     </div>
   </div>
 
@@ -689,7 +608,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">标签云</h3>
     <div class="widget tagcloud">
-      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/CUDA/" style="font-size: 16px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 12px;">Cache</a> <a href="/tags/GEMM/" style="font-size: 12px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 10px;">HPC</a> <a href="/tags/ICC/" style="font-size: 16px;">ICC</a> <a href="/tags/Japan/" style="font-size: 16px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 16px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/MPI/" style="font-size: 20px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 14px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 12px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 14px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 14px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 18px;">Travel</a>
+      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/CUDA/" style="font-size: 16px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 12px;">Cache</a> <a href="/tags/Conference/" style="font-size: 12px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 12px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 14px;">HPC</a> <a href="/tags/ICC/" style="font-size: 16px;">ICC</a> <a href="/tags/Japan/" style="font-size: 18px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 16px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 14px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 12px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 14px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 14px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
     </div>
   </div>
 
@@ -698,7 +617,7 @@
   <div class="widget-wrap">
     <h3 class="widget-title">归档</h3>
     <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
     </div>
   </div>
 
@@ -710,6 +629,10 @@
       <ul>
         
           <li>
+            <a href="/2019/12/16/SC19/">SC19：年轻人的第一次公费旅游</a>
+          </li>
+        
+          <li>
             <a href="/2019/09/02/MPI-asymmetric-OMP/">奇技淫巧：非对称 MPI + OpenMP 并行</a>
           </li>
         
@@ -718,15 +641,11 @@
           </li>
         
           <li>
-            <a href="/2018/09/20/OpenMP_fork_join_cost/">OpenMP fork-join cost 测试</a>
+            <a href="/2019/02/13/Japan-Trip-2019-4/">2019 日本游记，四：小樽 &amp; 札幌</a>
           </li>
         
           <li>
-            <a href="/2018/09/05/MPI_mmap_trim/">禁用 mmap 和 memory trip 来加速 MPI RMA</a>
-          </li>
-        
-          <li>
-            <a href="/2018/05/24/Why_you_need_O3_and_ICC/">比起C++性能榨汁机，你可能更需要的是 -O3 和 ICC</a>
+            <a href="/2019/02/13/Japan-Trip-2019-3/">2019 日本游记，三：函馆 &amp; 登别</a>
           </li>
         
       </ul>
