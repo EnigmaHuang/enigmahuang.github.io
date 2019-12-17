@@ -13,20 +13,20 @@
 <meta property="og:url" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/index.html">
 <meta property="og:site_name" content="Rainmaker&#39;s Notebook">
 <meta property="og:description" content="Yet Another GEMM Study. 两年前我按 Ref. 1 的页面（以前还没有 GitHub Repo 和 Markdown pages 呢）做过一次 DGEMM Optimization，当时做的效果其实不是很好。去年叶老师给我看了一下 BLIS 这个项目，说里面分块和分级 Cache 的思路值得一看。前两天一搜，居然出了 Ref. 2 这个 Repo，有如此详细的指导和参考代码，">
-<meta property="og:image" content="http://wx1.sinaimg.cn/large/db02a3d8gy1fhxd09iyi4j20qq0k8adx.jpg">
-<meta property="og:image" content="http://wx3.sinaimg.cn/mw1024/db02a3d8gy1fhxd05ex89j20mb0hndjb.jpg">
-<meta property="og:image" content="http://wx1.sinaimg.cn/mw1024/db02a3d8gy1fhxd0a7j8oj20cx0ao3yj.jpg">
-<meta property="og:image" content="http://wx1.sinaimg.cn/mw1024/db02a3d8gy1fhxd068nx2j20h60gpt9n.jpg">
-<meta property="og:image" content="http://wx4.sinaimg.cn/mw1024/db02a3d8gy1fhxd0726dij20rh0hmabf.jpg">
-<meta property="og:image" content="http://wx1.sinaimg.cn/mw1024/db02a3d8gy1fhxd0azp6cj20ir0fy754.jpg">
-<meta property="og:image" content="http://wx1.sinaimg.cn/large/db02a3d8gy1fhxd0brigsj20rb0m90u5.jpg">
-<meta property="og:image" content="http://wx1.sinaimg.cn/mw690/db02a3d8gy1fhxd08joe8j20mv0dsdgo.jpg">
-<meta property="og:image" content="http://wx3.sinaimg.cn/mw690/db02a3d8gy1fhxd07v9wdj20mh0dtdgn.jpg">
-<meta property="og:updated_time" content="2017-09-29T19:53:43.082Z">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/1.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/2.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/3.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/4.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/5.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/6.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/7.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/8.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/9.jpg">
+<meta property="og:updated_time" content="2019-12-17T04:27:08.557Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CPU Case Study - Optimizing DGEMM">
 <meta name="twitter:description" content="Yet Another GEMM Study. 两年前我按 Ref. 1 的页面（以前还没有 GitHub Repo 和 Markdown pages 呢）做过一次 DGEMM Optimization，当时做的效果其实不是很好。去年叶老师给我看了一下 BLIS 这个项目，说里面分块和分级 Cache 的思路值得一看。前两天一搜，居然出了 Ref. 2 这个 Repo，有如此详细的指导和参考代码，">
-<meta name="twitter:image" content="http://wx1.sinaimg.cn/large/db02a3d8gy1fhxd09iyi4j20qq0k8adx.jpg">
+<meta name="twitter:image" content="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
@@ -119,18 +119,18 @@
 <h2 id="Kernel-1-3-Naive-ways"><a href="#Kernel-1-3-Naive-ways" class="headerlink" title="Kernel 1~3 Naive ways"></a>Kernel 1~3 Naive ways</h2><p>Kernel 1、2、3 都是非常 Naive 的方法：原始的 ijk 循环、改变顺序的 ikj 循环和将 M、N、K 填充到 8 的倍数再去计算。Kernel 3 没有比 Kernel 2 慢多少，大概是因为矩阵尺寸都还不是很大，填充操作不是很耗时。</p>
 <h2 id="Kernel-4-Registers-for-C"><a href="#Kernel-4-Registers-for-C" class="headerlink" title="Kernel 4: Registers for C"></a>Kernel 4: Registers for C</h2><p>Kernel 4 每次计算一个 4x4 的 C 子块，并且使用寄存器来保存这 16 个 C 的元素。Ref. 1 给出的结果显示，这样做应该是可以提高一点点速度的；按 Ref. 1 做的 <code>MMult_4x4_6</code> （列优先存储）比起不分块不使用寄存器的版本也的确可以有较大的性能提高。然而，我自己重新写的这个却没有变快，甚至还变慢了。这与我使用行优先进行存储应该没有关系，因为无论是行优先还是列优先，要么访问 A 的一列会造成访存跳行，要么访问 B 的一行会造成访存跳行。这让我感到比较疑惑。</p>
 <h2 id="Kernel-5-假装做了分块"><a href="#Kernel-5-假装做了分块" class="headerlink" title="Kernel 5: 假装做了分块"></a>Kernel 5: 假装做了分块</h2><p>Kernel 5 是按 Ref. 1 的 <code>MMult_4x4_11</code> 的思路来做的：每次算 C 的一个若干大小的块，算这个块的时候调用 Kernel 4。按 Ref. 1 的说法和我以前做的结果，这样可以在矩阵尺寸变大的时候维持性能。然而 Kernel 5 并没有这个效果，我依旧无法解释这个结果——见了鬼了。</p>
-<h2 id="BLISLab-dgemm-kernel-1-amp-2"><a href="#BLISLab-dgemm-kernel-1-amp-2" class="headerlink" title="BLISLab_dgemm_kernel 1 &amp; 2"></a>BLISLab_dgemm_kernel 1 &amp; 2</h2><p>这两个 Kernel 就是对下面这个 BLIS Framework 的原样照搬：<br><img src="http://wx1.sinaimg.cn/large/db02a3d8gy1fhxd09iyi4j20qq0k8adx.jpg" alt="BLIS Framework"></p>
+<h2 id="BLISLab-dgemm-kernel-1-amp-2"><a href="#BLISLab-dgemm-kernel-1-amp-2" class="headerlink" title="BLISLab_dgemm_kernel 1 &amp; 2"></a>BLISLab_dgemm_kernel 1 &amp; 2</h2><p>这两个 Kernel 就是对下面这个 BLIS Framework 的原样照搬：<br><img src="/2017/07/26/my-DGEMM-BLISLab/1.jpg" alt="BLIS Framework"></p>
 <p>这张框架图可以分成两个部分来看：外三层（3-rd, 4-th, 5-th）循环是对 A、B、C 进行整体分块的，然后调用里面的 Marco Kernel 去处理。Marco Kernel 的外两层（2-nd, 1-st）进一步分块，分成若干个 cache size awared 的块状内积，即 micro-kernel 的那一条东西。最内层的 micro-kernel 将块状内积拆分成了若干个 rank-1 update，以便操作数都可以放在寄存器里。</p>
 <p>blislab_dgemm_kernel1 其实只实现了外三层，对 A B 分块的打包只是简单地 memcpy 出来，没有做重排。测试表明，这个 kernel 虽然性能比前面几个的要好一点，但依旧很糟糕。毕竟只进行简单的分块只能保证每次 Marco Kernel 要算的数据不会掉出 L3 cache，但是并没有很好地利用 L1, L2 cache。</p>
-<p>blislab_dgemm_kernel2 对应 Ref. 2 的 <code>step3/dgemm/my_dgemm.c</code> 以及 <code>step3/kernels/bl_dgemm_int_8x4.c</code>，完整地按部就班地（几乎可以说是公式翻译器一样）实现了上面这个框架。其中，进行 rank-1 update 的两种方法我都实现了出来：最直观的读 4 个 B 的元素广播一个 A 的元素（广播法），以及一次读 A B 向量然后通过 shuffle 和 permutate 改变 B 的排列来 update 不同 C 元素（混洗法，或者叫蝴蝶法）。广播法的图我直接用 Ref. 2 教程里的图了（Ref. 2 用的列优先，所以图里的广播对象和我的相反）：<br><img src="http://wx3.sinaimg.cn/mw1024/db02a3d8gy1fhxd05ex89j20mb0hndjb.jpg" alt="bcast_4x4"></p>
-<p>混洗法的图我觉得 Ref. 2 教程里的图有些问题，自己画了一个更容易理解一点的：<br><img src="http://wx1.sinaimg.cn/mw1024/db02a3d8gy1fhxd0a7j8oj20cx0ao3yj.jpg" alt="shuffle_4x4"></p>
-<p>实验表明，广播法在我的笔记本上只能跑到 13~14 GFlops 的速度，但是混洗法可以跑到 20 GFlops，与 Ref. 2 GitHub Repo 里的代码速度相同（然而我的代码写得简单得多）。然而，在实验室服务器上，混洗法和广播法的速度竟然区别不大。因此我在实验室的服务器上开了一下 VTune 对比了一下这两个版本的区别。先看广播法的：<br><img src="http://wx1.sinaimg.cn/mw1024/db02a3d8gy1fhxd068nx2j20h60gpt9n.jpg" alt="bcast_generalexploration"><br><img src="http://wx4.sinaimg.cn/mw1024/db02a3d8gy1fhxd0726dij20rh0hmabf.jpg" alt="bcast_hotspots"></p>
+<p>blislab_dgemm_kernel2 对应 Ref. 2 的 <code>step3/dgemm/my_dgemm.c</code> 以及 <code>step3/kernels/bl_dgemm_int_8x4.c</code>，完整地按部就班地（几乎可以说是公式翻译器一样）实现了上面这个框架。其中，进行 rank-1 update 的两种方法我都实现了出来：最直观的读 4 个 B 的元素广播一个 A 的元素（广播法），以及一次读 A B 向量然后通过 shuffle 和 permutate 改变 B 的排列来 update 不同 C 元素（混洗法，或者叫蝴蝶法）。广播法的图我直接用 Ref. 2 教程里的图了（Ref. 2 用的列优先，所以图里的广播对象和我的相反）：<br><img src="/2017/07/26/my-DGEMM-BLISLab/2.jpg" alt="bcast_4x4"></p>
+<p>混洗法的图我觉得 Ref. 2 教程里的图有些问题，自己画了一个更容易理解一点的：<br><img src="/2017/07/26/my-DGEMM-BLISLab/3.jpg" alt="shuffle_4x4"></p>
+<p>实验表明，广播法在我的笔记本上只能跑到 13~14 GFlops 的速度，但是混洗法可以跑到 20 GFlops，与 Ref. 2 GitHub Repo 里的代码速度相同（然而我的代码写得简单得多）。然而，在实验室服务器上，混洗法和广播法的速度竟然区别不大。因此我在实验室的服务器上开了一下 VTune 对比了一下这两个版本的区别。先看广播法的：<br><img src="/2017/07/26/my-DGEMM-BLISLab/4.jpg" alt="bcast_generalexploration"><br><img src="/2017/07/26/my-DGEMM-BLISLab/5.jpg" alt="bcast_hotspots"></p>
 <p>呃……我很怀疑进行 general-exploration 测试时， VTune 是否采集到了有效的数据，要不然为什么 Port Utilization 一片都是 0.0。对比看一下混洗法的结果：</p>
-<p><img src="http://wx1.sinaimg.cn/mw1024/db02a3d8gy1fhxd0azp6cj20ir0fy754.jpg" alt="shuffle_generalexploration"><br><img src="http://wx1.sinaimg.cn/large/db02a3d8gy1fhxd0brigsj20rb0m90u5.jpg" alt="shuffle_hotspots"></p>
+<p><img src="/2017/07/26/my-DGEMM-BLISLab/6.jpg" alt="shuffle_generalexploration"><br><img src="/2017/07/26/my-DGEMM-BLISLab/7.jpg" alt="shuffle_hotspots"></p>
 <p>这次 general-exploration 里的 Core Bound 消失了，全都变成了 Memory Bound，还是看不出什么信息。对比 hotspot 图，可以看出混洗操作几乎没有使用什么时间，而广播 A 还是需要不少时间的，这里已经省下了一部分时间。</p>
-<h2 id="Performance-Compare"><a href="#Performance-Compare" class="headerlink" title="Performance Compare"></a>Performance Compare</h2><p>下面是所有的性能测试结果。其中，Ref. 2 的代码和我实现的代码均使用 M*N*K = 128*512*512 的分块大小，MR, NR 的值均为 8 和 4。为了对比，我还将 Ref. 1 里最后一个 Kernel <code>MMult_4x4_15</code> 用 AVX 指令集改写了一下，一并加入测试。<br>下面先看我的笔记本上的结果：<br><img src="http://wx1.sinaimg.cn/mw690/db02a3d8gy1fhxd08joe8j20mv0dsdgo.jpg" alt="i7-4702mq_perf"></p>
+<h2 id="Performance-Compare"><a href="#Performance-Compare" class="headerlink" title="Performance Compare"></a>Performance Compare</h2><p>下面是所有的性能测试结果。其中，Ref. 2 的代码和我实现的代码均使用 M*N*K = 128*512*512 的分块大小，MR, NR 的值均为 8 和 4。为了对比，我还将 Ref. 1 里最后一个 Kernel <code>MMult_4x4_15</code> 用 AVX 指令集改写了一下，一并加入测试。<br>下面先看我的笔记本上的结果：<br><img src="/2017/07/26/my-DGEMM-BLISLab/8.jpg" alt="i7-4702mq_perf"></p>
 <p>OpenBLAS 基本能跑到峰值性能。我按部就班写出来的代码（Kernel 7）和 Ref. 2 材料里的代码跑的速度基本一样，都没能接近峰值性能，可能需要上汇编才行。<code>MMult_4x4_15</code> 的结果也不太坏，但是那种分块方式显然没有上面那张图的那么好。其他 Kernel 基本就是自己跟自己玩了。</p>
-<p>再看一下实验室服务器上的结果：<br><img src="http://wx3.sinaimg.cn/mw690/db02a3d8gy1fhxd07v9wdj20mh0dtdgn.jpg" alt="e5-2620v2_perf"></p>
+<p>再看一下实验室服务器上的结果：<br><img src="/2017/07/26/my-DGEMM-BLISLab/9.jpg" alt="e5-2620v2_perf"></p>
 <p>这次 OpenBLAS 距离峰值还差一点。很意外地，Ref. 2 材料里的代码居然能够逼近 OpenBLAS 的性能，并且没有使用汇编代码。我按部就班写的代码（Kernel 7）则显得力不从心了，可能是我的代码只在同一个迭代内 prefetch 了一次，没有连续 prefetch。</p>
 <p>Update: 我将 Kernel 7 里的代码改成了交替连续 prefetch 的，但是仍然没有用 __asm__ 汇编指令。这一改进使得程序在实验室服务器上可以跑到 12.48 GFlops 了，交替连续 prefetch 还是可以用计算掩盖一下数据传输的。</p>
 <h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>以下方法有助于提高 CPU 程序的性能：</p>
@@ -152,7 +152,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/" data-id="ck49agg66001oossijcs4mqeb" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/" data-id="ck49dixmo001mmssi0tvspvgt" class="article-share-link">Share</a>
       
 
       
@@ -167,7 +167,7 @@
 <nav id="article-nav">
   
     <a href="/2017/08/26/Install-Arch-on-USBKey/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
+      <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
           Install Arch Linux on a USB Key
@@ -177,7 +177,7 @@
   
   
     <a href="/2017/07/06/my-CUDA-SGEMM/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">CUDA Case Study - SGEMM on Pascal</div>
     </a>
   
@@ -236,7 +236,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
     </div>
@@ -245,7 +245,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/CUDA/" style="font-size: 16px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 12px;">Cache</a> <a href="/tags/Conference/" style="font-size: 12px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 12px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 14px;">HPC</a> <a href="/tags/ICC/" style="font-size: 16px;">ICC</a> <a href="/tags/Japan/" style="font-size: 18px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 16px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 14px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 12px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 14px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 14px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
     </div>
@@ -254,7 +254,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
     </div>
@@ -263,7 +263,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -294,7 +294,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">友情链接</h3>
+    <h3 class="widget-title">Links</h3>
     <div class="widget">
       <ul>
         
@@ -331,7 +331,7 @@
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->

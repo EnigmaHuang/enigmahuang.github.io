@@ -4,26 +4,26 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>MPI-3 学习笔记（一）：Nonblocking Collective Communication | Rainmaker&#39;s Notebook</title>
+  <title>MPI-3 学习笔记（一）：非阻塞集合通信 | Rainmaker&#39;s Notebook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="MPI-3 非阻塞集合通信（Nonblocking Collective Communication）特性学习笔记。">
 <meta name="keywords" content="MPI">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MPI-3 学习笔记（一）：Nonblocking Collective Communication">
+<meta property="og:title" content="MPI-3 学习笔记（一）：非阻塞集合通信">
 <meta property="og:url" content="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/index.html">
 <meta property="og:site_name" content="Rainmaker&#39;s Notebook">
 <meta property="og:description" content="MPI-3 非阻塞集合通信（Nonblocking Collective Communication）特性学习笔记。">
-<meta property="og:image" content="http://wx4.sinaimg.cn/large/db02a3d8gy1fgyvrqmgyij20fq0f1tb8.jpg">
-<meta property="og:image" content="http://wx3.sinaimg.cn/large/db02a3d8gy1fgyvroi5coj20ep0fdq4w.jpg">
-<meta property="og:image" content="http://wx1.sinaimg.cn/large/db02a3d8gy1fgyvrrwqllj20db0drq4d.jpg">
-<meta property="og:image" content="http://wx2.sinaimg.cn/large/db02a3d8gy1fgyvrwcwvjj20r30bi0vt.jpg">
-<meta property="og:image" content="http://wx3.sinaimg.cn/large/db02a3d8gy1fgyvrz8vvtj20it0bjtao.jpg">
-<meta property="og:image" content="http://wx1.sinaimg.cn/large/db02a3d8gy1fgyvrxde2oj208b0803z6.jpg">
-<meta property="og:updated_time" content="2017-09-29T19:54:06.473Z">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/1.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/2.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/3.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/4.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/5.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/6.jpg">
+<meta property="og:updated_time" content="2019-12-17T04:30:51.084Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MPI-3 学习笔记（一）：Nonblocking Collective Communication">
+<meta name="twitter:title" content="MPI-3 学习笔记（一）：非阻塞集合通信">
 <meta name="twitter:description" content="MPI-3 非阻塞集合通信（Nonblocking Collective Communication）特性学习笔记。">
-<meta name="twitter:image" content="http://wx4.sinaimg.cn/large/db02a3d8gy1fgyvrqmgyij20fq0f1tb8.jpg">
+<meta name="twitter:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
@@ -97,7 +97,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      MPI-3 学习笔记（一）：Nonblocking Collective Communication
+      MPI-3 学习笔记（一）：非阻塞集合通信
     </h1>
   
 
@@ -141,34 +141,36 @@
 <p>非阻塞 Barrier <code>MPI_Barrier(comm, *request)</code> ：单独通知各进程，但集合同步。</p>
 <p>例子：动态稀疏数据交换（Dynamic Sparse Data Exchange）：只有发送者知道它要发给谁，接收者不知道</p>
 <ul>
-<li><p>一对一交换（all-to-all, PEX）：先使用 <code>MPI_Alltoall</code> 使得各进程知道自己要从哪些进程接受多少数据。最符合直觉的方法，但是性能和扩展性最差。</p>
-<p><img src="http://wx4.sinaimg.cn/large/db02a3d8gy1fgyvrqmgyij20fq0f1tb8.jpg" alt="PEX"></p>
-</li>
-<li><p>逐个统计（Reduce_scatter, PCX）：先执行规约（Reduce）操作求和得到每一个进程要接受多少数据，再将这一结果散发到各个进程。比 PEX 好一点但好不了多少。</p>
-<p><img src="http://wx3.sinaimg.cn/large/db02a3d8gy1fgyvroi5coj20ep0fdq4w.jpg" alt="PCX"></p>
-</li>
-<li><p><code>MPI_Ibarrier</code> （NBX）：点对点同步，直接传输，效果最好。</p>
-<p><img src="http://wx1.sinaimg.cn/large/db02a3d8gy1fgyvrrwqllj20db0drq4d.jpg" alt="NBX"></p>
-</li>
-<li><p>并行 BFS 测试：</p>
-<p><img src="http://wx2.sinaimg.cn/large/db02a3d8gy1fgyvrwcwvjj20r30bi0vt.jpg" alt="PBFS"></p>
-</li>
+<li>一对一交换（all-to-all, PEX）：先使用 <code>MPI_Alltoall</code> 使得各进程知道自己要从哪些进程接受多少数据。最符合直觉的方法，但是性能和扩展性最差。</li>
 </ul>
+<p><img src="/2017/06/26/MPI3-NCC/1.jpg" alt="PEX"></p>
+<ul>
+<li>逐个统计（Reduce_scatter, PCX）：先执行规约（Reduce）操作求和得到每一个进程要接受多少数据，再将这一结果散发到各个进程。比 PEX 好一点但好不了多少。</li>
+</ul>
+<p><img src="/2017/06/26/MPI3-NCC/2.jpg" alt="PCX"></p>
+<ul>
+<li><code>MPI_Ibarrier</code> （NBX）：点对点同步，直接传输，效果最好。</li>
+</ul>
+<p><img src="/2017/06/26/MPI3-NCC/3.jpg" alt="NBX"></p>
+<ul>
+<li>并行 BFS 测试：</li>
+</ul>
+<p><img src="/2017/06/26/MPI3-NCC/4.jpg" alt="PBFS"></p>
 <p>并行 FFT with <code>Ialltoall</code> 和计算-通信流水线（三种颜色分别是三个进程所持有的数据）：</p>
-<p><img src="http://wx3.sinaimg.cn/large/db02a3d8gy1fgyvrz8vvtj20it0bjtao.jpg" alt="PFFT"></p>
+<p><img src="/2017/06/26/MPI3-NCC/5.jpg" alt="PFFT"></p>
 <ul>
 <li><p>依次调用 <code>MPI_Ialltoall</code> 传输第 1, 2, 3 个 y 平面；</p>
 </li>
 <li><p>依次等待三个 y 平面的传输完成，每传输完一个就执行一次 x 方向的变换（图中蓝色的是还在传输中的，第一个 y 平面已经传输完了并且进行了变换）：</p>
-<p><img src="http://wx1.sinaimg.cn/large/db02a3d8gy1fgyvrxde2oj208b0803z6.jpg" alt="PFFT2"></p>
 </li>
 </ul>
+<p><img src="/2017/06/26/MPI3-NCC/6.jpg" alt="PFFT2"></p>
 
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/" data-id="ck49agg3d0011ossi4kp3xu3p" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/06/26/MPI3-NCC/" data-id="ck49dixke0011mssi422lf0ak" class="article-share-link">Share</a>
       
 
       
@@ -183,17 +185,17 @@
 <nav id="article-nav">
   
     <a href="/2017/06/26/MPI3-OSC/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
+      <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          MPI-3 学习笔记（二）：One-sided Communication
+          MPI-3 学习笔记（二）：单边通信
         
       </div>
     </a>
   
   
     <a href="/2017/06/24/Sorting-and-Cache/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">排序与 Cache Miss</div>
     </a>
   
@@ -230,8 +232,8 @@
      
       <script type="text/javascript">
         var gitment = new Gitment({
-			  id: 'MPI-3 学习笔记（一）：Nonblocking Collective Communication',
-			  title: 'MPI-3 学习笔记（一）：Nonblocking Collective Communication',
+			  id: 'MPI-3 学习笔记（一）：非阻塞集合通信',
+			  title: 'MPI-3 学习笔记（一）：非阻塞集合通信',
 			  owner: 'EnigmaHuang',
 			  repo: 'enigmahuang.github.io',
 			  oauth: {
@@ -252,7 +254,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
     </div>
@@ -261,7 +263,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/CUDA/" style="font-size: 16px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 12px;">Cache</a> <a href="/tags/Conference/" style="font-size: 12px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 12px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 14px;">HPC</a> <a href="/tags/ICC/" style="font-size: 16px;">ICC</a> <a href="/tags/Japan/" style="font-size: 18px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 16px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 14px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 12px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 14px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 14px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
     </div>
@@ -270,7 +272,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
     </div>
@@ -279,7 +281,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -310,7 +312,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">友情链接</h3>
+    <h3 class="widget-title">Links</h3>
     <div class="widget">
       <ul>
         
@@ -347,7 +349,7 @@
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->

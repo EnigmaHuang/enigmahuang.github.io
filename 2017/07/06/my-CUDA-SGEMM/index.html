@@ -14,8 +14,8 @@
 <meta property="og:site_name" content="Rainmaker&#39;s Notebook">
 <meta property="og:description" content="最近自己重新学 CUDA （以前上过课，长时间不用又忘记了），找些经典的 case study 自己照猫画虎弄一次加深一点认识。HPC 领域里一个绕不开的例子就是 xGEMM，即稠密矩阵-矩阵乘法。网上关于 CUDA 如何实现高性能 xGEMM 的介绍不多，而且很多都是 Fermi 时代的资料，面对 Kepler 有详细介绍的只有 Ref No.2 那个网页。我以 Ref No.1, No.2 两">
 <meta property="og:image" content="https://cnugteren.github.io/tutorial/images/gemm2a.png">
-<meta property="og:image" content="http://wx2.sinaimg.cn/large/db02a3d8gy1fhaf3zjahpj20h10k0q6s.jpg">
-<meta property="og:updated_time" content="2018-01-13T22:30:02.634Z">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/07/06/my-CUDA-SGEMM/1.jpg">
+<meta property="og:updated_time" content="2019-12-17T04:24:31.836Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="CUDA Case Study - SGEMM on Pascal">
 <meta name="twitter:description" content="最近自己重新学 CUDA （以前上过课，长时间不用又忘记了），找些经典的 case study 自己照猫画虎弄一次加深一点认识。HPC 领域里一个绕不开的例子就是 xGEMM，即稠密矩阵-矩阵乘法。网上关于 CUDA 如何实现高性能 xGEMM 的介绍不多，而且很多都是 Fermi 时代的资料，面对 Kepler 有详细介绍的只有 Ref No.2 那个网页。我以 Ref No.1, No.2 两">
@@ -112,7 +112,7 @@
 <p>Kernel 1~4 中我没有显式为 A, B, C 矩阵填充 0 以满足 32x32 的分块大小，而是在 kernel 里进行判断。这样写起来比较麻烦，性能也会受到影响。因此我在 kernel 5 里先进行了填0，使得 A, B 的尺寸都是 32 的倍数，然后再计算，最后再把 C 周围填充的 0 给去掉。</p>
 <p>Kernel 5 的性能为 2375 GFlops.</p>
 <h2 id="Kernel-6-amp-7-More-2-Work-Per-Thread-amp-2D-Register"><a href="#Kernel-6-amp-7-More-2-Work-Per-Thread-amp-2D-Register" class="headerlink" title="Kernel 6 &amp; 7: More^2 Work Per Thread &amp; 2D Register"></a>Kernel 6 &amp; 7: More^2 Work Per Thread &amp; 2D Register</h2><p>更进一步！这次每个线程不止管 C 的一列了，而是管 C 的一个子块：每一列管 C 的 8 * 4 个元素，和 kernel 4 中的思路一样，每个线程管的元素在同一行中两两间隔有 15 个元素。这个思路其实就是 Ref No.3 论文里的 Fig.2，只是论文里的是一个线程管 16 个元素而不是 32 个。每个线程每次从 shared memory 的 A, B 分块中取出一列 4 个元素和一行 8 个元素，对自己寄存器中的 C 子块进行秩1修正（一个列向量乘一个行向量），这样可以最大限度提高读入到寄存器中的数据的使用率（秩1修正读 $2n$ 个元素计算 $2n^2$ 次，前提是计算的结果必须能存在 fast mem 里）。Kernel 7 和 kernel 6 类似，不过存在 shared memory 里的 A 和 B 不再是正方形，而是长方形。因此从 global memory 读入到 shared memory 的时候会有一些变化。每次秩一修正也变成 8x8 的子块。</p>
-<p><img src="http://wx2.sinaimg.cn/large/db02a3d8gy1fhaf3zjahpj20h10k0q6s.jpg" alt="Fig.2"></p>
+<p><img src="/2017/07/06/my-CUDA-SGEMM/1.jpg" alt="Fig.2"></p>
 <p>Kernel 6 和 7 的性能很接近，分别是 3102 GFlops 和 3280 GFlops。</p>
 <h2 id="Kernel-8-Vector-Read"><a href="#Kernel-8-Vector-Read" class="headerlink" title="Kernel 8: Vector Read"></a>Kernel 8: Vector Read</h2><p>这个 Kernel 对应 Ref No.2 里的 kernel 7，计算上和上面的 kernel 7 一致，只是使用了 float4 类型来进行读入。这样，GPU 可以使用 <code>LD.128</code> 这样的向量载入指令，每次读取更多数据，减少总的指令数，使得全局访问的速度更快（参见<a href="https://stackoverflow.com/questions/26676806/efficiency-of-cuda-vector-types-float2-float3-float4" target="_blank" rel="external">这个</a>）。然而读到寄存器里的 float4 再拆开写到 shared mem 里的时候免不了要出现一次 bank conflict。这个 Kernel 的速度可以达到 4807 GFlops。如果忽略掉填充 0 所需的时间，单纯是计算乘法的性能可以达到 5280 GFlops。</p>
 <h2 id="数据汇总"><a href="#数据汇总" class="headerlink" title="数据汇总"></a>数据汇总</h2><p>Kernel 8 与 CUBLAS sgemm 在不同尺寸下的对比：</p>
@@ -220,7 +220,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/07/06/my-CUDA-SGEMM/" data-id="ck49agg5z001lossiod0itrik" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/07/06/my-CUDA-SGEMM/" data-id="ck49dixm5001hmssic76py4lv" class="article-share-link">Share</a>
       
 
       
@@ -235,7 +235,7 @@
 <nav id="article-nav">
   
     <a href="/2017/07/26/my-DGEMM-BLISLab/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
+      <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
           CPU Case Study - Optimizing DGEMM
@@ -245,8 +245,8 @@
   
   
     <a href="/2017/06/27/MPI3-HP-NCC/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">MPI-3 学习笔记（三）：Hybrid Programming, Neighborhood Collective Communication</div>
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MPI-3 学习笔记（三）：混合编程与邻居集合通信</div>
     </a>
   
 </nav>
@@ -304,7 +304,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
     </div>
@@ -313,7 +313,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/CUDA/" style="font-size: 16px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 12px;">Cache</a> <a href="/tags/Conference/" style="font-size: 12px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 12px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 14px;">HPC</a> <a href="/tags/ICC/" style="font-size: 16px;">ICC</a> <a href="/tags/Japan/" style="font-size: 18px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 16px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 14px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 12px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 14px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 14px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
     </div>
@@ -322,7 +322,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
     </div>
@@ -331,7 +331,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -362,7 +362,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">友情链接</h3>
+    <h3 class="widget-title">Links</h3>
     <div class="widget">
       <ul>
         
@@ -399,7 +399,7 @@
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->

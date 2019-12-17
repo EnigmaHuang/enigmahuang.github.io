@@ -4,23 +4,23 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>MPI-3 学习笔记（二）：One-sided Communication | Rainmaker&#39;s Notebook</title>
+  <title>MPI-3 学习笔记（二）：单边通信 | Rainmaker&#39;s Notebook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
   <meta name="description" content="MPI-3 单边通信（One-sided Communication）特性学习笔记。">
 <meta name="keywords" content="MPI">
 <meta property="og:type" content="article">
-<meta property="og:title" content="MPI-3 学习笔记（二）：One-sided Communication">
+<meta property="og:title" content="MPI-3 学习笔记（二）：单边通信">
 <meta property="og:url" content="http://enigmahuang.github.io/2017/06/26/MPI3-OSC/index.html">
 <meta property="og:site_name" content="Rainmaker&#39;s Notebook">
 <meta property="og:description" content="MPI-3 单边通信（One-sided Communication）特性学习笔记。">
-<meta property="og:image" content="http://wx2.sinaimg.cn/large/db02a3d8gy1fgyyk0phh7j20aa07njrk.jpg">
-<meta property="og:image" content="http://wx3.sinaimg.cn/large/db02a3d8gy1fgyyk1xxqfj20jv07rdgg.jpg">
-<meta property="og:image" content="http://wx4.sinaimg.cn/large/db02a3d8gy1fgyyk5276zj20j00843z6.jpg">
-<meta property="og:updated_time" content="2017-09-29T19:54:01.796Z">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-OSC/1.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-OSC/2.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-OSC/3.jpg">
+<meta property="og:updated_time" content="2019-12-17T04:31:49.508Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MPI-3 学习笔记（二）：One-sided Communication">
+<meta name="twitter:title" content="MPI-3 学习笔记（二）：单边通信">
 <meta name="twitter:description" content="MPI-3 单边通信（One-sided Communication）特性学习笔记。">
-<meta name="twitter:image" content="http://wx2.sinaimg.cn/large/db02a3d8gy1fgyyk0phh7j20aa07njrk.jpg">
+<meta name="twitter:image" content="http://enigmahuang.github.io/2017/06/26/MPI3-OSC/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
@@ -94,7 +94,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      MPI-3 学习笔记（二）：One-sided Communication
+      MPI-3 学习笔记（二）：单边通信
     </h1>
   
 
@@ -167,7 +167,7 @@
 <li>PSCW 同步：主动同步<ul>
 <li>和 fence 类似，但源进程和目标进程指出他们可以和哪一个组的进程进行通信；</li>
 <li>目标进程：启动一个暴露阶段（Exposure Epoch）:  <code>MPI_Win_post</code> 打开，<code>MPI_Win_wait</code> 关闭；</li>
-<li>源进程：启动一个访问阶段（Access epoch）：<code>MPI_Win_start</code> 打开，<code>MPI_Win_complete</code> 关闭。<br><img src="http://wx2.sinaimg.cn/large/db02a3d8gy1fgyyk0phh7j20aa07njrk.jpg" alt="PSCW"></li>
+<li>源进程：启动一个访问阶段（Access epoch）：<code>MPI_Win_start</code> 打开，<code>MPI_Win_complete</code> 关闭。<br><img src="/2017/06/26/MPI3-OSC/1.jpg" alt="PSCW"></li>
 </ul>
 </li>
 <li>Lock/Unlock：被动同步<ul>
@@ -176,7 +176,7 @@
 <li><code>MPI_Win_lock</code>/<code>MPI_Win_unlock</code>开始/结束被动通信阶段；</li>
 <li>独占/共享 模式决定了其他进程能否取得目标进程的锁（使用目标进程的数据），使用独占模式时只有源进程调用 unlock 以后才会释放目标进程的锁；</li>
 <li><code>MPI_Win_flush</code>：完成所有还没完成的操作；</li>
-<li>类似的函数： <code>MPI_Win_lock_all</code> / <code>MPI_Win_unlock_all</code>, lock/unlock 源进程以外所有其他进程<br><img src="http://wx3.sinaimg.cn/large/db02a3d8gy1fgyyk1xxqfj20jv07rdgg.jpg" alt="Lock"></li>
+<li>类似的函数： <code>MPI_Win_lock_all</code> / <code>MPI_Win_unlock_all</code>, lock/unlock 源进程以外所有其他进程<br><img src="/2017/06/26/MPI3-OSC/2.jpg" alt="Lock"></li>
 </ul>
 </li>
 </ol>
@@ -188,7 +188,7 @@
 <p>内存模型：</p>
 <ul>
 <li>统一模式：公共和私有的 window 是同一片内存；</li>
-<li>分隔模式：公共和私有的 window 不是同一片内存，但 MPI 提供软件保证的一致性。<br><img src="http://wx4.sinaimg.cn/large/db02a3d8gy1fgyyk5276zj20j00843z6.jpg" alt="MemMode"></li>
+<li>分隔模式：公共和私有的 window 不是同一片内存，但 MPI 提供软件保证的一致性。<br><img src="/2017/06/26/MPI3-OSC/3.jpg" alt="MemMode"></li>
 <li>这两种模式的语义都非常复杂……</li>
 </ul>
 
@@ -196,7 +196,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/06/26/MPI3-OSC/" data-id="ck49agg3k0013ossievqfify0" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/06/26/MPI3-OSC/" data-id="ck49dixkl0013mssibdnj5hhs" class="article-share-link">Share</a>
       
 
       
@@ -211,18 +211,18 @@
 <nav id="article-nav">
   
     <a href="/2017/06/27/MPI3-HP-NCC/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
+      <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
-          MPI-3 学习笔记（三）：Hybrid Programming, Neighborhood Collective Communication
+          MPI-3 学习笔记（三）：混合编程与邻居集合通信
         
       </div>
     </a>
   
   
     <a href="/2017/06/26/MPI3-NCC/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">MPI-3 学习笔记（一）：Nonblocking Collective Communication</div>
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MPI-3 学习笔记（一）：非阻塞集合通信</div>
     </a>
   
 </nav>
@@ -258,8 +258,8 @@
      
       <script type="text/javascript">
         var gitment = new Gitment({
-			  id: 'MPI-3 学习笔记（二）：One-sided Communication',
-			  title: 'MPI-3 学习笔记（二）：One-sided Communication',
+			  id: 'MPI-3 学习笔记（二）：单边通信',
+			  title: 'MPI-3 学习笔记（二）：单边通信',
 			  owner: 'EnigmaHuang',
 			  repo: 'enigmahuang.github.io',
 			  oauth: {
@@ -280,7 +280,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
     </div>
@@ -289,7 +289,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/CUDA/" style="font-size: 16px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 12px;">Cache</a> <a href="/tags/Conference/" style="font-size: 12px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 12px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 14px;">HPC</a> <a href="/tags/ICC/" style="font-size: 16px;">ICC</a> <a href="/tags/Japan/" style="font-size: 18px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 16px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 14px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 12px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 14px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 14px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
     </div>
@@ -298,7 +298,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
     </div>
@@ -307,7 +307,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -338,7 +338,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">友情链接</h3>
+    <h3 class="widget-title">Links</h3>
     <div class="widget">
       <ul>
         
@@ -375,7 +375,7 @@
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->

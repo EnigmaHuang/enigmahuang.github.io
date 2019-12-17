@@ -13,13 +13,13 @@
 <meta property="og:url" content="http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/index.html">
 <meta property="og:site_name" content="Rainmaker&#39;s Notebook">
 <meta property="og:description" content="HPCG (High-Performance Conjugate Gradient) 是如今主要的 HPC 系统性能测试基准之一，是一个精简的大型稀疏方程组并行求解器，包含了区域分解（Domain Decomposition）、多重网格（Multigrid）和预条件子（Preconditioner）这些重要的线性方程组求解技术。我在学完 MATH 6644 这门课以及自己动手写了 3D Multi">
-<meta property="og:image" content="http://wx2.sinaimg.cn/large/db02a3d8gy1fmvm3i48q1j20hs0a4dig.jpg">
-<meta property="og:image" content="http://wx4.sinaimg.cn/large/db02a3d8gy1fmvm3ilefij212g0jjth7.jpg">
-<meta property="og:updated_time" content="2017-12-27T22:45:45.884Z">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/1.jpg">
+<meta property="og:image" content="http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/2.jpg">
+<meta property="og:updated_time" content="2019-12-17T04:19:59.014Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="HPCG 3.0 reference implementation 阅读笔记">
 <meta name="twitter:description" content="HPCG (High-Performance Conjugate Gradient) 是如今主要的 HPC 系统性能测试基准之一，是一个精简的大型稀疏方程组并行求解器，包含了区域分解（Domain Decomposition）、多重网格（Multigrid）和预条件子（Preconditioner）这些重要的线性方程组求解技术。我在学完 MATH 6644 这门课以及自己动手写了 3D Multi">
-<meta name="twitter:image" content="http://wx2.sinaimg.cn/large/db02a3d8gy1fmvm3i48q1j20hs0a4dig.jpg">
+<meta name="twitter:image" content="http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/1.jpg">
   
     <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
@@ -106,7 +106,7 @@
 <h2 id="数学模型与基本算法"><a href="#数学模型与基本算法" class="headerlink" title="数学模型与基本算法"></a>数学模型与基本算法</h2><p>HPCG 求解的目标方程是带 Dirichlet 边界条件的三维热传导偏微分方程。方程使用 27 点 stencil 导出线性方程组，边界条件为 0，求解线性方程组使用的是预条件共轭梯度法（PCG）。方程组使用各分量均为 1 的向量作为精确解并生成对应的右端项（RHS），使用零向量作为初始解。求解的有效性指标是 50 步迭代后相对残差 $\frac{| \vec{b} - A \vec{x}|_2}{|\vec{b}|_2} &lt; 10^{-6}$. </p>
 <p>其中，PCG 使用一个四层的 Multigrid V-cycle 求解器作为预条件子。Multigrid V-cycle 每一层使用单步 symmetric Gauss-Seidel 迭代法作为 pre- &amp; post-smoother。Multigrid V-cycle 的限制投影和插值投影算子使用最简单的 injection 方式，即将本层粗网格的部分网格点和下一层细网格的网格点建立直接联系。</p>
 <h2 id="方程组生成与数据分布"><a href="#方程组生成与数据分布" class="headerlink" title="方程组生成与数据分布"></a>方程组生成与数据分布</h2><p>HPCG 首先调用 <code>GenerateGeometry</code> 函数根据输入参数构造求解问题的几何尺寸。每个 MPI 进程处理含有 $nx \times ny \times nz$ 个网格点的 local subdomain，在 x, y, z 方向上分别有 $npx, npy, npz$ 个 MPI 进程。如果启动程序的时候不指定，HPCG 会自动计算最合适的 $npx, npy, npz$, 使得这三者尽量相等。因此，x, y, z 方向上全局共有 $gn[x, y, z]= n[x, y, z] \times np[x, y, z]$ 个格点，全局格点 $(igx, igy, igz)$ 的全局编号为 $igz \times gnx \times gny + igy \times gnx + igx$. </p>
-<p><img src="http://wx2.sinaimg.cn/large/db02a3d8gy1fmvm3i48q1j20hs0a4dig.jpg" alt="DD and Stencil"></p>
+<p><img src="/2017/12/27/HPCG_3_Notes/1.jpg" alt="DD and Stencil"></p>
 <p>上图中左侧是求解区域的区域分解。每一个小立方体为一个 MPI 进程的 local subdomain。圆圈中为 local subdomain 的 halo 示意图。右侧是 27 点 Stencil 的示意图，即格点 $(ix, iy, iz)$ 的计算需要依赖 $(ix+kx, iy+ky, iz+kz), k[x,y,z]= -1, 0, 1$ 这 27 个格点。这样的 stencil 可以由 FDM, FVM 或 FEM 导出，非常常见。</p>
 <p>完成问题构建以后，HPCG 会调用 <code>GenerateProblem</code> 函数来构造稀疏方程组。HPCG 使用 CSR 格式储存稀疏矩阵，不过不使用数组来记录每一行非零元的偏移，而是直接使用一个指针数组（<code>double **matrixValues</code>）指向每一行的第一个非零元。然而实际上，HPCG 为每一行都分配了 27 个非零元的存储空间（GenerateProblem_ref.cpp:67, 104-124），尽管有些行只有 8 个或 12 个非零元（所以很多优化实现都会直接在这里把 CSR 转换成 ELLPACK 或者 S-ELLPACK）。<code>GenerateProblem</code> 函数为本 MPI 进程的 local subdomain 中的网格点生成方程组（GenerateProblem_ref.cpp:131-183），非零元先是生成全局坐标编号（<code>A.mtxIndG</code>）而并不直接生成本地坐标编号（<code>A.mtxIndL</code>）（GenerateProblem_ref.cpp:151, 165），但使用了两个 <code>std::map</code> 来保存全局坐标编号和本地坐标编号之间的对应关系（GenerateProblem_ref.cpp:139-145）。全局坐标编号使用 long long 类型，本地坐标编号使用 int 类型。参考实现中生成的方程组主对角线元素为 26，其余非零元素为 -1。</p>
 <p>调用 <code>GenerateProblem</code> 以后，HPCG 会调用 <code>SetupHalo</code> 来初始化与本 MPI 进程的 local subdomain 相邻的其他进程的网格点的设置和将全局坐标编号转换为本地坐标编号。过程如下：</p>
@@ -117,7 +117,7 @@
 </ol>
 <p>随后，HPCG 会调用 <code>GenerateCoarseProblem</code> 来为 Multigrid V-cycle 生成第 2, 3, 4 层的系数矩阵和投影算子。生成粗网格的系数矩阵时，<code>GenerateCoarseProblem</code> 会将 local domain 的三维尺寸缩小为原来一半，然后以此为参数直接调用 <code>GenerateProblem</code> 来生成粗网格系数矩阵和 <code>SetupHalo</code> 来构建粗网格 subdomain 之间的边界关系，也就是使用 rediscretization on coarse grid 方法。至于投影算子，则相当简单粗暴：粗网格的 $(clix, cliy, cliz)$ 对应细网格的 $(clix \times 2, cliy \times 2, cliz \times 2)$, 并且这里使用的是本地坐标编号，因为投影算子的操作是本地的，不需要与相邻的 subdomain 发生联系。这个关系被保存在 <code>A.MGData-&gt;f2c</code> 数组（fine to coarse）中（GenerateCoarseProblem.cpp:71-82）。虽然这个实现在收敛速度上不如 Galerkin coarse method 和 full-weighted operator，但是胜在足够简单，不需要引入复杂的计算。</p>
 <p>HPCG 会进行 symmetric test 和 spectral test 以确保生成的方程组是正确可解的以及用户优化实现是正确的。此部分我们忽略。</p>
-<h2 id="主要计算函数与过程"><a href="#主要计算函数与过程" class="headerlink" title="主要计算函数与过程"></a>主要计算函数与过程</h2><p><img src="http://wx4.sinaimg.cn/large/db02a3d8gy1fmvm3ilefij212g0jjth7.jpg" alt="HPCG Algorithm"></p>
+<h2 id="主要计算函数与过程"><a href="#主要计算函数与过程" class="headerlink" title="主要计算函数与过程"></a>主要计算函数与过程</h2><p><img src="/2017/12/27/HPCG_3_Notes/2.jpg" alt="HPCG Algorithm"></p>
 <p>上图是 HPCG 所使用的 PCG 算法。实际上，红框内的 Multigrid Preconditioner 也需要蓝色的 SpMV，而 SpMV 和 SYMGS 所需的与相邻 subdomain 的通信 <code>ExchangeHalo</code> 未被列出。下表列出了 HPCG 中主要的计算函数及其作用。</p>
 <table>
 <thead>
@@ -180,7 +180,7 @@
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/" data-id="ck49agg1c000aossi11apvsfk" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/" data-id="ck49dixia0009mssi67zex5hu" class="article-share-link">Share</a>
       
 
       
@@ -195,7 +195,7 @@
 <nav id="article-nav">
   
     <a href="/2018/01/01/AMG_Introduce/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
+      <strong class="article-nav-caption">Newer</strong>
       <div class="article-nav-title">
         
           代数多重网格（Algebraic Multigrid）简介
@@ -205,7 +205,7 @@
   
   
     <a href="/2017/12/01/PoissonEqu_FDMCD_Multigrid/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">上一篇</strong>
+      <strong class="article-nav-caption">Older</strong>
       <div class="article-nav-title">泊松方程的中心差分格式与多重网格法</div>
     </a>
   
@@ -264,7 +264,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签</h3>
+    <h3 class="widget-title">Tags</h3>
     <div class="widget">
       <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
     </div>
@@ -273,7 +273,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">标签云</h3>
+    <h3 class="widget-title">Tag Cloud</h3>
     <div class="widget tagcloud">
       <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/CUDA/" style="font-size: 16px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 12px;">Cache</a> <a href="/tags/Conference/" style="font-size: 12px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 12px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 14px;">HPC</a> <a href="/tags/ICC/" style="font-size: 16px;">ICC</a> <a href="/tags/Japan/" style="font-size: 18px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 16px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 14px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 14px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 12px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 14px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 14px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
     </div>
@@ -282,7 +282,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">归档</h3>
+    <h3 class="widget-title">Archives</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
     </div>
@@ -291,7 +291,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">近期文章</h3>
+    <h3 class="widget-title">Recent Posts</h3>
     <div class="widget">
       <ul>
         
@@ -322,7 +322,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">友情链接</h3>
+    <h3 class="widget-title">Links</h3>
     <div class="widget">
       <ul>
         
@@ -359,7 +359,7 @@
 </nav>
   <!-- totop start -->
 <div id="totop">
-<a title="返回顶部"><img src="/img/scrollup.png"/></a>
+<a title="totop"><img src="/img/scrollup.png"/></a>
 </div>
 
 <!-- totop end -->
