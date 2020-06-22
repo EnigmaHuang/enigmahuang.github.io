@@ -1,0 +1,458 @@
+<?xml version="1.0" encoding="utf-8"?>
+<feed xmlns="http://www.w3.org/2005/Atom">
+  <title>Rainmaker&#39;s Notebook</title>
+  
+  <subtitle>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</subtitle>
+  <link href="/atom.xml" rel="self"/>
+  
+  <link href="http://enigmahuang.github.io/"/>
+  <updated>2020-04-12T01:29:36.717Z</updated>
+  <id>http://enigmahuang.github.io/</id>
+  
+  <author>
+    <name>Enigma Huang</name>
+    
+  </author>
+  
+  <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>雕虫小技：用 C Macro 进行『模板编程』</title>
+    <link href="http://enigmahuang.github.io/2020/04/11/C-macro-template-programming/"/>
+    <id>http://enigmahuang.github.io/2020/04/11/C-macro-template-programming/</id>
+    <published>2020-04-11T23:19:00.000Z</published>
+    <updated>2020-04-12T01:29:36.717Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近和一个 C++ 程序员聊的时候被对方说写 C 不能用模板编程，会浪费很多时间。我想对方作为一个写了十多年 C++ 的老程序员肯定知道 C 能用 macro 玩出许多花样，只是不想让我这种菜鸡被这些禁忌领域的东西荼毒心灵。于是我自己找了一下资料，搞了一个满足我需求的方法出来，记录如下。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="C" scheme="http://enigmahuang.github.io/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SC19：年轻人的第一次公费旅游</title>
+    <link href="http://enigmahuang.github.io/2019/12/16/SC19/"/>
+    <id>http://enigmahuang.github.io/2019/12/16/SC19/</id>
+    <published>2019-12-17T02:34:17.000Z</published>
+    <updated>2019-12-17T02:58:52.824Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这是一篇咕咕咕了一个月的游记。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="HPC" scheme="http://enigmahuang.github.io/tags/HPC/"/>
+    
+      <category term="Travel" scheme="http://enigmahuang.github.io/tags/Travel/"/>
+    
+      <category term="Conference" scheme="http://enigmahuang.github.io/tags/Conference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>奇技淫巧：非对称 MPI + OpenMP 并行</title>
+    <link href="http://enigmahuang.github.io/2019/09/02/MPI-asymmetric-OMP/"/>
+    <id>http://enigmahuang.github.io/2019/09/02/MPI-asymmetric-OMP/</id>
+    <published>2019-09-02T15:45:14.000Z</published>
+    <updated>2020-04-12T01:22:12.792Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;MPI + OpenMP/multi-threading 是如今大部分高性能计算程序的并行方式。一般情况下，各 MPI 进程地位对等（对称），可用的 CPU 资源和并行出来的线程数也相同。今天讲一个奇技淫巧：如何进行非对称 MPI + OpenMP 并行。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="C" scheme="http://enigmahuang.github.io/tags/C/"/>
+    
+      <category term="MPI" scheme="http://enigmahuang.github.io/tags/MPI/"/>
+    
+      <category term="OpenMP" scheme="http://enigmahuang.github.io/tags/OpenMP/"/>
+    
+      <category term="Affinity" scheme="http://enigmahuang.github.io/tags/Affinity/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>MKL + CUDA 编译 MAGMA 以及使用 MAGMA</title>
+    <link href="http://enigmahuang.github.io/2019/03/19/Install-MAGMA-and-CG-Sample-Code/"/>
+    <id>http://enigmahuang.github.io/2019/03/19/Install-MAGMA-and-CG-Sample-Code/</id>
+    <published>2019-03-20T03:37:21.000Z</published>
+    <updated>2019-03-20T03:44:56.186Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;久闻 MAGMA 大名若干年以后，最近终于要用到它来做测试。记录一下安装和使用的一些步骤。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="LinearSystemSolver" scheme="http://enigmahuang.github.io/tags/LinearSystemSolver/"/>
+    
+      <category term="CUDA" scheme="http://enigmahuang.github.io/tags/CUDA/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2019 日本游记，四：小樽 &amp; 札幌</title>
+    <link href="http://enigmahuang.github.io/2019/02/13/Japan-Trip-2019-4/"/>
+    <id>http://enigmahuang.github.io/2019/02/13/Japan-Trip-2019-4/</id>
+    <published>2019-02-13T16:45:15.000Z</published>
+    <updated>2019-12-17T03:08:11.002Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;四：小樽 &amp;amp; 札幌&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Travel" scheme="http://enigmahuang.github.io/tags/Travel/"/>
+    
+      <category term="Japan" scheme="http://enigmahuang.github.io/tags/Japan/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2019 日本游记，三：函馆 &amp; 登别</title>
+    <link href="http://enigmahuang.github.io/2019/02/13/Japan-Trip-2019-3/"/>
+    <id>http://enigmahuang.github.io/2019/02/13/Japan-Trip-2019-3/</id>
+    <published>2019-02-13T16:45:14.000Z</published>
+    <updated>2019-12-17T03:08:03.280Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;三：函馆 &amp;amp; 登别&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Travel" scheme="http://enigmahuang.github.io/tags/Travel/"/>
+    
+      <category term="Japan" scheme="http://enigmahuang.github.io/tags/Japan/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2019 日本游记，二：京阪神</title>
+    <link href="http://enigmahuang.github.io/2019/02/12/Japan-Trip-2019-2/"/>
+    <id>http://enigmahuang.github.io/2019/02/12/Japan-Trip-2019-2/</id>
+    <published>2019-02-12T16:45:15.000Z</published>
+    <updated>2019-12-17T03:08:07.003Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;二：京阪神&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Travel" scheme="http://enigmahuang.github.io/tags/Travel/"/>
+    
+      <category term="Japan" scheme="http://enigmahuang.github.io/tags/Japan/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2019 日本游记，一：和歌山县</title>
+    <link href="http://enigmahuang.github.io/2019/02/12/Japan-Trip-2019-1/"/>
+    <id>http://enigmahuang.github.io/2019/02/12/Japan-Trip-2019-1/</id>
+    <published>2019-02-12T16:45:14.000Z</published>
+    <updated>2019-12-17T03:07:58.794Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一：和歌山县&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Travel" scheme="http://enigmahuang.github.io/tags/Travel/"/>
+    
+      <category term="Japan" scheme="http://enigmahuang.github.io/tags/Japan/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>SC18：年轻人的第一次学术会议</title>
+    <link href="http://enigmahuang.github.io/2018/11/17/SC18/"/>
+    <id>http://enigmahuang.github.io/2018/11/17/SC18/</id>
+    <published>2018-11-17T16:45:14.000Z</published>
+    <updated>2019-12-17T02:38:23.703Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;本科眼馋 SC 三年了，读研以后终于可以去 SC 了。年轻人的第一次学术会议啊。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="HPC" scheme="http://enigmahuang.github.io/tags/HPC/"/>
+    
+      <category term="Travel" scheme="http://enigmahuang.github.io/tags/Travel/"/>
+    
+      <category term="Conference" scheme="http://enigmahuang.github.io/tags/Conference/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>OpenMP fork-join cost 测试</title>
+    <link href="http://enigmahuang.github.io/2018/09/20/OpenMP_fork_join_cost/"/>
+    <id>http://enigmahuang.github.io/2018/09/20/OpenMP_fork_join_cost/</id>
+    <published>2018-09-21T02:01:14.000Z</published>
+    <updated>2020-04-12T01:22:01.125Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前两天和基友讨论问题的时候，想起来此之前先后在几个场合遇到过什么场合开 OpenMP 多线程的加速能抵过开线程的 overhead 这个问题。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="ICC" scheme="http://enigmahuang.github.io/tags/ICC/"/>
+    
+      <category term="C" scheme="http://enigmahuang.github.io/tags/C/"/>
+    
+      <category term="OpenMP" scheme="http://enigmahuang.github.io/tags/OpenMP/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>禁用 mmap 和 memory trip 来加速 MPI RMA</title>
+    <link href="http://enigmahuang.github.io/2018/09/05/MPI_mmap_trim/"/>
+    <id>http://enigmahuang.github.io/2018/09/05/MPI_mmap_trim/</id>
+    <published>2018-09-06T00:18:05.000Z</published>
+    <updated>2018-09-06T02:02:19.009Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这两天遇到一个小坑，和 MPI &amp;amp; Linux 内存管理有关。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="MPI" scheme="http://enigmahuang.github.io/tags/MPI/"/>
+    
+      <category term="Linux" scheme="http://enigmahuang.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>比起C++性能榨汁机，你可能更需要的是 -O3 和 ICC</title>
+    <link href="http://enigmahuang.github.io/2018/05/24/Why_you_need_O3_and_ICC/"/>
+    <id>http://enigmahuang.github.io/2018/05/24/Why_you_need_O3_and_ICC/</id>
+    <published>2018-05-24T15:45:14.000Z</published>
+    <updated>2020-04-12T01:21:39.691Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前两天看到一个文章系列：《C++性能榨汁机》，其中前面四篇（&lt;a href=&quot;http://irootlee.com/juicer_branch_predictor4/&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;第四篇&lt;/a&gt;）在讲分支预测和如何避免分支预测带来的性能下降问题。文章大体的思路是对的，只是我觉得手写条件传送代码实在是有点奇技淫巧，在绝大部分的情况下是不应该提倡的。我觉得比起条件传送代码，用 SIMD 加上掩码才是更直观的操作。我还是用原文的代码来说明这个问题。&lt;br&gt;&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="SIMD" scheme="http://enigmahuang.github.io/tags/SIMD/"/>
+    
+      <category term="ICC" scheme="http://enigmahuang.github.io/tags/ICC/"/>
+    
+      <category term="C" scheme="http://enigmahuang.github.io/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>2D Poisson 方程与 Finite Element Method</title>
+    <link href="http://enigmahuang.github.io/2018/02/04/Poisson2D_FEM/"/>
+    <id>http://enigmahuang.github.io/2018/02/04/Poisson2D_FEM/</id>
+    <published>2018-02-04T16:47:33.000Z</published>
+    <updated>2019-12-17T04:17:04.236Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;上周上 Advanced Scientific Computing 的时候老板讲了 2D Poisson 的有限元法，用的是四边形等参数单元。他布置的作业是写第一类边界条件的求解器。由于我印象中 FEM 用三角网格比较多，因此自己又对照着写了三角形等参数单元的版本，以及把第三类边界条件的情况也做了出来。下面是一点笔记，主要包括计算用到的公式和方法。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="PDE" scheme="http://enigmahuang.github.io/tags/PDE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CUDA 与 OpenCL 简明对比</title>
+    <link href="http://enigmahuang.github.io/2018/01/13/CUDA_OpenCL_compare/"/>
+    <id>http://enigmahuang.github.io/2018/01/13/CUDA_OpenCL_compare/</id>
+    <published>2018-01-13T15:28:37.000Z</published>
+    <updated>2018-01-13T15:33:38.606Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;又称『如何一把梭在 CUDA 和 OpenCL 之间进行转换』。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="CUDA" scheme="http://enigmahuang.github.io/tags/CUDA/"/>
+    
+      <category term="OpenCL" scheme="http://enigmahuang.github.io/tags/OpenCL/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>代数多重网格（Algebraic Multigrid）简介</title>
+    <link href="http://enigmahuang.github.io/2018/01/01/AMG_Introduce/"/>
+    <id>http://enigmahuang.github.io/2018/01/01/AMG_Introduce/</id>
+    <published>2018-01-01T21:37:21.000Z</published>
+    <updated>2019-12-17T04:19:09.072Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;代数多重网格（AMG）是利用几何多重网格（Geometric Multigrid, GMG）的一些重要原则和理念发展起来的不依赖于实际几何网格的多重网格方法。它继承了几何多重网格的主要优点，并且可以被用于更多类型的线性方程组。本文将介绍 Classic AMG 的基本算法并忽略数学推导过程。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Multigrid" scheme="http://enigmahuang.github.io/tags/Multigrid/"/>
+    
+      <category term="LinearSystemSolver" scheme="http://enigmahuang.github.io/tags/LinearSystemSolver/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>HPCG 3.0 reference implementation 阅读笔记</title>
+    <link href="http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/"/>
+    <id>http://enigmahuang.github.io/2017/12/27/HPCG_3_Notes/</id>
+    <published>2017-12-27T13:26:33.000Z</published>
+    <updated>2019-12-17T04:19:59.014Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;HPCG (High-Performance Conjugate Gradient) 是如今主要的 HPC 系统性能测试基准之一，是一个精简的大型稀疏方程组并行求解器，包含了区域分解（Domain Decomposition）、多重网格（Multigrid）和预条件子（Preconditioner）这些重要的线性方程组求解技术。我在学完 MATH 6644 这门课以及自己动手写了 3D Multigrid 以后，我便一直想看看 HPCG 是如何实现的（虽然我还没学过 DD）。下面的记录是我阅读 HPCG 3.0 官方参考实现的源代码的笔记，源代码参见 &lt;a href=&quot;https://github.com/hpcg-benchmark/hpcg&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;GitHub&lt;/a&gt; .&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Multigrid" scheme="http://enigmahuang.github.io/tags/Multigrid/"/>
+    
+      <category term="LinearSystemSolver" scheme="http://enigmahuang.github.io/tags/LinearSystemSolver/"/>
+    
+      <category term="MPI" scheme="http://enigmahuang.github.io/tags/MPI/"/>
+    
+      <category term="PDE" scheme="http://enigmahuang.github.io/tags/PDE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>泊松方程的中心差分格式与多重网格法</title>
+    <link href="http://enigmahuang.github.io/2017/12/01/PoissonEqu_FDMCD_Multigrid/"/>
+    <id>http://enigmahuang.github.io/2017/12/01/PoissonEqu_FDMCD_Multigrid/</id>
+    <published>2017-12-01T16:45:10.000Z</published>
+    <updated>2019-12-17T04:22:19.641Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;这个学期上 MATH 6644 接触了多重网格（Multigrid, MG）法，觉得这是一个很有意思的方法。课程作业和期末项目的选项之一就是用 MG 加速泊松方程中心差分格式的求解。虽然我期末项目选了另一个题目，然而我也写了一下这个。这篇东西算是一点小的总结。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Multigrid" scheme="http://enigmahuang.github.io/tags/Multigrid/"/>
+    
+      <category term="LinearSystemSolver" scheme="http://enigmahuang.github.io/tags/LinearSystemSolver/"/>
+    
+      <category term="PDE" scheme="http://enigmahuang.github.io/tags/PDE/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>使用 AVX 系列指令集进行向量化</title>
+    <link href="http://enigmahuang.github.io/2017/09/29/AVX-SIMD/"/>
+    <id>http://enigmahuang.github.io/2017/09/29/AVX-SIMD/</id>
+    <published>2017-09-29T19:45:10.000Z</published>
+    <updated>2020-04-12T01:21:08.651Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;最近上课讲到了向量化的内容，我顺便整理了一下自己手头以前相关的资料。下面内容的主要关注点是在 x86 平台上让编译器进行自动向量化，但是第二部分所提到的一些原则在各个平台上都适用。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="SIMD" scheme="http://enigmahuang.github.io/tags/SIMD/"/>
+    
+      <category term="ICC" scheme="http://enigmahuang.github.io/tags/ICC/"/>
+    
+      <category term="C" scheme="http://enigmahuang.github.io/tags/C/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>Install Arch Linux on a USB Key</title>
+    <link href="http://enigmahuang.github.io/2017/08/26/Install-Arch-on-USBKey/"/>
+    <id>http://enigmahuang.github.io/2017/08/26/Install-Arch-on-USBKey/</id>
+    <published>2017-08-27T03:45:10.000Z</published>
+    <updated>2017-08-27T04:10:50.054Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;前些天学校发了一个 2GB 大小的 U 盘，这样一来我手上就多了个 U 盘。我就把原来的一个 16GB 的 Kingston USB Data Traveler 腾了出来，打算装个 Arch Linux 在上面随带随用。Arch 的安装教程网上也是多不胜数了，个人觉得写得比较好的是这个 &lt;a href=&quot;https://blog.yoitsu.moe/arch-linux/installing_arch_linux_for_complete_newbies.html&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;给 Linux 萌新的 Arch 安装指南&lt;/a&gt; . 本文下面的记录与这个指南大体相同，只是增加了一些个人需要的东西。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="Linux" scheme="http://enigmahuang.github.io/tags/Linux/"/>
+    
+  </entry>
+  
+  <entry>
+    <title>CPU Case Study - Optimizing DGEMM</title>
+    <link href="http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/"/>
+    <id>http://enigmahuang.github.io/2017/07/26/my-DGEMM-BLISLab/</id>
+    <published>2017-07-26T16:11:21.000Z</published>
+    <updated>2020-04-12T01:21:28.205Z</updated>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Yet Another GEMM Study.&lt;/p&gt;
+&lt;p&gt;两年前我按 Ref. 1 的页面（以前还没有 GitHub Repo 和 Markdown pages 呢）做过一次 DGEMM Optimization，当时做的效果其实不是很好。去年叶老师给我看了一下 &lt;a href=&quot;https://github.com/flame/blis&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;BLIS&lt;/a&gt; 这个项目，说里面分块和分级 Cache 的思路值得一看。前两天一搜，居然出了 Ref. 2 这个 Repo，有如此详细的指导和参考代码，不自己造一次轮子简直说不过去了。我最后撸出来的代码在 &lt;a href=&quot;https://github.com/EnigmaHuang/my_DGEMM_BLISLab&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;这里&lt;/a&gt;。&lt;/p&gt;
+    
+    </summary>
+    
+    
+    
+      <category term="SIMD" scheme="http://enigmahuang.github.io/tags/SIMD/"/>
+    
+      <category term="C" scheme="http://enigmahuang.github.io/tags/C/"/>
+    
+      <category term="Cache" scheme="http://enigmahuang.github.io/tags/Cache/"/>
+    
+      <category term="GEMM" scheme="http://enigmahuang.github.io/tags/GEMM/"/>
+    
+  </entry>
+  
+</feed>
