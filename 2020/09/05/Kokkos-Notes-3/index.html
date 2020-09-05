@@ -4,19 +4,19 @@
 <head>
   <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
   
-  <title>使用 Environment Module 管理不同版本软件 | Rainmaker&#39;s Notebook</title>
+  <title>Kokkos 笔记，Part 3 | Rainmaker&#39;s Notebook</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="使用 Environment Modules 可以方便地管理和切换同一软件的不同版本。">
-<meta name="keywords" content="ICC,MPI,CUDA,Linux">
+  <meta name="description" content="Kokkos Tutorials 笔记第三部分。">
+<meta name="keywords" content="MPI,CUDA,C++">
 <meta property="og:type" content="article">
-<meta property="og:title" content="使用 Environment Module 管理不同版本软件">
-<meta property="og:url" content="http://enigmahuang.github.io/2017/02/22/Environment-Modules-Usage/index.html">
+<meta property="og:title" content="Kokkos 笔记，Part 3">
+<meta property="og:url" content="http://enigmahuang.github.io/2020/09/05/Kokkos-Notes-3/index.html">
 <meta property="og:site_name" content="Rainmaker&#39;s Notebook">
-<meta property="og:description" content="使用 Environment Modules 可以方便地管理和切换同一软件的不同版本。">
-<meta property="og:updated_time" content="2017-09-29T19:54:27.876Z">
+<meta property="og:description" content="Kokkos Tutorials 笔记第三部分。">
+<meta property="og:updated_time" content="2020-09-05T14:12:19.541Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用 Environment Module 管理不同版本软件">
-<meta name="twitter:description" content="使用 Environment Modules 可以方便地管理和切换同一软件的不同版本。">
+<meta name="twitter:title" content="Kokkos 笔记，Part 3">
+<meta name="twitter:description" content="Kokkos Tutorials 笔记第三部分。">
   
     <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
@@ -76,10 +76,10 @@
   </div>
 </header>
     <div class="outer">
-      <section id="main"><article id="post-Environment-Modules-Usage" class="article article-type-post" itemscope itemprop="blogPost">
+      <section id="main"><article id="post-Kokkos-Notes-3" class="article article-type-post" itemscope itemprop="blogPost">
   <div class="article-meta">
-    <a href="/2017/02/22/Environment-Modules-Usage/" class="article-date">
-  <time datetime="2017-02-22T17:56:08.000Z" itemprop="datePublished">2017-02-22</time>
+    <a href="/2020/09/05/Kokkos-Notes-3/" class="article-date">
+  <time datetime="2020-09-05T13:47:14.000Z" itemprop="datePublished">2020-09-05</time>
 </a>
     
   </div>
@@ -90,7 +90,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      使用 Environment Module 管理不同版本软件
+      Kokkos 笔记，Part 3
     </h1>
   
 
@@ -98,44 +98,45 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <p>使用 Environment Modules 可以方便地管理和切换同一软件的不同版本。</p>
+        <p><a href="https://github.com/kokkos/kokkos-tutorials" target="_blank" rel="external">Kokkos Tutorials</a> 笔记第三部分。</p>
 <a id="more"></a>
-<h2 id="一般的使用流程"><a href="#一般的使用流程" class="headerlink" title="一般的使用流程"></a>一般的使用流程</h2><p>要使用 module，需要：</p>
-<ol>
-<li><p>安装 module 程序，这个直接用软件仓库安装就行了。在 CentOS 7 下，命令是 <code>sudo yum install environment-modules</code> 。源码编译方法参见<a href="https://en.wikipedia.org/wiki/Environment_Modules_(software" target="_blank" rel="external">这里</a>#Installing)</p>
-</li>
-<li><p>如果是采取编译安装的，需要设置一下脚本和资源。对于 Bash 用户，创建一个 <code>module_bashrc</code> 文件（假设放在~/）如下（所有\&lt;>中的路径请替换为你系统中的路径，下同）：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>----------------------------------------------------------------------#</div><div class="line"><span class="meta">#</span> system-wide bashrc                                                   #</div><div class="line"><span class="meta">#</span> functions and settings for sh-derivative shells                      #</div><div class="line"><span class="meta">#</span>----------------------------------------------------------------------#</div><div class="line"></div><div class="line">. &lt;MODULE_INSTALL_PATH&gt;/init/bash</div><div class="line"><span class="meta"></span></div><div class="line"># module initialization</div><div class="line"><span class="meta">#</span></div><div class="line">case "$0" in</div><div class="line">          -sh|sh|*/sh)	modules_shell=sh ;;</div><div class="line">       -ksh|ksh|*/ksh)	modules_shell=ksh ;;</div><div class="line">       -zsh|zsh|*/zsh)	modules_shell=zsh ;;</div><div class="line">    -bash|bash|*/bash)	modules_shell=bash ;;</div><div class="line">esac</div><div class="line">eval "module() &#123; eval \`&lt;MODULE_INSTALL_PATH&gt;/bin/modulecmd $modules_shell \$*\`; &#125;"</div><div class="line"></div><div class="line">unset modules_shell</div><div class="line"><span class="meta"></span></div><div class="line">#----------------------------------------------------------------------#</div><div class="line"><span class="meta">#</span> set this if bash exists on your system and to use it</div><div class="line"><span class="meta">#</span> instead of sh - so per-process dot files will be sourced.</div><div class="line"><span class="meta">#</span>----------------------------------------------------------------------#</div><div class="line"></div><div class="line">sh() &#123; bash "$@"; &#125;</div><div class="line"><span class="meta"></span></div><div class="line">#----------------------------------------------------------------------#</div><div class="line"><span class="meta">#</span> further system customizations can be added here</div><div class="line"><span class="meta">#</span></div><div class="line"></div><div class="line">export MODULEPATH=&lt;MODULE_INSTALL_PATH&gt;/modulefiles:$MODULEPATH</div></pre></td></tr></table></figure>
-</li>
-</ol>
-<p>配置文件的最后一行指明了 module files 存放的路径，我将它们放在 module 的安装路径下了。在当前账户的 <code>.bashrc</code> 里加入一行 <code>source module_bashrc</code> 使得每次登陆的时候会初始化 module。如果是用包管理器安装的，直接在 <code>~/.bashrc</code> 里加上上面的最后一行来指定其他存储 module files 的位置。</p>
-<ol>
-<li><p>为每一个库创建一个 module file。一般来说这不比写环境变量脚本麻烦多少，主要就是标明这个库的冲突标识符（两个冲突标识符相同的 module 不能同时加载）和列出库的 <code>PATH</code> <code>LD_LIBRARY_PATH</code> 和 <code>MANPATH</code> 路径。</p>
-</li>
-<li><p>将写好的 module files 放到 module 可以识别的目录中以供查询。同一个库不同版本的 module files 应放在同一个文件夹中，以版本号作为文件名。比如，我有 CUDA 6.0 和 CUDA 7.0，它们的 module files 我会放在<code>/public/soft/Module/module_files/cuda</code> 这个目录下面。如果需要指定默认加载的版本，则需要在文件夹里多创建一个 <code>.version</code> 文件：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>%Module1.0</div><div class="line">set ModulesVersion  "&lt;DEFAULT_VERSION_STRING&gt;"</div></pre></td></tr></table></figure>
-</li>
-<li><p>可以使用 <code>module avail</code> 命令让系统列出可用的 module，选择需要的使用库，用 <code>module load</code> 命令进行加载。如果一个库有多个可选版本，需要指定加载哪一个，或者让系统加载默认选项。 以上述的 CUDA 6.0 7.0 为例，我需要加载 CUDA 7.0 的时候，则应该使用 <code>module load cuda/7.0</code> 的命令来加载。</p>
-</li>
-<li>要查看现在已经加载的 mofule files，可以用命令 <code>module list</code> 。使用完以后用 <code>module unload</code> 来取消加载，比如<code>module unload cuda/7.0</code> 。 </li>
-</ol>
-<h2 id="我使用过的一些-Module-Files"><a href="#我使用过的一些-Module-Files" class="headerlink" title="我使用过的一些 Module Files"></a>我使用过的一些 Module Files</h2><h3 id="GCC"><a href="#GCC" class="headerlink" title="GCC"></a>GCC</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>%Module 1.0</div><div class="line"><span class="meta">#</span> 这一行一般 module file 都有</div><div class="line"><span class="meta"></span></div><div class="line"># 冲突标识符gcc</div><div class="line">conflict        gcc</div><div class="line"><span class="meta"></span></div><div class="line"># 所需路径</div><div class="line">prepend-path    PATH            &lt;GCC_INSTALL_PATH&gt;/bin</div><div class="line">prepend-path    LD_LIBRARY_PATH &lt;GCC_INSTALL_PATH&gt;/lib64</div><div class="line">prepend-path    LIBRARY_PATH    &lt;GCC_INSTALL_PATH&gt;/lib64</div><div class="line">prepend-path    MANPATH         &lt;GCC_INSTALL_PATH&gt;/share/man</div></pre></td></tr></table></figure>
-<h3 id="ICC"><a href="#ICC" class="headerlink" title="ICC"></a>ICC</h3><p>ICC的设置比较麻烦，一般不能手动配置。Intel 官网 <a href="https://software.intel.com/en-us/articles/using-environment-modules-with-the-intel-development-tools" target="_blank" rel="external">给出了一个方法</a> ，使用 <a href="https://sourceforge.net/projects/env2/" target="_blank" rel="external">env2</a> 来捕获和创建 module file：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span> 1.  place a special comment at the beginning of the file so that module will recognize it as a module file with following command:</div><div class="line">echo "#%Module 1.0" &gt; &lt;ICC_MODULE_FILE&gt;</div><div class="line"><span class="meta"></span></div><div class="line"># 2. use the env2 command like below:</div><div class="line">perl env2 -from bash -to modulecmd "&lt;ICC_INSTALL_PATH&gt;/&lt;ICC_INSTALL_VRSION&gt;/psxevars.sh &lt;intel64|ia-32&gt;" &gt;&gt; &lt;ICC_MODULE_FILE&gt; </div><div class="line"><span class="meta">#</span> an example:</div><div class="line"><span class="meta">#</span> perl env2 -from bash -to modulecmd "/opt/intel/parallel_studio_xe_2017.1.043/psxevars.sh intel64" &gt;&gt; 2017.1.043</div></pre></td></tr></table></figure></p>
-<p>这两步得到的 mofule files 还不能直接用，要将里面的类似 <code>PATH</code> <code>MANPATH</code> 等带有『PATH』的项，前面的类型从 <code>setenv</code> 改成 <code>prepend-path</code>。</p>
-<h3 id="OpenMPI"><a href="#OpenMPI" class="headerlink" title="OpenMPI"></a>OpenMPI</h3><p>Hint: 用不同的编译器编译出来的OpenMPI是不一样的，不要搞混，module files 也不要搞混了路径<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>%Module 1.0</div><div class="line"></div><div class="line">conflict	mpi</div><div class="line">prepend-path	PATH             &lt;OMPI_INSTALL_PATH&gt;/bin</div><div class="line">prepend-path	LD_LIBRARY_PATH  &lt;OMPI_INSTALL_PATH&gt;/lib</div><div class="line">prepend-path	MANPATH          &lt;OMPI_INSTALL_PATH&gt;/share/man</div></pre></td></tr></table></figure></p>
-<h3 id="Intel-MPI"><a href="#Intel-MPI" class="headerlink" title="Intel MPI"></a>Intel MPI</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>%Module 1.0</div><div class="line"><span class="meta"></span></div><div class="line"># Replace the /opt/intel in the below with your path, and the version should be correspond to your IMPI version </div><div class="line">conflict	mpi</div><div class="line">prepend-path	PATH            /opt/intel/impi/2017.1.132/intel64/bin</div><div class="line">prepend-path	LD_LIBRARY_PATH /opt/intel/impi/2017.1.132/intel64/lib</div><div class="line">prepend-path	MANPATH         /opt/intel/impi/2017.1.132/man</div><div class="line">setenv	        I_MPI_ROOT      /opt/intel/impi/2017.1.132</div></pre></td></tr></table></figure>
-<h3 id="CUDA"><a href="#CUDA" class="headerlink" title="CUDA"></a>CUDA</h3><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#</span>%Module 1.0</div><div class="line"></div><div class="line">conflict	cuda</div><div class="line">prepend-path	PATH             &lt;CUDA_INSTALL_PATH&gt;/bin</div><div class="line">prepend-path	LD_LIBRARY_PATH	 &lt;CUDA_INSTALL_PATH&gt;/lib64</div></pre></td></tr></table></figure>
+<h2 id="9-SIMD"><a href="#9-SIMD" class="headerlink" title="9. SIMD"></a>9. SIMD</h2><p>Kokkos 的 SIMD 看起来不太好理解，远不如 <code>#pragma omp simd</code>, GPU thread block, 以及 intrinsic functions 来得好理解。我不在乎这一部分，按下不提。</p>
+<h2 id="10-Scratch-Memory"><a href="#10-Scratch-Memory" class="headerlink" title="10. Scratch Memory"></a>10. Scratch Memory</h2><p>Manually managed cache. Some of the use scenarios:</p>
+<ul>
+<li>Algorithm requires temporary workspace of size W</li>
+<li>Threads in a group need to access the same data </li>
+</ul>
+<p>How to use:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line">TeamPolicy&lt;exec_space&gt; policy(num_team, team_size);</div><div class="line"><span class="comment">// Define a scratch memory view type</span></div><div class="line"><span class="keyword">using</span> scratch_pad_view = View&lt;<span class="keyword">double</span>*, ExecutionSpace::scratch_memory_space&gt;;</div><div class="line"><span class="comment">// Compute how much scratch memory (in bytes) is needed for each team</span></div><div class="line"><span class="keyword">size_t</span> team_spm_msize = scratch_pad_view::shmem_size(team_vec_size);</div><div class="line"><span class="comment">// Tell the policy how much scratch memory is needed</span></div><div class="line"><span class="keyword">int</span> level = <span class="number">0</span>;  <span class="comment">// 0 is faster but smaller, 1 is larger but slower</span></div><div class="line">Kokkos::parallel_for(</div><div class="line">    policy.set_scratch_size(level, PerTeam(team_spm_msize)), <span class="comment">// Can also use PerThread</span></div><div class="line">    KOKKOS_LAMBDA(cinst member_type &amp;team_member) <span class="keyword">const</span></div><div class="line">    &#123;</div><div class="line">        <span class="comment">// Create a view from the pre-existing scratch memory</span></div><div class="line">        scratch_pad_view spm(team_member.team_scratch(level), team_vec_size);</div><div class="line">        <span class="comment">// Populate the scratch memory using TeamVectorRange</span></div><div class="line">        Kokkos::parallel_for(</div><div class="line">            TeamVectorRange(team_member, team_vec_size),</div><div class="line">            KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">int</span> i) &#123; spm(i) = src_view(i, ...); &#125;</div><div class="line">        );</div><div class="line">        <span class="comment">// Make sure all threads have populated the scratch memory</span></div><div class="line">        team_member.team_barrier(); </div><div class="line">        <span class="comment">// Then we can start calculations</span></div><div class="line">    &#125;</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<h2 id="11-Unique-Token"><a href="#11-Unique-Token" class="headerlink" title="11. Unique Token"></a>11. Unique Token</h2><p>Used to identify a (group of) computing resource, similar to the thread ID in OpenMP. Example usage:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">UniqueToken&lt;exec_space&gt; token;  <span class="comment">// Default size: exec_space().concurrency()</span></div><div class="line"><span class="keyword">int</span> num_uniq_id = token.size();</div><div class="line">Kokkos::parallel_for(</div><div class="line">    <span class="string">"lable"</span>, n, </div><div class="line">    KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">int</span> i) <span class="keyword">const</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> id = token.acquire();</div><div class="line">        <span class="comment">// Using id value</span></div><div class="line">        token.release(id);</div><div class="line">    &#125;</div><div class="line">);</div></pre></td></tr></table></figure></p>
+<p>Can also use a unique token for a team:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">int</span> team_size = ...;</div><div class="line"><span class="comment">// Actual number of teams in-flight</span></div><div class="line"><span class="keyword">int</span> num_active_team = exec_space().concurrency() / team_size;</div><div class="line">UniqueToken&lt;exec_space&gt; token(num_active_team * <span class="number">1.2</span>);</div><div class="line"></div><div class="line">Kokkos::parallel_for(</div><div class="line">    <span class="string">"label"</span>, TeamPolicy&lt;exec_space&gt;(n, team_size),</div><div class="line">    KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">team_t</span> &amp;team)  <span class="comment">// what is team_t?</span></div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> id;</div><div class="line">        <span class="comment">// Acquire an id and broadcast it with a single thread</span></div><div class="line">        Kokkos::single(</div><div class="line">            PerTeam(team), </div><div class="line">            [&amp;](<span class="keyword">int</span> &amp;lid) &#123; lid = token.acquire(); &#125;, </div><div class="line">            id</div><div class="line">        );</div><div class="line">        <span class="comment">// Other operations</span></div><div class="line">        team.team_barrier(); </div><div class="line">        <span class="comment">// Release the id</span></div><div class="line">        Kokkos::single(PerTeam(team), [&amp;]() &#123;token.release(id)&#125;);</div><div class="line">    &#125;</div><div class="line">)</div></pre></td></tr></table></figure></p>
+<h2 id="12-Asynchronicity-and-Streams"><a href="#12-Asynchronicity-and-Streams" class="headerlink" title="12. Asynchronicity and Streams"></a>12. Asynchronicity and Streams</h2><ul>
+<li>Most operations in Kokkos are non-blocking, the caller returns before the operation is finished</li>
+<li>Each unique instance of an execution space has its own FIFO ordered execution queue</li>
+<li>Each execution space type has a default instance, not all spaces support having multiple instances</li>
+<li>Execution policies &amp; <code>deep_copy</code> can take an instance as the first argument</li>
+<li>Use <code>Kokkos::fense()</code> to wait for all completion, use instance specific fence to wait on specified instance, e.g.</li>
+</ul>
+<figure class="highlight"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">using device = Kokkos::DefaultExecutionSpace;</div><div class="line">device dev1(...), dev2(...);   // Execution space instances</div><div class="line">dev1.fence();  // Wait on dev1 instance only</div></pre></td></tr></table></figure>
+<ul>
+<li>Most host backends are blocking dispatches (except HPX) but <strong>do not rely on blocking behavior</strong></li>
+<li>Reductions to scalars are blocking, reductions to views are non-blocking</li>
+<li>2-argument deep copy is fully blocking, deep_copy with space argument is non-blocking</li>
+<li>Deallocation of views implies fence, but <strong>do not rely on deallocation fence</strong></li>
+</ul>
+<h2 id="13-Using-Kokkos-with-MPI"><a href="#13-Using-Kokkos-with-MPI" class="headerlink" title="13. Using Kokkos with MPI"></a>13. Using Kokkos with MPI</h2><p>基本上和 MPI + CUDA 类似，需要先把数据倒腾回来 host 上进行打包然后再收发。按下不提。</p>
+<h2 id="14-Kokkos-Remote-Space"><a href="#14-Kokkos-Remote-Space" class="headerlink" title="14. Kokkos Remote Space"></a>14. Kokkos Remote Space</h2><p>Kokkos has its Partitioned Global Address Space (PGAS) framework. Usage:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> RemoteSpace_t = Kokkos::Experimental::SHMEMSpace;</div><div class="line"><span class="comment">// Allocate a remote view: num_proc processes, each process has </span></div><div class="line"><span class="comment">// local_size elements of data type T</span></div><div class="line">Kokkos::View&lt;T**, RemoteSpace_t&gt; glb_a(<span class="string">"glb_a"</span>, num_proc, local_size);</div><div class="line"><span class="comment">// Access global memory, only support put and get</span></div><div class="line">T val0 = <span class="number">19.24</span>, val1;</div><div class="line">glb_a(<span class="number">0</span>, <span class="number">3</span>) = val0;  <span class="comment">// Write val0 to view glb_a on proc 0 at offset 3</span></div><div class="line">val1 = glb_a(<span class="number">2</span>, <span class="number">0</span>);  <span class="comment">// Read val1 from view glb_a on proc 2 at offset 0</span></div><div class="line"><span class="comment">// Fence</span></div><div class="line">RemoteSpace_t().fence();</div><div class="line"><span class="comment">// Copy data to other memory space</span></div><div class="line">Kokkos::View&lt;T**, Kokkos::HostSpace_t&gt; host_a(<span class="string">"host_a"</span>, <span class="number">1</span>, local_size);</div><div class="line">Kokkos::Experimental::deep_copy(host_a, glb_a);</div></pre></td></tr></table></figure></p>
+
       
     </div>
     <footer class="article-footer">
       
-        <a data-url="http://enigmahuang.github.io/2017/02/22/Environment-Modules-Usage/" data-id="ckeprzhy3000aucsi27d4h1c5" class="article-share-link">分享到</a>
+        <a data-url="http://enigmahuang.github.io/2020/09/05/Kokkos-Notes-3/" data-id="ckeprzi1e0013ucsid0zjrlt5" class="article-share-link">分享到</a>
       
 
       
 
       
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ICC/">ICC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li></ul>
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li></ul>
 
     </footer>
   </div>
@@ -143,19 +144,10 @@
     
 <nav id="article-nav">
   
-    <a href="/2017/04/09/Japan-Trip-2017-1/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">下一篇</strong>
-      <div class="article-nav-title">
-        
-          2017 日本游记，一：出发 &amp; 东京
-        
-      </div>
-    </a>
   
-  
-    <a href="/2017/02/04/Build-Your-MPI-Cluster/" id="article-nav-older" class="article-nav-link-wrap">
+    <a href="/2020/09/05/Kokkos-Notes-2/" id="article-nav-older" class="article-nav-link-wrap">
       <strong class="article-nav-caption">上一篇</strong>
-      <div class="article-nav-title">如何搭建自己的 MPI 集群</div>
+      <div class="article-nav-title">Kokkos 笔记，Part 2</div>
     </a>
   
 </nav>
@@ -191,8 +183,8 @@
      
       <script type="text/javascript">
         var gitment = new Gitment({
-			  id: '使用 Environment Module 管理不同版本软件',
-			  title: '使用 Environment Module 管理不同版本软件',
+			  id: 'Kokkos 笔记，Part 3',
+			  title: 'Kokkos 笔记，Part 3',
 			  owner: 'EnigmaHuang',
 			  repo: 'enigmahuang.github.io',
 			  oauth: {
