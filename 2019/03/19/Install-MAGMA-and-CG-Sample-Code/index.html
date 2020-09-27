@@ -1,104 +1,66 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="zh-cmn-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>MKL + CUDA 编译 MAGMA 以及使用 MAGMA | Rainmaker&#39;s Notebook</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="久闻 MAGMA 大名若干年以后，最近终于要用到它来做测试。记录一下安装和使用的一些步骤。">
-<meta name="keywords" content="LinearSystemSolver,CUDA">
-<meta property="og:type" content="article">
-<meta property="og:title" content="MKL + CUDA 编译 MAGMA 以及使用 MAGMA">
-<meta property="og:url" content="http://enigmahuang.github.io/2019/03/19/Install-MAGMA-and-CG-Sample-Code/index.html">
-<meta property="og:site_name" content="Rainmaker&#39;s Notebook">
-<meta property="og:description" content="久闻 MAGMA 大名若干年以后，最近终于要用到它来做测试。记录一下安装和使用的一些步骤。">
-<meta property="og:updated_time" content="2019-03-20T03:44:56.186Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MKL + CUDA 编译 MAGMA 以及使用 MAGMA">
-<meta name="twitter:description" content="久闻 MAGMA 大名若干年以后，最近终于要用到它来做测试。记录一下安装和使用的一些步骤。">
-  
-    <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
   
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
-<body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
-  <div id="wrap">
-    <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Rainmaker&#39;s Notebook</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-          <a class="main-nav-link" href="/About">About</a>
-        
-          <a class="main-nav-link" href="/SiteXC">SiteXC</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
-          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
-          <input type="submit" value="" class="search-form-submit">
-          <input name=tn type=hidden value="bds">
-          <input name=cl type=hidden value="3">
-          <input name=ct type=hidden value="2097152">
-          <input type="hidden" name="si" value="enigmahuang.github.io">
-        </form>
-      </div>
-    </div>
-  </div>
-</header>
-    <div class="outer">
-      <section id="main"><article id="post-Install-MAGMA-and-CG-Sample-Code" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/" class="article-date">
-  <time datetime="2019-03-20T03:37:21.000Z" itemprop="datePublished">2019-03-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      MKL + CUDA 编译 MAGMA 以及使用 MAGMA
-    </h1>
-  
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>久闻 MAGMA 大名若干年以后，最近终于要用到它来做测试。记录一下安装和使用的一些步骤。</p>
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>MKL + CUDA 编译 MAGMA 以及使用 MAGMA</h1>
+    </header>
+
+    <section>
+      <p>久闻 MAGMA 大名若干年以后，最近终于要用到它来做测试。记录一下安装和使用的一些步骤。</p>
 <a id="more"></a>
 <p>硬件环境：Xeon E5-1620v2, GTX 1060 3GB<br>软件环境：Kubuntu 18.04 LTS, Intel Parallel Studio 2018 update 4, CUDA 10.0</p>
 <p>下载 MAGMA-2.5.0 的源代码并解压：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line">wget http://icl.utk.edu/projectsfiles/magma/downloads/magma-2.5.0.tar.gz</div><div class="line">tar xf magma-2.5.0.tar.gz</div><div class="line">mv magma-2.5.0 magma-2.5.0-src</div><div class="line">cd magma-2.5.0-src</div></pre></td></tr></table></figure></p>
@@ -110,200 +72,52 @@
 <figure class="highlight makefile"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line">EXE = MAGMA_sparse_test</div><div class="line"></div><div class="line">HOSTCC = icc</div><div class="line"></div><div class="line">CUDA_PATH       = /usr/local/cuda-10.0</div><div class="line">CUDA_INC_FLAGS  = -I<span class="variable">$(CUDA_PATH)</span>/<span class="keyword">include</span></div><div class="line">CUDA_LD_FLAGS   = -L<span class="variable">$(CUDA_PATH)</span>/lib64 -lcublas -lcudart -lcusparse</div><div class="line"></div><div class="line">MAGMA_PATH      = <span class="variable">$(HOME)</span>/magma-2.5.0</div><div class="line">MAGMA_INC_FLAGS = -I<span class="variable">$(MAGMA_PATH)</span>/<span class="keyword">include</span> -I<span class="variable">$(MAGMA_PATH)</span>/sparse/<span class="keyword">include</span> </div><div class="line">MAGMA_LD_FLAGS  = -L<span class="variable">$(MAGMA_PATH)</span>/lib -lmagma -lmagma_sparse </div><div class="line"></div><div class="line">CFLAGS  = -O3 -xHost -qopenmp -g -Wall <span class="variable">$(MAGMA_INC_FLAGS)</span> <span class="variable">$(CUDA_INC_FLAGS)</span></div><div class="line">LDFLAGS = -O3 -xHost -qopenmp -g -Wall <span class="variable">$(MAGMA_LD_FLAGS)</span>  <span class="variable">$(CUDA_LD_FLAGS)</span></div><div class="line"></div><div class="line">OBJS = magma_csr_cg_example.o</div><div class="line"></div><div class="line"><span class="section">EXE: <span class="variable">$(OBJS)</span></span></div><div class="line">	<span class="variable">$(HOSTCC)</span> <span class="variable">$(OBJS)</span> -o <span class="variable">$(EXE)</span> <span class="variable">$(LDFLAGS)</span> </div><div class="line"></div><div class="line"><span class="section">magma_csr_cg_example.o: magma_csr_cg_example.c</span></div><div class="line">	<span class="variable">$(HOSTCC)</span> <span class="variable">$(CFLAGS)</span> magma_csr_cg_example.c -c</div><div class="line"></div><div class="line"><span class="section">clean:</span></div><div class="line">	rm *.o <span class="variable">$(EXE)</span></div></pre></td></tr></table></figure>
 <p>这里顺带吐槽一下 MAGMA 的文档，<code>opts.solver_par.solver</code> 有哪些选项居然没有在文档里列出来，还要我去翻头文件……<br><figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// Modified from magma-2.5.0/example/example_sparse.c</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"magma_v2.h"</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">"magmasparse.h"</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span>** argv)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> m = <span class="number">200</span>, n = <span class="number">1</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">int</span> *row = (<span class="keyword">int</span>*) <span class="built_in">calloc</span>(m+<span class="number">1</span>, <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</div><div class="line">    <span class="keyword">int</span> *col = (<span class="keyword">int</span>*) <span class="built_in">calloc</span>(m,   <span class="keyword">sizeof</span>(<span class="keyword">int</span>));</div><div class="line">    </div><div class="line">    <span class="keyword">double</span> *val = (<span class="keyword">double</span>*) <span class="built_in">calloc</span>(m, <span class="keyword">sizeof</span>(<span class="keyword">double</span>));</div><div class="line">    <span class="keyword">double</span> *rhs = (<span class="keyword">double</span>*) <span class="built_in">calloc</span>(m, <span class="keyword">sizeof</span>(<span class="keyword">double</span>));</div><div class="line">    <span class="keyword">double</span> *sol = (<span class="keyword">double</span>*) <span class="built_in">calloc</span>(m, <span class="keyword">sizeof</span>(<span class="keyword">double</span>));</div><div class="line">    </div><div class="line">    <span class="comment">// Create a simple diagonal matrix in CSR format and the right-hand side</span></div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; ++i) </div><div class="line">    &#123;</div><div class="line">        col[i] = i;</div><div class="line">        row[i] = i;</div><div class="line">        val[i] = <span class="number">3.0</span>;</div><div class="line">        rhs[i] = <span class="number">3.0</span>;</div><div class="line">        sol[i] = <span class="number">0.0</span>;</div><div class="line">    &#125;</div><div class="line">    row[m] = m;</div><div class="line">    </div><div class="line">    <span class="comment">// Initialize MAGMA</span></div><div class="line">    magma_init();</div><div class="line">    magma_dopts   opts;</div><div class="line">    <span class="keyword">magma_queue_t</span> <span class="built_in">queue</span>;</div><div class="line">    magma_queue_create(<span class="number">0</span>, &amp;<span class="built_in">queue</span>);</div><div class="line">    </div><div class="line">    magma_d_matrix A=&#123;Magma_CSR&#125;, dA=&#123;Magma_CSR&#125;;</div><div class="line">    magma_d_matrix b=&#123;Magma_CSR&#125;, db=&#123;Magma_CSR&#125;;</div><div class="line">    magma_d_matrix x=&#123;Magma_CSR&#125;, dx=&#123;Magma_CSR&#125;;</div><div class="line">    </div><div class="line">    <span class="comment">// Pass the system to MAGMA</span></div><div class="line">    magma_dcsrset(m, m, row, col, val, &amp;A, <span class="built_in">queue</span>);</div><div class="line">    magma_dvset(m, <span class="number">1</span>, rhs, &amp;b, <span class="built_in">queue</span>);</div><div class="line">    magma_dvset(m, <span class="number">1</span>, sol, &amp;x, <span class="built_in">queue</span>);</div><div class="line">    </div><div class="line">    <span class="comment">// Setup MAGMA solver</span></div><div class="line">    opts.solver_par.solver  = Magma_CG;</div><div class="line">    opts.solver_par.maxiter = <span class="number">1000</span>;</div><div class="line">    opts.solver_par.rtol    = <span class="number">1e-10</span>;</div><div class="line">    </div><div class="line">    <span class="comment">// Initialize MAGMA solver</span></div><div class="line">    magma_dsolverinfo_init(&amp;opts.solver_par, &amp;opts.precond_par, <span class="built_in">queue</span>);</div><div class="line">    </div><div class="line">    <span class="comment">// Copy the system to the device (optional, only necessary if using the GPU)</span></div><div class="line">    magma_dmtransfer(A, &amp;dA, Magma_CPU, Magma_DEV, <span class="built_in">queue</span>);</div><div class="line">    magma_dmtransfer(b, &amp;db, Magma_CPU, Magma_DEV, <span class="built_in">queue</span>);</div><div class="line">    magma_dmtransfer(x, &amp;dx, Magma_CPU, Magma_DEV, <span class="built_in">queue</span>);</div><div class="line"></div><div class="line">    <span class="comment">// Solve the linear system</span></div><div class="line">    magma_d_solver(dA, db, &amp;dx, &amp;opts, <span class="built_in">queue</span>);</div><div class="line"></div><div class="line">    <span class="comment">// Copy the solution back to the host</span></div><div class="line">    magma_dmfree(&amp;x, <span class="built_in">queue</span>);</div><div class="line">    magma_dmtransfer(dx, &amp;x, Magma_CPU, Magma_DEV, <span class="built_in">queue</span>);</div><div class="line">    </div><div class="line">    <span class="comment">// Copy the solution in MAGMA host structure to the application code</span></div><div class="line">    magma_dvget(x, &amp;m, &amp;n, &amp;sol, <span class="built_in">queue</span>);</div><div class="line">    </div><div class="line">    <span class="comment">// Check the results</span></div><div class="line">    <span class="keyword">int</span> correct = <span class="number">1</span>;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; m; i++)</div><div class="line">        <span class="keyword">if</span> (<span class="built_in">fabs</span>(sol[i] - <span class="number">1.0</span>) / <span class="number">1.0</span> &gt; <span class="number">1e-10</span>) correct = <span class="number">0</span>;</div><div class="line">    <span class="keyword">if</span> (correct) <span class="built_in">printf</span>(<span class="string">"MAGMA solution is correct\n"</span>);</div><div class="line">    <span class="keyword">else</span> <span class="built_in">printf</span>(<span class="string">"MAGMA solution is wrong\n"</span>);</div><div class="line">    </div><div class="line">    <span class="comment">// Free the allocated memory and finalize MAGMA</span></div><div class="line">    magma_dmfree(&amp;dx, <span class="built_in">queue</span>);</div><div class="line">    magma_dmfree(&amp;db, <span class="built_in">queue</span>);</div><div class="line">    magma_dmfree(&amp;dA, <span class="built_in">queue</span>);</div><div class="line">    magma_queue_destroy(<span class="built_in">queue</span>);</div><div class="line">    magma_finalize();</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
 
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2019/03/19/Install-MAGMA-and-CG-Sample-Code/" data-id="ckeptt2l7000i1gsiskh3kxfp" class="article-share-link">Share</a>
-      
 
       
 
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a></li></ul>
-
-    </footer>
-  </div>
-  
+    </section>
     
-<nav id="article-nav">
-  
-    <a href="/2019/09/02/MPI-asymmetric-OMP/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          奇技淫巧：非对称 MPI + OpenMP 并行
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2019/02/13/Japan-Trip-2019-4/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">2019 日本游记，四：小樽 &amp; 札幌</div>
-    </a>
-  
-</nav>
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2019-03-20T03:37:21.000Z" itemprop="datePublished">
+              2019-03-19
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/LinearSystemSolver/">LinearSystemSolver</a> }
+  </li>
 
-  
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
 </article>
 
-
-
-<!--gitment 评论-->
-
-  <div class="comments" id="comments">
-  
-	<!--汉化-->
-  <link rel="stylesheet" href="https://billts.site/extra_css/gitment.css">
-	<script src="https://billts.site/js/gitment.js"></script>
-
-      <div id="gitmentContainer" style="margin-bottom: -19px;"></div>
-     
-      <style>
-        .gitment-container a {
-          border: none;
-        }
-        .comments {
-          margin: 60px 0 0;padding: 0 60px;
-        }
-      </style>
-     
-      <script type="text/javascript">
-        var gitment = new Gitment({
-			  id: 'MKL + CUDA 编译 MAGMA 以及使用 MAGMA',
-			  title: 'MKL + CUDA 编译 MAGMA 以及使用 MAGMA',
-			  owner: 'EnigmaHuang',
-			  repo: 'enigmahuang.github.io',
-			  oauth: {
-				client_id: '94e58ed5c77bee610a9d',
-				client_secret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
-			  },
-        })
-        gitment.render('gitmentContainer')
-      </script>
-    
-  </div>
-
-<!--gitment 评论 end--></section>
-      
-      <aside id="sidebar">
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">9</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/C/" style="font-size: 15.71px;">C</a> <a href="/tags/C/" style="font-size: 12.86px;">C++</a> <a href="/tags/CUDA/" style="font-size: 15.71px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 11.43px;">Cache</a> <a href="/tags/Conference/" style="font-size: 11.43px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 11.43px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 12.86px;">HPC</a> <a href="/tags/ICC/" style="font-size: 14.29px;">ICC</a> <a href="/tags/Japan/" style="font-size: 17.14px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 14.29px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 12.86px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18.57px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 12.86px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 11.43px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 12.86px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 12.86px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
-          </li>
-        
-          <li>
-            <a href="/2019/12/16/SC19/">SC19：年轻人的第一次公费旅游</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Links</h3>
-    <div class="widget">
-      <ul>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-      
-    </div>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Enigma Huang<br>
-      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
-      .
-      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
-    </div>
-  </div>
-</footer>
-  </div>
-  <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/About" class="mobile-nav-link">About</a>
-  
-    <a href="/SiteXC" class="mobile-nav-link">SiteXC</a>
-  
-</nav>
-  <!-- totop start -->
-<div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
-</div>
-
-<!-- totop end -->
-
-
-<!-- 百度分享 start -->
-
-<!-- 百度分享 end -->
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-
-
-
-<! -- mathjax config similar to math.stackexchange -->
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -340,9 +154,27 @@ MathJax.Hub.Queue(function() {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
+</div>
+            <footer>
+    <div>© 2020 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
 
-<script src="/js/script.js"></script>
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
 
-</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

@@ -150,9 +150,9 @@
     
     
     
-      <category term="C" scheme="http://enigmahuang.github.io/tags/C/"/>
-    
       <category term="MPI" scheme="http://enigmahuang.github.io/tags/MPI/"/>
+    
+      <category term="C" scheme="http://enigmahuang.github.io/tags/C/"/>
     
       <category term="OpenMP" scheme="http://enigmahuang.github.io/tags/OpenMP/"/>
     
