@@ -1,711 +1,552 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="zh-cmn-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Rainmaker&#39;s Notebook</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
-<meta property="og:title" content="Rainmaker&#39;s Notebook">
-<meta property="og:url" content="http://enigmahuang.github.io/index.html">
-<meta property="og:site_name" content="Rainmaker&#39;s Notebook">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Rainmaker&#39;s Notebook">
-  
-    <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
   
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
-<body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
-  <div id="wrap">
-    <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Rainmaker&#39;s Notebook</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-          <a class="main-nav-link" href="/About">About</a>
-        
-          <a class="main-nav-link" href="/SiteXC">SiteXC</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
-          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
-          <input type="submit" value="" class="search-form-submit">
-          <input name=tn type=hidden value="bds">
-          <input name=cl type=hidden value="3">
-          <input name=ct type=hidden value="2097152">
-          <input type="hidden" name="si" value="enigmahuang.github.io">
-        </form>
-      </div>
-    </div>
-  </div>
-</header>
-    <div class="outer">
-      <section id="main">
-  
-    <article id="post-CUDA-separate-compilation-library" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/10/31/CUDA-separate-compilation-library/" class="article-date">
-  <time datetime="2020-10-31T23:19:14.000Z" itemprop="datePublished">2020-10-31</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/10/31/CUDA-separate-compilation-library/">分离编译并打包 CUDA 函数库</a>
-    </h1>
-  
 
-      </header>
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <ul class="Index">
+  
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2020/10/31/CUDA-separate-compilation-library/">分离编译并打包 CUDA 函数库</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2020-10-31T23:19:14.000Z" itemprop="datePublished">
+    2020-10-31
+  </time>
+  
+  | 
+  <ul>
     
-    <div class="article-entry" itemprop="articleBody">
+  <li class="meta-text">
+  { <a href="/tags/MPI/">MPI</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p>最近遇到一个小问题：我写了一个小的库，这个库需要同时提供 CUDA device API 和 CPU host C API。本文记录一下编译、打包和链接到这个库的方法。</p>
         
-          <p class="article-more-link">
-            <a href="/2020/10/31/CUDA-separate-compilation-library/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2020/10/31/CUDA-separate-compilation-library/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2020/10/31/CUDA-separate-compilation-library/" data-id="ckgz7b4i40009nksipi5a5ty9" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2020-09-05T13:47:14.000Z" itemprop="datePublished">
+    2020-09-05
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/MPI/">MPI</a> }
+  </li>
 
-  
-    <article id="post-Kokkos-Notes-3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/09/05/Kokkos-Notes-3/" class="article-date">
-  <time datetime="2020-09-05T13:47:14.000Z" itemprop="datePublished">2020-09-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
-    </h1>
-  
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+  <li class="meta-text">
+  { <a href="/tags/C/">C++</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p><a href="https://github.com/kokkos/kokkos-tutorials" target="_blank" rel="external">Kokkos Tutorials</a> 笔记第三部分。</p>
         
-          <p class="article-more-link">
-            <a href="/2020/09/05/Kokkos-Notes-3/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2020/09/05/Kokkos-Notes-3/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2020/09/05/Kokkos-Notes-3/" data-id="ckgz7b4wj002dnksi8wsw0qj0" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2020-09-05T13:46:14.000Z" itemprop="datePublished">
+    2020-09-05
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
 
-  
-    <article id="post-Kokkos-Notes-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/09/05/Kokkos-Notes-2/" class="article-date">
-  <time datetime="2020-09-05T13:46:14.000Z" itemprop="datePublished">2020-09-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
-    </h1>
-  
+  <li class="meta-text">
+  { <a href="/tags/C/">C++</a> }
+  </li>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p><a href="https://github.com/kokkos/kokkos-tutorials" target="_blank" rel="external">Kokkos Tutorials</a> 笔记第二部分。</p>
         
-          <p class="article-more-link">
-            <a href="/2020/09/05/Kokkos-Notes-2/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2020/09/05/Kokkos-Notes-2/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2020/09/05/Kokkos-Notes-2/" data-id="ckgz7b4wk002gnksifeifq1im" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2020-09-05T13:45:14.000Z" itemprop="datePublished">
+    2020-09-05
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
 
-  
-    <article id="post-Kokkos-Notes-1" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/09/05/Kokkos-Notes-1/" class="article-date">
-  <time datetime="2020-09-05T13:45:14.000Z" itemprop="datePublished">2020-09-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
-    </h1>
-  
+  <li class="meta-text">
+  { <a href="/tags/C/">C++</a> }
+  </li>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p>最近因工作需要学习了一下 <a href="https://github.com/kokkos/kokkos" target="_blank" rel="external">Kokkos</a> 这个 C++ 并行计算框架。以下是我看 <a href="https://github.com/kokkos/kokkos-tutorials" target="_blank" rel="external">Kokkos Tutorials</a> 时记的一些笔记。</p>
         
-          <p class="article-more-link">
-            <a href="/2020/09/05/Kokkos-Notes-1/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2020/09/05/Kokkos-Notes-1/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2020/09/05/Kokkos-Notes-1/" data-id="ckgz7b4wh002bnksilu8bqe6x" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2020-04-11T23:19:00.000Z" itemprop="datePublished">
+    2020-04-11
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/C/">C</a> }
+  </li>
 
-  
-    <article id="post-C-macro-template-programming" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/04/11/C-macro-template-programming/" class="article-date">
-  <time datetime="2020-04-11T23:19:00.000Z" itemprop="datePublished">2020-04-11</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
-    </h1>
-  
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p>最近和一个 C++ 程序员聊的时候被对方说写 C 不能用模板编程，会浪费很多时间。我想对方作为一个写了十多年 C++ 的老程序员肯定知道 C 能用 macro 玩出许多花样，只是不想让我这种菜鸡被这些禁忌领域的东西荼毒心灵。于是我自己找了一下资料，搞了一个满足我需求的方法出来，记录如下。</p>
         
-          <p class="article-more-link">
-            <a href="/2020/04/11/C-macro-template-programming/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2020/04/11/C-macro-template-programming/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2020/04/11/C-macro-template-programming/" data-id="ckgz7b4hz0006nksi2p17vcda" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2019/12/16/SC19/">SC19：年轻人的第一次公费旅游</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2019-12-17T02:34:17.000Z" itemprop="datePublished">
+    2019-12-16
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/HPC/">HPC</a> }
+  </li>
 
-  
-    <article id="post-SC19" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/12/16/SC19/" class="article-date">
-  <time datetime="2019-12-17T02:34:17.000Z" itemprop="datePublished">2019-12-16</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/12/16/SC19/">SC19：年轻人的第一次公费旅游</a>
-    </h1>
-  
+  <li class="meta-text">
+  { <a href="/tags/Travel/">Travel</a> }
+  </li>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+  <li class="meta-text">
+  { <a href="/tags/Conference/">Conference</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p>这是一篇咕咕咕了一个月的游记。</p>
         
-          <p class="article-more-link">
-            <a href="/2019/12/16/SC19/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2019/12/16/SC19/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2019/12/16/SC19/" data-id="ckgz7b4x10032nksiz230d80z" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Conference/">Conference</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HPC/">HPC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Travel/">Travel</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2019/09/02/MPI-asymmetric-OMP/">奇技淫巧：非对称 MPI + OpenMP 并行</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2019-09-02T15:45:14.000Z" itemprop="datePublished">
+    2019-09-02
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/MPI/">MPI</a> }
+  </li>
 
-  
-    <article id="post-MPI-asymmetric-OMP" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/09/02/MPI-asymmetric-OMP/" class="article-date">
-  <time datetime="2019-09-02T15:45:14.000Z" itemprop="datePublished">2019-09-02</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/09/02/MPI-asymmetric-OMP/">奇技淫巧：非对称 MPI + OpenMP 并行</a>
-    </h1>
-  
+  <li class="meta-text">
+  { <a href="/tags/C/">C</a> }
+  </li>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+  <li class="meta-text">
+  { <a href="/tags/OpenMP/">OpenMP</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Affinity/">Affinity</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p>MPI + OpenMP/multi-threading 是如今大部分高性能计算程序的并行方式。一般情况下，各 MPI 进程地位对等（对称），可用的 CPU 资源和并行出来的线程数也相同。今天讲一个奇技淫巧：如何进行非对称 MPI + OpenMP 并行。</p>
         
-          <p class="article-more-link">
-            <a href="/2019/09/02/MPI-asymmetric-OMP/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2019/09/02/MPI-asymmetric-OMP/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2019/09/02/MPI-asymmetric-OMP/" data-id="ckgz7b4wn002knksiq6vrs5i7" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Affinity/">Affinity</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenMP/">OpenMP</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/">MKL + CUDA 编译 MAGMA 以及使用 MAGMA</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2019-03-20T03:37:21.000Z" itemprop="datePublished">
+    2019-03-19
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/LinearSystemSolver/">LinearSystemSolver</a> }
+  </li>
 
-  
-    <article id="post-Install-MAGMA-and-CG-Sample-Code" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/" class="article-date">
-  <time datetime="2019-03-20T03:37:21.000Z" itemprop="datePublished">2019-03-19</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/">MKL + CUDA 编译 MAGMA 以及使用 MAGMA</a>
-    </h1>
-  
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p>久闻 MAGMA 大名若干年以后，最近终于要用到它来做测试。记录一下安装和使用的一些步骤。</p>
         
-          <p class="article-more-link">
-            <a href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2019/03/19/Install-MAGMA-and-CG-Sample-Code/" data-id="ckgz7b4j6000nnksievn21fx9" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2019/02/13/Japan-Trip-2019-4/">2019 日本游记，四：小樽 &amp; 札幌</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2019-02-13T16:45:15.000Z" itemprop="datePublished">
+    2019-02-13
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/Travel/">Travel</a> }
+  </li>
 
-  
-    <article id="post-Japan-Trip-2019-4" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/02/13/Japan-Trip-2019-4/" class="article-date">
-  <time datetime="2019-02-13T16:45:15.000Z" itemprop="datePublished">2019-02-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/13/Japan-Trip-2019-4/">2019 日本游记，四：小樽 &amp; 札幌</a>
-    </h1>
-  
+  <li class="meta-text">
+  { <a href="/tags/Japan/">Japan</a> }
+  </li>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p>四：小樽 &amp; 札幌</p>
         
-          <p class="article-more-link">
-            <a href="/2019/02/13/Japan-Trip-2019-4/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2019/02/13/Japan-Trip-2019-4/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2019/02/13/Japan-Trip-2019-4/" data-id="ckgz7b4wg0029nksi3wpqomr0" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Japan/">Japan</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Travel/">Travel</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2019/02/13/Japan-Trip-2019-3/">2019 日本游记，三：函馆 &amp; 登别</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2019-02-13T16:45:14.000Z" itemprop="datePublished">
+    2019-02-13
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/Travel/">Travel</a> }
+  </li>
 
-  
-    <article id="post-Japan-Trip-2019-3" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2019/02/13/Japan-Trip-2019-3/" class="article-date">
-  <time datetime="2019-02-13T16:45:14.000Z" itemprop="datePublished">2019-02-13</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2019/02/13/Japan-Trip-2019-3/">2019 日本游记，三：函馆 &amp; 登别</a>
-    </h1>
-  
+  <li class="meta-text">
+  { <a href="/tags/Japan/">Japan</a> }
+  </li>
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
       
         <p>三：函馆 &amp; 登别</p>
         
-          <p class="article-more-link">
-            <a href="/2019/02/13/Japan-Trip-2019-3/#more">Read More</a>
-          </p>
+          <div class="more-link">
+            <a href="/2019/02/13/Japan-Trip-2019-3/#more">Read On »</a>
+          </div>
         
       
     </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2019/02/13/Japan-Trip-2019-3/" data-id="ckgz7b4we0027nksiyh8nkkvb" class="article-share-link">Share</a>
-      
-
-      
-
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Japan/">Japan</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Travel/">Travel</a></li></ul>
-
-    </footer>
-  </div>
-  
 </article>
 
-
+    </li>
   
+</ul>
+
+  <section id="nav-wrapper">
+    <nav id="page-nav">
+      <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">next »</a>
+    </nav>
+  </section>
 
 
-  <nav id="page-nav">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/">Next &raquo;</a>
-  </nav>
-</section>
-      
-      <aside id="sidebar">
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
+            <footer>
+    <div>© 2020 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
     </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/C/" style="font-size: 15.71px;">C</a> <a href="/tags/C/" style="font-size: 12.86px;">C++</a> <a href="/tags/CUDA/" style="font-size: 17.14px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 11.43px;">Cache</a> <a href="/tags/Conference/" style="font-size: 11.43px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 11.43px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 12.86px;">HPC</a> <a href="/tags/ICC/" style="font-size: 14.29px;">ICC</a> <a href="/tags/Japan/" style="font-size: 17.14px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 14.29px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 12.86px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18.57px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 12.86px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 11.43px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 12.86px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 12.86px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/10/31/CUDA-separate-compilation-library/">分离编译并打包 CUDA 函数库</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Links</h3>
-    <div class="widget">
-      <ul>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-      
-    </div>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Enigma Huang<br>
-      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
-      .
-      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
-    </div>
-  </div>
 </footer>
-  </div>
-  <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/About" class="mobile-nav-link">About</a>
-  
-    <a href="/SiteXC" class="mobile-nav-link">SiteXC</a>
-  
-</nav>
-  <!-- totop start -->
-<div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
+
+        </div>
+    </div>
 </div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
 
-<!-- totop end -->
-
-
-<!-- 百度分享 start -->
-
-<!-- 百度分享 end -->
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-
-
-
-<! -- mathjax config similar to math.stackexchange -->
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-tex2jax: {
-          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
-                processEscapes: true
-                    
-}
-  
-        });
-</script>
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Config({
-tex2jax: {
-            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
-                  
-}
-    
-        });
-</script>
-
-<script type="text/x-mathjax-config">
-MathJax.Hub.Queue(function() {
-            var all = MathJax.Hub.getAllJax(), i;
-            for(i=0; i < all.length; i += 1) {
-                            all[i].SourceElement().parentNode.className += ' has-jax';
-                                    
-            }
-                
-        });
-</script>
-
-<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
-
-<script src="/js/script.js"></script>
-
-</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

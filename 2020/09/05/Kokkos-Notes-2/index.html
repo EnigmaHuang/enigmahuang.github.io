@@ -1,111 +1,121 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="zh-cmn-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Kokkos笔记（二） | Rainmaker&#39;s Notebook</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="Kokkos Tutorials 笔记第二部分。">
-<meta name="keywords" content="CUDA,C++">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Kokkos笔记（二）">
-<meta property="og:url" content="http://enigmahuang.github.io/2020/09/05/Kokkos-Notes-2/index.html">
-<meta property="og:site_name" content="Rainmaker&#39;s Notebook">
-<meta property="og:description" content="Kokkos Tutorials 笔记第二部分。">
-<meta property="og:updated_time" content="2020-09-05T15:26:38.339Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Kokkos笔记（二）">
-<meta name="twitter:description" content="Kokkos Tutorials 笔记第二部分。">
-  
-    <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
   
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
-<body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
-  <div id="wrap">
-    <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Rainmaker&#39;s Notebook</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-          <a class="main-nav-link" href="/About">About</a>
-        
-          <a class="main-nav-link" href="/SiteXC">SiteXC</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
-          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
-          <input type="submit" value="" class="search-form-submit">
-          <input name=tn type=hidden value="bds">
-          <input name=cl type=hidden value="3">
-          <input name=ct type=hidden value="2097152">
-          <input type="hidden" name="si" value="enigmahuang.github.io">
-        </form>
-      </div>
-    </div>
-  </div>
-</header>
-    <div class="outer">
-      <section id="main"><article id="post-Kokkos-Notes-2" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2020/09/05/Kokkos-Notes-2/" class="article-date">
-  <time datetime="2020-09-05T13:46:14.000Z" itemprop="datePublished">2020-09-05</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      Kokkos笔记（二）
-    </h1>
-  
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p><a href="https://github.com/kokkos/kokkos-tutorials" target="_blank" rel="external">Kokkos Tutorials</a> 笔记第二部分。</p>
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Kokkos笔记（二）</h1>
+    </header>
+
+    <section>
+      <p><a href="https://github.com/kokkos/kokkos-tutorials" target="_blank" rel="external">Kokkos Tutorials</a> 笔记第二部分。</p>
 <a id="more"></a>
 <h2 id="5-MDRangePolicy"><a href="#5-MDRangePolicy" class="headerlink" title="5. MDRangePolicy"></a>5. MDRangePolicy</h2><p>To parallelize tightly nested loops of 1 to 6 dimensions. Example:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for collapse(3) reduction(+:sum)</span></div><div class="line"><span class="keyword">float</span> sum = <span class="number">0.0</span>;</div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> x = nx_s; x &lt; nx_e; x++)</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> y = ny_s; y &lt; ny_e; y++)</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> z = nz_s; z &lt; nz_e; z++)</div><div class="line">            sum += f[x][y][z];</div><div class="line"><span class="comment">// Note: when applying MDRangPolicy, cannot use multiple reducers</span></div><div class="line">Kokkos::parallel_reduce(</div><div class="line">    <span class="string">"Sum_over_cuboid"</span>,</div><div class="line">    MDRangePolicy&lt;Rank&lt;<span class="number">3</span>&gt;&gt;(&#123;nx_s, ny_s, nz_s&#125;, &#123;nx_e, ny_e, nz_e&#125;),</div><div class="line">    KOKKOS_LAMBDA(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> k, <span class="keyword">float</span> &amp;lsum) &#123; lsum += f[x][y][z]; &#125;,</div><div class="line">    Kokkos::Sum&lt;<span class="keyword">float</span>&gt;(sum)</div><div class="line">);</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+</pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> omp parallel for collapse(3) reduction(+:sum)</span></span>
+<span class="line"><span class="keyword">float</span> sum = <span class="number">0.0</span>;</span>
+<span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> x = nx_s; x &lt; nx_e; x++)</span>
+<span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> y = ny_s; y &lt; ny_e; y++)</span>
+<span class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> z = nz_s; z &lt; nz_e; z++)</span>
+<span class="line">            sum += f[x][y][z];</span>
+<span class="line"><span class="comment">// Note: when applying MDRangPolicy, cannot use multiple reducers</span></span>
+<span class="line">Kokkos::parallel_reduce(</span>
+<span class="line">    <span class="string">"Sum_over_cuboid"</span>,</span>
+<span class="line">    MDRangePolicy&lt;Rank&lt;<span class="number">3</span>&gt;&gt;(&#123;nx_s, ny_s, nz_s&#125;, &#123;nx_e, ny_e, nz_e&#125;),</span>
+<span class="line">    KOKKOS_LAMBDA(<span class="keyword">int</span> i, <span class="keyword">int</span> j, <span class="keyword">int</span> k, <span class="keyword">float</span> &amp;lsum) &#123; lsum += f[x][y][z]; &#125;,</span>
+<span class="line">    Kokkos::Sum&lt;<span class="keyword">float</span>&gt;(sum)</span>
+<span class="line">);</span>
+</pre></td></tr></table></figure>
 <p>Tiling: easy, just add the third set of parameters: <code>MDRangePolicy&lt;Rank&lt;3&gt;&gt;({nx_s, ny_s, nz_s}, {nx_e, ny_e, nz_e}, {ts_x, ts_y, ts_z})</code>, the tile sizes on x/y/z loops are ts_{x/y/z}. For GPUs a tile is handled by a single thread block. </p>
 <p>Default iteration patterns match the default memory layouts, can change the iteration patterns between tiles (IterateOuter) and within tiles (IterateInner): <code>Kokkos:Rank&lt;ndim, IterateOuter, IterateInner&gt;</code>. </p>
 <p><strong>WorkTag</strong>: enables multiple operators in one functor:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo</span></span></div><div class="line">&#123;</div><div class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Tag1</span>&#123;</span>&#125;;  <span class="class"><span class="keyword">struct</span> <span class="title">Tag2</span>&#123;</span>&#125;;</div><div class="line">    <span class="function">KOKKOS_FUNCTION <span class="keyword">void</span> <span class="title">operator</span><span class="params">(Tag1, <span class="keyword">int</span> i)</span> <span class="keyword">const</span> </span>&#123;...&#125;</div><div class="line">    <span class="function">KOKKOS_FUNCTION <span class="keyword">void</span> <span class="title">operator</span><span class="params">(Tag2, <span class="keyword">int</span> i)</span> <span class="keyword">const</span> </span>&#123;...&#125;</div><div class="line">    <span class="function"><span class="keyword">void</span> <span class="title">run_both</span><span class="params">(<span class="keyword">int</span> n)</span> </span></div><div class="line">    &#123;</div><div class="line">        parallel_for(RangePolicy&lt;Tag1&gt;(<span class="number">0</span>, N), *<span class="keyword">this</span>);</div><div class="line">        parallel_for(RangePolicy&lt;Tag2&gt;(<span class="number">0</span>, N), *<span class="keyword">this</span>);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+</pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">foo</span></span>
+<span class="line">&#123;</span></span>
+<span class="line">    <span class="class"><span class="keyword">struct</span> <span class="title">Tag1</span>&#123;</span>&#125;;  <span class="class"><span class="keyword">struct</span> <span class="title">Tag2</span>&#123;</span>&#125;;</span>
+<span class="line">    <span class="function">KOKKOS_FUNCTION <span class="keyword">void</span> <span class="title">operator</span><span class="params">(Tag1, <span class="keyword">int</span> i)</span> <span class="keyword">const</span> </span>&#123;...&#125;</span>
+<span class="line">    <span class="function">KOKKOS_FUNCTION <span class="keyword">void</span> <span class="title">operator</span><span class="params">(Tag2, <span class="keyword">int</span> i)</span> <span class="keyword">const</span> </span>&#123;...&#125;</span>
+<span class="line">    <span class="function"><span class="keyword">void</span> <span class="title">run_both</span><span class="params">(<span class="keyword">int</span> n)</span> </span>
+<span class="line">    </span>&#123;</span>
+<span class="line">        parallel_for(RangePolicy&lt;Tag1&gt;(<span class="number">0</span>, N), *<span class="keyword">this</span>);</span>
+<span class="line">        parallel_for(RangePolicy&lt;Tag2&gt;(<span class="number">0</span>, N), *<span class="keyword">this</span>);</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;</span>
+</pre></td></tr></table></figure>
 <h2 id="6-Subview"><a href="#6-Subview" class="headerlink" title="6. Subview"></a>6. Subview</h2><p>A subview is a slice of each dimension of a view and points to the same data, can be constructed on host or with in a kernel. Similar to the “colon” notation provided by MATLAB, Fortran, Python. </p>
 <p>Subview can take three types of slice arguments:</p>
 <ul>
@@ -113,174 +123,263 @@
 <li><code>Kokkos::pair</code>: a half-open range of indices</li>
 <li><code>Kokkos::ALL</code>: the entire range</li>
 </ul>
-<p>For example, the following code is equivalent to MATLAB code <code>norm(tensor(3, 5:10, :), &#39;fro&#39;)</code>:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">Kokkos::View&lt;<span class="keyword">double</span>***&gt; tensor(<span class="string">"tensor"</span>, N0, N1, N2);</div><div class="line"><span class="keyword">auto</span> sv = Kokkos::subview(tensor, <span class="number">2</span>, Kokkos::make_pair(<span class="number">4</span>, <span class="number">10</span>), Kokkos::ALL);</div><div class="line"><span class="keyword">double</span> fnorm = <span class="number">0.0</span>;</div><div class="line">Kokkos::parallel_reduce(</div><div class="line">    <span class="string">"fro_norm"</span>,</div><div class="line">    MDRangePolicy&lt;Rank&lt;<span class="number">2</span>&gt;&gt;(&#123;<span class="number">0</span>, <span class="number">0</span>&#125;, &#123;<span class="number">6</span>, N2&#125;),</div><div class="line">    KOKKOS_LAMBDA(<span class="keyword">int</span> j, <span class="keyword">int</span> k, <span class="keyword">double</span> &amp;lsum) &#123; </div><div class="line">        <span class="keyword">double</span> sv_jk = sv(j, k);</div><div class="line">        lsum += sv_jk * sv_jk; </div><div class="line">    &#125;,</div><div class="line">    fnorm</div><div class="line">);</div><div class="line">fnorm = <span class="built_in">sqrt</span>(fnorm);</div></pre></td></tr></table></figure></p>
-<h2 id="7-Thread-Safety-and-Atomic-Operations"><a href="#7-Thread-Safety-and-Atomic-Operations" class="headerlink" title="7. Thread Safety and Atomic Operations"></a>7. Thread Safety and Atomic Operations</h2><p>Example: histogram<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">Kokkos::View&lt;<span class="keyword">int</span>*&gt; histogram(<span class="string">"histogram"</span>, num_bucket);</div><div class="line">Kokkos::parallel_for(num_bucket, KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">int</span> &amp;i) &#123;histogram(i) = <span class="number">0</span>;&#125;);</div><div class="line">Kokkos::parallel_for(</div><div class="line">    <span class="string">"histogram"</span>,</div><div class="line">    n, </div><div class="line">    KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">int</span> &amp;i)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">const</span> dtype value = ...;</div><div class="line">        <span class="keyword">const</span> <span class="keyword">int</span> bucket_index = calc_bucket_index(value);</div><div class="line">        Kokkos::atomic_add(&amp;histogram(bucket_index), <span class="number">1</span>);</div><div class="line">    &#125;</div><div class="line">);</div></pre></td></tr></table></figure></p>
-<p><strong>View</strong> can have memory traits including <code>Atomic</code>, <code>RandomAccess</code>, <code>Restrict</code>, <code>Unmanaged</code>, and other. Two examples:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div></pre></td><td class="code"><pre><div class="line">Kokkos::View&lt;<span class="keyword">int</span>*&gt; a(<span class="string">"a"</span> , <span class="number">100</span>);</div><div class="line">Kokkos::View&lt;<span class="keyword">int</span>*, Kokkos::MemoryTraits&lt;Atomic&gt; &gt; a_atomic = a;</div><div class="line">a_atomic(<span class="number">1</span>) += <span class="number">1</span>; <span class="comment">// This access will do an atomic addition</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> <span class="keyword">size_t</span> N0 = ...;</div><div class="line">Kokkos::View&lt;<span class="keyword">int</span>*&gt; a_nonconst (<span class="string">"a"</span>, N0); <span class="comment">// Allocate nonconst View</span></div><div class="line"><span class="comment">// Assign to const, RandomAccess View (useful on GPU)</span></div><div class="line">Kokkos::View&lt;<span class="keyword">const</span> <span class="keyword">int</span>*, Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt; a_ra = a_nonconst;</div></pre></td></tr></table></figure></p>
-<p><strong>ScatterView</strong>: transparently switch between atomic and data replication (every thread owns a copy).<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">compute_forces</span><span class="params">(</span></span></div><div class="line">    View&lt;real3*&gt; x, View&lt;real3*&gt; f, ScatterView&lt;real3*&gt;scatter_f,</div><div class="line">    View&lt;<span class="keyword">int</span>**&gt; neighs, Interaction force</div><div class="line">)</div><div class="line">&#123;</div><div class="line">    scatter_f.reset();</div><div class="line">    <span class="keyword">int</span> N = x.extent(<span class="number">0</span>);</div><div class="line">    <span class="keyword">int</span> num_neighs = neighs.extent(<span class="number">1</span>);</div><div class="line">    Kokkos::parallel_for(</div><div class="line">        <span class="string">"ForceCompute"</span>, N, </div><div class="line">        KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">int</span> i)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">auto</span> f_a = scatter_f.access();</div><div class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; num_neighs; j++) </div><div class="line">            &#123;</div><div class="line">                real3 df = force.compute(x(i), x(neighs(i, j)));</div><div class="line">                f_a(i) += df;   <span class="comment">// Only += and -= operators are available</span></div><div class="line">                f_a(j) -= df;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    );</div><div class="line">    Kokkos::Experimental::contribute(f, scatter_f);</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>For example, the following code is equivalent to MATLAB code <code>norm(tensor(3, 5:10, :), &#39;fro&#39;)</code>:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+</pre></td><td class="code"><pre><span class="line">Kokkos::View&lt;<span class="keyword">double</span>***&gt; tensor(<span class="string">"tensor"</span>, N0, N1, N2);</span>
+<span class="line"><span class="keyword">auto</span> sv = Kokkos::subview(tensor, <span class="number">2</span>, Kokkos::make_pair(<span class="number">4</span>, <span class="number">10</span>), Kokkos::ALL);</span>
+<span class="line"><span class="keyword">double</span> fnorm = <span class="number">0.0</span>;</span>
+<span class="line">Kokkos::parallel_reduce(</span>
+<span class="line">    <span class="string">"fro_norm"</span>,</span>
+<span class="line">    MDRangePolicy&lt;Rank&lt;<span class="number">2</span>&gt;&gt;(&#123;<span class="number">0</span>, <span class="number">0</span>&#125;, &#123;<span class="number">6</span>, N2&#125;),</span>
+<span class="line">    KOKKOS_LAMBDA(<span class="keyword">int</span> j, <span class="keyword">int</span> k, <span class="keyword">double</span> &amp;lsum) &#123; </span>
+<span class="line">        <span class="keyword">double</span> sv_jk = sv(j, k);</span>
+<span class="line">        lsum += sv_jk * sv_jk; </span>
+<span class="line">    &#125;,</span>
+<span class="line">    fnorm</span>
+<span class="line">);</span>
+<span class="line">fnorm = <span class="built_in">sqrt</span>(fnorm);</span>
+</pre></td></tr></table></figure></p>
+<h2 id="7-Thread-Safety-and-Atomic-Operations"><a href="#7-Thread-Safety-and-Atomic-Operations" class="headerlink" title="7. Thread Safety and Atomic Operations"></a>7. Thread Safety and Atomic Operations</h2><p>Example: histogram<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+</pre></td><td class="code"><pre><span class="line">Kokkos::View&lt;<span class="keyword">int</span>*&gt; histogram(<span class="string">"histogram"</span>, num_bucket);</span>
+<span class="line">Kokkos::parallel_for(num_bucket, KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">int</span> &amp;i) &#123;histogram(i) = <span class="number">0</span>;&#125;);</span>
+<span class="line">Kokkos::parallel_for(</span>
+<span class="line">    <span class="string">"histogram"</span>,</span>
+<span class="line">    n, </span>
+<span class="line">    KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">int</span> &amp;i)</span>
+<span class="line">    &#123;</span>
+<span class="line">        <span class="keyword">const</span> dtype value = ...;</span>
+<span class="line">        <span class="keyword">const</span> <span class="keyword">int</span> bucket_index = calc_bucket_index(value);</span>
+<span class="line">        Kokkos::atomic_add(&amp;histogram(bucket_index), <span class="number">1</span>);</span>
+<span class="line">    &#125;</span>
+<span class="line">);</span>
+</pre></td></tr></table></figure></p>
+<p><strong>View</strong> can have memory traits including <code>Atomic</code>, <code>RandomAccess</code>, <code>Restrict</code>, <code>Unmanaged</code>, and other. Two examples:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+</pre></td><td class="code"><pre><span class="line">Kokkos::View&lt;<span class="keyword">int</span>*&gt; a(<span class="string">"a"</span> , <span class="number">100</span>);</span>
+<span class="line">Kokkos::View&lt;<span class="keyword">int</span>*, Kokkos::MemoryTraits&lt;Atomic&gt; &gt; a_atomic = a;</span>
+<span class="line">a_atomic(<span class="number">1</span>) += <span class="number">1</span>; <span class="comment">// This access will do an atomic addition</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">const</span> <span class="keyword">size_t</span> N0 = ...;</span>
+<span class="line">Kokkos::View&lt;<span class="keyword">int</span>*&gt; a_nonconst (<span class="string">"a"</span>, N0); <span class="comment">// Allocate nonconst View</span></span>
+<span class="line"><span class="comment">// Assign to const, RandomAccess View (useful on GPU)</span></span>
+<span class="line">Kokkos::View&lt;<span class="keyword">const</span> <span class="keyword">int</span>*, Kokkos::MemoryTraits&lt;Kokkos::RandomAccess&gt;&gt; a_ra = a_nonconst;</span>
+</pre></td></tr></table></figure></p>
+<p><strong>ScatterView</strong>: transparently switch between atomic and data replication (every thread owns a copy).<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+</pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">compute_forces</span><span class="params">(</span>
+<span class="line">    View&lt;real3*&gt; x, View&lt;real3*&gt; f, ScatterView&lt;real3*&gt;scatter_f,</span>
+<span class="line">    View&lt;<span class="keyword">int</span>**&gt; neighs, Interaction force</span>
+<span class="line">)</span></span>
+<span class="line"></span>&#123;</span>
+<span class="line">    scatter_f.reset();</span>
+<span class="line">    <span class="keyword">int</span> N = x.extent(<span class="number">0</span>);</span>
+<span class="line">    <span class="keyword">int</span> num_neighs = neighs.extent(<span class="number">1</span>);</span>
+<span class="line">    Kokkos::parallel_for(</span>
+<span class="line">        <span class="string">"ForceCompute"</span>, N, </span>
+<span class="line">        KOKKOS_LAMBDA(<span class="keyword">const</span> <span class="keyword">int</span> i)</span>
+<span class="line">        &#123;</span>
+<span class="line">            <span class="keyword">auto</span> f_a = scatter_f.access();</span>
+<span class="line">            <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; num_neighs; j++) </span>
+<span class="line">            &#123;</span>
+<span class="line">                real3 df = force.compute(x(i), x(neighs(i, j)));</span>
+<span class="line">                f_a(i) += df;   <span class="comment">// Only += and -= operators are available</span></span>
+<span class="line">                f_a(j) -= df;</span>
+<span class="line">            &#125;</span>
+<span class="line">        &#125;</span>
+<span class="line">    );</span>
+<span class="line">    Kokkos::Experimental::contribute(f, scatter_f);</span>
+<span class="line">&#125;</span>
+</pre></td></tr></table></figure></p>
 <h2 id="8-Hierarchical-Parallelism"><a href="#8-Hierarchical-Parallelism" class="headerlink" title="8. Hierarchical Parallelism"></a>8. Hierarchical Parallelism</h2><p><strong>Thread team</strong>: a collection of threads which are guaranteed to be <strong>executing cincurrently</strong> and <strong>can synchronize</strong> (similar to a thread block in CUDA).</p>
-<p>Here are some important properties:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">using</span> member_type = Kokkos::TeamPolicy&lt;&gt;::member_type;</div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">(<span class="keyword">const</span> member_type &amp;team_member)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="comment">// How many teams are there and which team am I on</span></div><div class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> num_team   = team_member.league_size();</div><div class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> team_idx   = team_member.league_rank();</div><div class="line">    <span class="comment">// How many threads are in the team and which thread am I on</span></div><div class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> num_thread = team_member.team_size();</div><div class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> thread_idx = team_member.team_rank();</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
-<p>Hierarchical parallelism using TeamPolicy: total work = number of teams * size of teams<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div></pre></td><td class="code"><pre><div class="line">parallel_operation(</div><div class="line">    <span class="string">"label"</span>, </div><div class="line">    TeamPolicy&lt;execution_space&gt;(number_of_teams, team_size),</div><div class="line">    functor,</div><div class="line">    <span class="comment">// Something else</span></div><div class="line">)</div></pre></td></tr></table></figure></p>
+<p>Here are some important properties:<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">using</span> member_type = Kokkos::TeamPolicy&lt;&gt;::member_type;</span>
+<span class="line"><span class="function"><span class="keyword">void</span> <span class="title">operator</span><span class="params">(<span class="keyword">const</span> member_type &amp;team_member)</span></span>
+<span class="line"></span>&#123;</span>
+<span class="line">    <span class="comment">// How many teams are there and which team am I on</span></span>
+<span class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> num_team   = team_member.league_size();</span>
+<span class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> team_idx   = team_member.league_rank();</span>
+<span class="line">    <span class="comment">// How many threads are in the team and which thread am I on</span></span>
+<span class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> num_thread = team_member.team_size();</span>
+<span class="line">    <span class="keyword">const</span> <span class="keyword">unsigned</span> <span class="keyword">int</span> thread_idx = team_member.team_rank();</span>
+<span class="line">&#125;</span>
+</pre></td></tr></table></figure></p>
+<p>Hierarchical parallelism using TeamPolicy: total work = number of teams * size of teams<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+</pre></td><td class="code"><pre><span class="line">parallel_operation(</span>
+<span class="line">    <span class="string">"label"</span>, </span>
+<span class="line">    TeamPolicy&lt;execution_space&gt;(number_of_teams, team_size),</span>
+<span class="line">    functor,</span>
+<span class="line">    <span class="comment">// Something else</span></span>
+<span class="line">)</span>
+</pre></td></tr></table></figure></p>
 <p>Nested parallel pattern: use parallel executions in parallel execution. Here is an example of doing a matrix-vector multiplication:</p>
-<figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> m = ...;</div><div class="line"><span class="keyword">const</span> <span class="keyword">int</span> n = ...;</div><div class="line">Kokkos::View&lt;<span class="keyword">float</span>**&gt; A(<span class="string">"A"</span>, m, n);</div><div class="line">Kokkos::View&lt;<span class="keyword">float</span>*&gt;  x(<span class="string">"x"</span>, n);</div><div class="line">Kokkos::View&lt;<span class="keyword">float</span>*&gt;  b(<span class="string">"x"</span>, m);</div><div class="line"><span class="comment">// Fill A, x and set b to all 0</span></div><div class="line">Kokkos::parallel_for(</div><div class="line">    <span class="string">"GEMV"</span>, </div><div class="line">    TeamPolicy&lt;exec_space&gt;(m, Kokkos::AUTO),  <span class="comment">// Kokkos::AUTO can be other team_size</span></div><div class="line">    KOKKOS_LAMBDA(<span class="keyword">const</span> member_type &amp;team_member)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> row = team_member.league_rank();</div><div class="line">        <span class="keyword">double</span> row_dot_sum = <span class="number">0.0</span>;</div><div class="line">        Kokkos::parallel_reduce(</div><div class="line">            <span class="comment">// Inner lambda: </span></div><div class="line">            <span class="comment">// (1) policy is always a TeamThreadRange</span></div><div class="line">            <span class="comment">// (2) may capture by reference, but capture by value is recommended</span></div><div class="line">            <span class="comment">// (3) cannot use KOKKOS_LAMBDA</span></div><div class="line">            Kokkos::TeamThreadRange(team_member, n),</div><div class="line">            [=] (<span class="keyword">const</span> <span class="keyword">int</span> col, <span class="keyword">float</span> &amp;lsum)  </div><div class="line">            &#123; </div><div class="line">                lsum += A(row, col) * x(col); </div><div class="line">            &#125;,</div><div class="line">            row_dot_sum</div><div class="line">        );</div><div class="line">        <span class="keyword">if</span> (team_member.team_rank() == <span class="number">0</span>) b(row) = row_dot_sum;</div><div class="line">    &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+<figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">const</span> <span class="keyword">int</span> m = ...;</span>
+<span class="line"><span class="keyword">const</span> <span class="keyword">int</span> n = ...;</span>
+<span class="line">Kokkos::View&lt;<span class="keyword">float</span>**&gt; A(<span class="string">"A"</span>, m, n);</span>
+<span class="line">Kokkos::View&lt;<span class="keyword">float</span>*&gt;  x(<span class="string">"x"</span>, n);</span>
+<span class="line">Kokkos::View&lt;<span class="keyword">float</span>*&gt;  b(<span class="string">"x"</span>, m);</span>
+<span class="line"><span class="comment">// Fill A, x and set b to all 0</span></span>
+<span class="line">Kokkos::parallel_for(</span>
+<span class="line">    <span class="string">"GEMV"</span>, </span>
+<span class="line">    TeamPolicy&lt;exec_space&gt;(m, Kokkos::AUTO),  <span class="comment">// Kokkos::AUTO can be other team_size</span></span>
+<span class="line">    KOKKOS_LAMBDA(<span class="keyword">const</span> member_type &amp;team_member)</span>
+<span class="line">    &#123;</span>
+<span class="line">        <span class="keyword">int</span> row = team_member.league_rank();</span>
+<span class="line">        <span class="keyword">double</span> row_dot_sum = <span class="number">0.0</span>;</span>
+<span class="line">        Kokkos::parallel_reduce(</span>
+<span class="line">            <span class="comment">// Inner lambda: </span></span>
+<span class="line">            <span class="comment">// (1) policy is always a TeamThreadRange</span></span>
+<span class="line">            <span class="comment">// (2) may capture by reference, but capture by value is recommended</span></span>
+<span class="line">            <span class="comment">// (3) cannot use KOKKOS_LAMBDA</span></span>
+<span class="line">            Kokkos::TeamThreadRange(team_member, n),</span>
+<span class="line">            [=] (<span class="keyword">const</span> <span class="keyword">int</span> col, <span class="keyword">float</span> &amp;lsum)  </span>
+<span class="line">            &#123; </span>
+<span class="line">                lsum += A(row, col) * x(col); </span>
+<span class="line">            &#125;,</span>
+<span class="line">            row_dot_sum</span>
+<span class="line">        );</span>
+<span class="line">        <span class="keyword">if</span> (team_member.team_rank() == <span class="number">0</span>) b(row) = row_dot_sum;</span>
+<span class="line">    &#125;</span>
+<span class="line">);</span>
+</pre></td></tr></table></figure>
 <p>Third level parallelism: <code>ThreadVectorRange</code>, but the tutorial does not provide a detailed example. </p>
 
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2020/09/05/Kokkos-Notes-2/" data-id="ckgz7b4wk002gnksifeifq1im" class="article-share-link">Share</a>
-      
 
       
 
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C++</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/CUDA/">CUDA</a></li></ul>
-
-    </footer>
-  </div>
-  
+    </section>
     
-<nav id="article-nav">
-  
-    <a href="/2020/09/05/Kokkos-Notes-3/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          Kokkos笔记（三）
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2020/09/05/Kokkos-Notes-1/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Kokkos笔记（一）</div>
-    </a>
-  
-</nav>
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2020-09-05T13:46:14.000Z" itemprop="datePublished">
+              2020-09-05
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
 
-  
+  <li class="meta-text">
+  { <a href="/tags/C/">C++</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
 </article>
 
-</section>
-      
-      <aside id="sidebar">
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/C/" style="font-size: 15.71px;">C</a> <a href="/tags/C/" style="font-size: 12.86px;">C++</a> <a href="/tags/CUDA/" style="font-size: 17.14px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 11.43px;">Cache</a> <a href="/tags/Conference/" style="font-size: 11.43px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 11.43px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 12.86px;">HPC</a> <a href="/tags/ICC/" style="font-size: 14.29px;">ICC</a> <a href="/tags/Japan/" style="font-size: 17.14px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 14.29px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 12.86px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18.57px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 12.86px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 11.43px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 12.86px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 12.86px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/10/31/CUDA-separate-compilation-library/">分离编译并打包 CUDA 函数库</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Links</h3>
-    <div class="widget">
-      <ul>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-      
-    </div>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Enigma Huang<br>
-      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
-      .
-      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
-    </div>
-  </div>
-</footer>
-  </div>
-  <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/About" class="mobile-nav-link">About</a>
-  
-    <a href="/SiteXC" class="mobile-nav-link">SiteXC</a>
-  
-</nav>
-  <!-- totop start -->
-<div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
-</div>
-
-<!-- totop end -->
-
-
-<!-- 百度分享 start -->
-
-<!-- 百度分享 end -->
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-
-
-
-<! -- mathjax config similar to math.stackexchange -->
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -317,9 +416,27 @@ MathJax.Hub.Queue(function() {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
+</div>
+            <footer>
+    <div>© 2020 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
 
-<script src="/js/script.js"></script>
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
 
-</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

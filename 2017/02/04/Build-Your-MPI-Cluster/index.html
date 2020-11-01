@@ -1,297 +1,228 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="zh-cmn-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>如何搭建自己的 MPI 集群 | Rainmaker&#39;s Notebook</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="如果你有几台装了 Linux 的 PS3 / PS4 / Xbox One，你也可以按下面的方法自己搭一个 MPI 集群并等着拯救世界。">
-<meta name="keywords" content="NFS,MPI">
-<meta property="og:type" content="article">
-<meta property="og:title" content="如何搭建自己的 MPI 集群">
-<meta property="og:url" content="http://enigmahuang.github.io/2017/02/04/Build-Your-MPI-Cluster/index.html">
-<meta property="og:site_name" content="Rainmaker&#39;s Notebook">
-<meta property="og:description" content="如果你有几台装了 Linux 的 PS3 / PS4 / Xbox One，你也可以按下面的方法自己搭一个 MPI 集群并等着拯救世界。">
-<meta property="og:updated_time" content="2017-09-29T19:54:14.378Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="如何搭建自己的 MPI 集群">
-<meta name="twitter:description" content="如果你有几台装了 Linux 的 PS3 / PS4 / Xbox One，你也可以按下面的方法自己搭一个 MPI 集群并等着拯救世界。">
-  
-    <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
   
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
-<body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
-  <div id="wrap">
-    <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Rainmaker&#39;s Notebook</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-          <a class="main-nav-link" href="/About">About</a>
-        
-          <a class="main-nav-link" href="/SiteXC">SiteXC</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
-          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
-          <input type="submit" value="" class="search-form-submit">
-          <input name=tn type=hidden value="bds">
-          <input name=cl type=hidden value="3">
-          <input name=ct type=hidden value="2097152">
-          <input type="hidden" name="si" value="enigmahuang.github.io">
-        </form>
-      </div>
-    </div>
-  </div>
-</header>
-    <div class="outer">
-      <section id="main"><article id="post-Build-Your-MPI-Cluster" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/02/04/Build-Your-MPI-Cluster/" class="article-date">
-  <time datetime="2017-02-04T16:22:33.000Z" itemprop="datePublished">2017-02-04</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      如何搭建自己的 MPI 集群
-    </h1>
-  
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>如果你有几台装了 Linux 的 PS3 / PS4 / Xbox One，你也可以按下面的方法自己搭一个 MPI 集群并等着拯救世界。</p>
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>如何搭建自己的 MPI 集群</h1>
+    </header>
+
+    <section>
+      <p>如果你有几台装了 Linux 的 PS3 / PS4 / Xbox One，你也可以按下面的方法自己搭一个 MPI 集群并等着拯救世界。</p>
 <a id="more"></a>
-<h2 id="一、配置-NFS"><a href="#一、配置-NFS" class="headerlink" title="一、配置 NFS"></a>一、配置 NFS</h2><p>无论是 Server 还是 Clients，先安装 NFS 套件：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install nfs-utils</div></pre></td></tr></table></figure></p>
-<h3 id="以太网下的设定"><a href="#以太网下的设定" class="headerlink" title="以太网下的设定"></a>以太网下的设定</h3><p>设置防火墙：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">firewall-cmd --permanent --zone=public --add-service=ssh</div><div class="line">firewall-cmd --permanent --zone=public --add-service=nfs</div><div class="line">firewall-cmd --reload</div></pre></td></tr></table></figure></p>
-<p>在 Server 上执行以下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line">cd /</div><div class="line">sudo su # 切换到 root 用户，方便操作</div><div class="line"><span class="meta">#</span> 下面这一行设置共享的文件夹为 /export，共享范围是 192.168.15.0/24 这个网段</div><div class="line">echo "/export 192.168.15.0/24(rw,sync,no_root_squash,no_all_squash)" &gt; /etc/exports</div><div class="line">mkdir export </div><div class="line">chown enigma:enigma /export # 将 enigma 换成你的用户名</div><div class="line">chmod 755 /export</div><div class="line">systemctl start rpcbind</div><div class="line">systemctl start nfs</div><div class="line"><span class="meta">#</span> 设置两个服务为自动启动</div><div class="line">systemctl enable rpcbind.service</div><div class="line">systemctl enable nfs.service</div></pre></td></tr></table></figure></p>
-<p>在 Client 上执行以下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">sudo su # 切换到 root 用户，方便操作</div><div class="line">systemctl start rpcbind</div><div class="line">systemctl enable rpcbind.service</div><div class="line">systemctl start nfs</div><div class="line">systemctl enable nfs.service</div><div class="line">mkdir /export</div><div class="line"><span class="meta">#</span> 下面这一行将 192.168.15.128 上的 NFS 挂载到本机的 /export 位置</div><div class="line">mount -t nfs 192.168.15.128:/export/ /export </div><div class="line"><span class="meta">#</span> 下面这一行指示系统每次启动就挂载 NFS</div><div class="line">echo "192.168.15.128:/export/ /export/ nfs rw,sync,hard,intr 0 0" &gt;&gt; /etc/fstab</div></pre></td></tr></table></figure></p>
+<h2 id="一、配置-NFS"><a href="#一、配置-NFS" class="headerlink" title="一、配置 NFS"></a>一、配置 NFS</h2><p>无论是 Server 还是 Clients，先安装 NFS 套件：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">sudo yum install nfs-utils</span>
+</pre></td></tr></table></figure></p>
+<h3 id="以太网下的设定"><a href="#以太网下的设定" class="headerlink" title="以太网下的设定"></a>以太网下的设定</h3><p>设置防火墙：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">firewall-cmd --permanent --zone=public --add-service=ssh</span>
+<span class="line">firewall-cmd --permanent --zone=public --add-service=nfs</span>
+<span class="line">firewall-cmd --reload</span>
+</pre></td></tr></table></figure></p>
+<p>在 Server 上执行以下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+</pre></td><td class="code"><pre><span class="line">cd /</span>
+<span class="line">sudo su # 切换到 root 用户，方便操作</span>
+<span class="line"><span class="meta">#</span> 下面这一行设置共享的文件夹为 /export，共享范围是 192.168.15.0/24 这个网段</span>
+<span class="line">echo "/export 192.168.15.0/24(rw,sync,no_root_squash,no_all_squash)" &gt; /etc/exports</span>
+<span class="line">mkdir export </span>
+<span class="line">chown enigma:enigma /export # 将 enigma 换成你的用户名</span>
+<span class="line">chmod 755 /export</span>
+<span class="line">systemctl start rpcbind</span>
+<span class="line">systemctl start nfs</span>
+<span class="line"><span class="meta">#</span> 设置两个服务为自动启动</span>
+<span class="line">systemctl enable rpcbind.service</span>
+<span class="line">systemctl enable nfs.service</span>
+</pre></td></tr></table></figure></p>
+<p>在 Client 上执行以下命令：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+</pre></td><td class="code"><pre><span class="line">sudo su # 切换到 root 用户，方便操作</span>
+<span class="line">systemctl start rpcbind</span>
+<span class="line">systemctl enable rpcbind.service</span>
+<span class="line">systemctl start nfs</span>
+<span class="line">systemctl enable nfs.service</span>
+<span class="line">mkdir /export</span>
+<span class="line"><span class="meta">#</span> 下面这一行将 192.168.15.128 上的 NFS 挂载到本机的 /export 位置</span>
+<span class="line">mount -t nfs 192.168.15.128:/export/ /export </span>
+<span class="line"><span class="meta">#</span> 下面这一行指示系统每次启动就挂载 NFS</span>
+<span class="line">echo "192.168.15.128:/export/ /export/ nfs rw,sync,hard,intr 0 0" &gt;&gt; /etc/fstab</span>
+</pre></td></tr></table></figure></p>
 <h3 id="IB-网下的设定"><a href="#IB-网下的设定" class="headerlink" title="IB 网下的设定"></a>IB 网下的设定</h3><p>（没机会玩 IB ……）</p>
 <h2 id="二、配置各节点的无密码访问"><a href="#二、配置各节点的无密码访问" class="headerlink" title="二、配置各节点的无密码访问"></a>二、配置各节点的无密码访问</h2><ol>
-<li>生成密钥对<br>执行下列命令以生成密钥对：<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">ssh-keygen -t rsa</div></pre></td></tr></table></figure>
+<li>生成密钥对<br>执行下列命令以生成密钥对：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">ssh-keygen -t rsa</span>
+</pre></td></tr></table></figure>
 </li>
 </ol>
 <p>执行过程会提示你：选择密钥对存储的位置，如果不指定将存储在 <code>~/.ssh/</code> 下面；密码，如果非空，则在第一次登陆远程主机的时候需要输入。这里我们把两个选项都留空</p>
 <ol>
-<li>复制公钥到其他主机以进行无密码访问<br>准备好一个远程主机列表文件 <code>hostlist</code> ，每一行指定一个计划让这一台主机进行无密码访问的主机IP。一般这个列表可以包含所有的主机名（包含这一台），然后拷贝到集群的每一台主机上，在每一台主机上运行下列脚本：<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div></pre></td><td class="code"><pre><div class="line">for host in $(cat hostlist); do</div><div class="line">    `ssh-copy-id -i $USER@$host`</div><div class="line">done</div></pre></td></tr></table></figure>
+<li>复制公钥到其他主机以进行无密码访问<br>准备好一个远程主机列表文件 <code>hostlist</code> ，每一行指定一个计划让这一台主机进行无密码访问的主机IP。一般这个列表可以包含所有的主机名（包含这一台），然后拷贝到集群的每一台主机上，在每一台主机上运行下列脚本：<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">for host in $(cat hostlist); do</span>
+<span class="line">    `ssh-copy-id -i $USER@$host`</span>
+<span class="line">done</span>
+</pre></td></tr></table></figure>
 </li>
 </ol>
 <p>脚本的作用是执行过程中会提示你是否接受远程主机的指纹，以及输入远程主机同名账户的密码。</p>
 <h2 id="三、编译安装和使用-MPI-环境"><a href="#三、编译安装和使用-MPI-环境" class="headerlink" title="三、编译安装和使用 MPI 环境"></a>三、编译安装和使用 MPI 环境</h2><p>以 OpenMPI 为例。其他 MPI 环境需要对应修改一些路径和设置。<br>假设集群的 NFS 文件系统在 /export，各机器之间已配置无密码 ssh 访问。</p>
 <ul>
 <li><p>确保已安装 gcc, g++ 和 gfortran，或者其他的 C &amp; C++ &amp; Fortran 编译器</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo yum install gcc gcc-c++ gcc-gfortram</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">sudo yum install gcc gcc-c++ gcc-gfortram</span>
+</pre></td></tr></table></figure>
 </li>
 <li><p>从 OpenMPI <a href="https://www.open-mpi.org/software/" target="_blank" rel="external">官网下载页面</a>  下载 OpenMPI 最新的包（本文用2.0.1）：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">wget https://www.open-mpi.org/software/ompi/v2.0/downloads/openmpi-2.0.1.tar.gz</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">wget https://www.open-mpi.org/software/ompi/v2.0/downloads/openmpi-2.0.1.tar.gz</span>
+</pre></td></tr></table></figure>
 </li>
 <li><p>解压并配置安装参数，安装到 /export/soft/openmpi-2.0.1 目录下：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">tar zxf openmpi-2.0.1.tar.gz</div><div class="line">cd openmpi-2.0.1</div><div class="line">./configure --prefix=/export/soft/openmpi-2.0.1 | tee config.log</div><div class="line"><span class="meta">#</span> 如果系统中有其他编译器套件如 ICC 并且已经加载可用，可以指定使用哪个编译套件来编译 OpenMPI，如</div><div class="line"><span class="meta">#</span> ./configure --prefix=/export/soft/openmpi-2.0.1 CC=icc CXX=icpc FC=ifort | tee config.log</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+</pre></td><td class="code"><pre><span class="line">tar zxf openmpi-2.0.1.tar.gz</span>
+<span class="line">cd openmpi-2.0.1</span>
+<span class="line">./configure --prefix=/export/soft/openmpi-2.0.1 | tee config.log</span>
+<span class="line"><span class="meta">#</span> 如果系统中有其他编译器套件如 ICC 并且已经加载可用，可以指定使用哪个编译套件来编译 OpenMPI，如</span>
+<span class="line"><span class="meta">#</span> ./configure --prefix=/export/soft/openmpi-2.0.1 CC=icc CXX=icpc FC=ifort | tee config.log</span>
+</pre></td></tr></table></figure>
 </li>
 <li><p>编译并安装</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">sudo make all check install | tee make.log</div></pre></td></tr></table></figure>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">sudo make all check install | tee make.log</span>
+</pre></td></tr></table></figure>
 </li>
 <li><p>配置可执行路径<br> 如果集群中只有一个 MPI 环境，那么直接在 <code>~/.bashrc</code> 中设置加入以下两句：</p>
-<figure class="highlight shell"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">export PATH=/export/soft/openmpi-2.0.1/bin:$PATH</div><div class="line">export LD_LIBRARY_PATH=/export/soft/openmpi-2.0.1/lib:$LD_LIBRARY_PATH</div></pre></td></tr></table></figure>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line">export PATH=/export/soft/openmpi-2.0.1/bin:$PATH</span>
+<span class="line">export LD_LIBRARY_PATH=/export/soft/openmpi-2.0.1/lib:$LD_LIBRARY_PATH</span>
+</pre></td></tr></table></figure>
 </li>
 </ul>
 <p>即可使得用户登录后自动将 OpenMPI 的可执行路径加入环境变量中并直接调用。<br>如果集群中有其他的 MPI 环境，建议用 Environment Modules 为 OpenMPI 创建一个 module file 来进行加载/取消加载。在 <code>~/.bashrc</code> 中<strong>必须指定加载一种 MPI 环境</strong>使得 MPI 环境可以跨节点启动 MPI 环境框架，否则只有一台机器启动了 MPI 环境框架，跨节点运行的时候会报错。</p>
 
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/02/04/Build-Your-MPI-Cluster/" data-id="ckgz7b4i10007nksibuogkmve" class="article-share-link">Share</a>
-      
 
       
 
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/NFS/">NFS</a></li></ul>
-
-    </footer>
-  </div>
-  
+    </section>
     
-<nav id="article-nav">
-  
-    <a href="/2017/02/22/Environment-Modules-Usage/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          使用 Environment Module 管理不同版本软件
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2016/12/19/IngressSZMD2016/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">2016 Ingress Shenzhen Mission Day 小记</div>
-    </a>
-  
-</nav>
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2017-02-04T16:22:33.000Z" itemprop="datePublished">
+              2017-02-04
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/NFS/">NFS</a> }
+  </li>
 
-  
+  <li class="meta-text">
+  { <a href="/tags/MPI/">MPI</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
 </article>
 
-</section>
-      
-      <aside id="sidebar">
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/C/" style="font-size: 15.71px;">C</a> <a href="/tags/C/" style="font-size: 12.86px;">C++</a> <a href="/tags/CUDA/" style="font-size: 17.14px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 11.43px;">Cache</a> <a href="/tags/Conference/" style="font-size: 11.43px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 11.43px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 12.86px;">HPC</a> <a href="/tags/ICC/" style="font-size: 14.29px;">ICC</a> <a href="/tags/Japan/" style="font-size: 17.14px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 14.29px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 12.86px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18.57px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 12.86px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 11.43px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 12.86px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 12.86px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/10/31/CUDA-separate-compilation-library/">分离编译并打包 CUDA 函数库</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Links</h3>
-    <div class="widget">
-      <ul>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-      
-    </div>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Enigma Huang<br>
-      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
-      .
-      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
-    </div>
-  </div>
-</footer>
-  </div>
-  <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/About" class="mobile-nav-link">About</a>
-  
-    <a href="/SiteXC" class="mobile-nav-link">SiteXC</a>
-  
-</nav>
-  <!-- totop start -->
-<div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
-</div>
-
-<!-- totop end -->
-
-
-<!-- 百度分享 start -->
-
-<!-- 百度分享 end -->
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-
-
-
-<! -- mathjax config similar to math.stackexchange -->
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -328,9 +259,27 @@ MathJax.Hub.Queue(function() {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
+</div>
+            <footer>
+    <div>© 2020 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
 
-<script src="/js/script.js"></script>
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
 
-</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

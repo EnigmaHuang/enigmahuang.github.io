@@ -1,104 +1,66 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="zh-cmn-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>使用 AVX 系列指令集进行向量化 | Rainmaker&#39;s Notebook</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="最近上课讲到了向量化的内容，我顺便整理了一下自己手头以前相关的资料。下面内容的主要关注点是在 x86 平台上让编译器进行自动向量化，但是第二部分所提到的一些原则在各个平台上都适用。">
-<meta name="keywords" content="SIMD,ICC,C">
-<meta property="og:type" content="article">
-<meta property="og:title" content="使用 AVX 系列指令集进行向量化">
-<meta property="og:url" content="http://enigmahuang.github.io/2017/09/29/AVX-SIMD/index.html">
-<meta property="og:site_name" content="Rainmaker&#39;s Notebook">
-<meta property="og:description" content="最近上课讲到了向量化的内容，我顺便整理了一下自己手头以前相关的资料。下面内容的主要关注点是在 x86 平台上让编译器进行自动向量化，但是第二部分所提到的一些原则在各个平台上都适用。">
-<meta property="og:updated_time" content="2020-04-12T01:21:08.651Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="使用 AVX 系列指令集进行向量化">
-<meta name="twitter:description" content="最近上课讲到了向量化的内容，我顺便整理了一下自己手头以前相关的资料。下面内容的主要关注点是在 x86 平台上让编译器进行自动向量化，但是第二部分所提到的一些原则在各个平台上都适用。">
-  
-    <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
   
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
-<body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
-  <div id="wrap">
-    <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Rainmaker&#39;s Notebook</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-          <a class="main-nav-link" href="/About">About</a>
-        
-          <a class="main-nav-link" href="/SiteXC">SiteXC</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
-          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
-          <input type="submit" value="" class="search-form-submit">
-          <input name=tn type=hidden value="bds">
-          <input name=cl type=hidden value="3">
-          <input name=ct type=hidden value="2097152">
-          <input type="hidden" name="si" value="enigmahuang.github.io">
-        </form>
-      </div>
-    </div>
-  </div>
-</header>
-    <div class="outer">
-      <section id="main"><article id="post-AVX-SIMD" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/09/29/AVX-SIMD/" class="article-date">
-  <time datetime="2017-09-29T19:45:10.000Z" itemprop="datePublished">2017-09-29</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      使用 AVX 系列指令集进行向量化
-    </h1>
-  
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>最近上课讲到了向量化的内容，我顺便整理了一下自己手头以前相关的资料。下面内容的主要关注点是在 x86 平台上让编译器进行自动向量化，但是第二部分所提到的一些原则在各个平台上都适用。</p>
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>使用 AVX 系列指令集进行向量化</h1>
+    </header>
+
+    <section>
+      <p>最近上课讲到了向量化的内容，我顺便整理了一下自己手头以前相关的资料。下面内容的主要关注点是在 x86 平台上让编译器进行自动向量化，但是第二部分所提到的一些原则在各个平台上都适用。</p>
 <a id="more"></a>
 <h2 id="指令集基本情况"><a href="#指令集基本情况" class="headerlink" title="指令集基本情况"></a>指令集基本情况</h2><table>
 <thead>
@@ -202,29 +164,111 @@
 <ul>
 <li>必须是最内层循环</li>
 <li>循环的长度是确定的（如果是固定的会更好）</li>
-<li>循环体内没有变量依赖关系（比如 <code>a[i] = a[i - 1] + a[i - 2]</code>），但是归约类操作不在此列（比如对一个数组进行求和）。注意，有时候编译器会认为循环有潜在的数据依赖而无法向量化，比如以下的代码：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</div><div class="line">    c[i] += a[i] * b[i];</div></pre></td></tr></table></figure>
+<li>循环体内没有变量依赖关系（比如 <code>a[i] = a[i - 1] + a[i - 2]</code>），但是归约类操作不在此列（比如对一个数组进行求和）。注意，有时候编译器会认为循环有潜在的数据依赖而无法向量化，比如以下的代码：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span>
+<span class="line">    c[i] += a[i] * b[i];</span>
+</pre></td></tr></table></figure>
 </li>
 </ul>
 <p>编译器可能会怀疑 <code>a</code> 或 <code>b</code> 的部分位置与 <code>c</code> 的部分位置重叠，比如存在如下关系 <code>&amp;a[i] == &amp;c[i - 4]</code>。这个时候可以通过编译制导语句（见下）来提示编译器进行向量化。</p>
 <ul>
 <li>循环访问的数据是连续的，或者最起码是相同的步长间隔（间接寻址如 <code>y[pos[i]] += data[i] * x[i]</code> 的效率很低）</li>
 <li><p>循环体内没有复杂的分支判断；一个 <code>if</code> 是可以接受的，因为可以被转换成 mask operation，比如以下函数：</p>
-<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div></pre></td><td class="code"><pre><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">quad</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;len, <span class="keyword">const</span> <span class="keyword">double</span> *a, <span class="keyword">const</span> <span class="keyword">double</span> *b, <span class="keyword">const</span> <span class="keyword">double</span> *c, <span class="keyword">double</span> *x1, <span class="keyword">double</span> *x2)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">double</span> s = b[i] * b[i] - <span class="number">4.0</span> * a[i] * c[i];</div><div class="line">        <span class="keyword">if</span> (s &gt;= <span class="number">0</span>)</div><div class="line">        &#123;</div><div class="line">            s = <span class="built_in">sqrt</span>(s);</div><div class="line">            x2[i] = (-b[i] + s) / (<span class="number">2.0</span> * a[i]);</div><div class="line">            x1[i] = (-b[i] - s) / (<span class="number">2.0</span> * a[i]);</div><div class="line">        &#125; <span class="keyword">else</span> &#123;</div><div class="line">            x2[i] = <span class="number">0.0</span>;</div><div class="line">            x1[i] = <span class="number">0.0</span>;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+</pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">void</span> <span class="title">quad</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> &amp;len, <span class="keyword">const</span> <span class="keyword">double</span> *a, <span class="keyword">const</span> <span class="keyword">double</span> *b, <span class="keyword">const</span> <span class="keyword">double</span> *c, <span class="keyword">double</span> *x1, <span class="keyword">double</span> *x2)</span></span>
+<span class="line"></span>&#123;</span>
+<span class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; len; i++)</span>
+<span class="line">    &#123;</span>
+<span class="line">        <span class="keyword">double</span> s = b[i] * b[i] - <span class="number">4.0</span> * a[i] * c[i];</span>
+<span class="line">        <span class="keyword">if</span> (s &gt;= <span class="number">0</span>)</span>
+<span class="line">        &#123;</span>
+<span class="line">            s = <span class="built_in">sqrt</span>(s);</span>
+<span class="line">            x2[i] = (-b[i] + s) / (<span class="number">2.0</span> * a[i]);</span>
+<span class="line">            x1[i] = (-b[i] - s) / (<span class="number">2.0</span> * a[i]);</span>
+<span class="line">        &#125; <span class="keyword">else</span> &#123;</span>
+<span class="line">            x2[i] = <span class="number">0.0</span>;</span>
+<span class="line">            x1[i] = <span class="number">0.0</span>;</span>
+<span class="line">        &#125;</span>
+<span class="line">    &#125;</span>
+<span class="line">&#125;</span>
+</pre></td></tr></table></figure>
 </li>
 <li><p>循环内没有调用其它复杂的函数；简单的可以被 inline 的函数与以下数学函数例外：<code>acos, acosh, asin, asinh, atan, atan2, atanh, cbrt, ceil, cos, cosh, erf, erfc, erfinv, exp, exp2, fabs, floor, fmax, fmin, log, log10, log2, pow, round, sin, sinh, sqrt, tan, tanh, trunc</code></p>
 </li>
 </ul>
 <p>以下要点有助于编译器自动进行向量化或提高向量化效率：</p>
 <ul>
-<li>使用对齐了的数据，即向量化操作的数据段前端应该对齐到若干字节。常用的内存申请和释放函数是：<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;x86intrin.h&gt;</span></span></div><div class="line"></div><div class="line">_mm_malloc(<span class="keyword">size_t</span> size, <span class="keyword">size_t</span> align) <span class="comment">// 内存块大小为 size，对齐到 align bit 的起始位置</span></div><div class="line">_mm_free(<span class="keyword">void</span> *)</div></pre></td></tr></table></figure>
+<li>使用对齐了的数据，即向量化操作的数据段前端应该对齐到若干字节。常用的内存申请和释放函数是：<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+</pre></td><td class="code"><pre><span class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;x86intrin.h&gt;</span></span></span>
+<span class="line"></span>
+<span class="line">_mm_malloc(<span class="keyword">size_t</span> size, <span class="keyword">size_t</span> align) <span class="comment">// 内存块大小为 size，对齐到 align bit 的起始位置</span></span>
+<span class="line">_mm_free(<span class="keyword">void</span> *)</span>
+</pre></td></tr></table></figure>
 </li>
 </ul>
 <p>分配的数组被用作二维数组时，可以在每一行的尾部留一些多余的空间，以使得每一行的左端可以对齐。</p>
 <ul>
-<li>使用 SoA（Structure of Array，数组结构） 而不是 AoS（Array of Structures，结构体数组），这样内存的访问连续。比如如下代码：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sCoord</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">double</span> x, y;</div><div class="line">&#125;;</div><div class="line"><span class="comment">/* other codes */</span></div><div class="line">sCoord a[N], b[N];</div><div class="line"><span class="comment">/* other codes */</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)</div><div class="line">&#123;</div><div class="line">    a[i].x += b[i].x;</div><div class="line">    a[i].y += b[i].y;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<li>使用 SoA（Structure of Array，数组结构） 而不是 AoS（Array of Structures，结构体数组），这样内存的访问连续。比如如下代码：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+</pre></td><td class="code"><pre><span class="line"><span class="class"><span class="keyword">struct</span> <span class="title">sCoord</span></span>
+<span class="line">&#123;</span></span>
+<span class="line">    <span class="keyword">double</span> x, y;</span>
+<span class="line">&#125;;</span>
+<span class="line"><span class="comment">/* other codes */</span></span>
+<span class="line">sCoord a[N], b[N];</span>
+<span class="line"><span class="comment">/* other codes */</span></span>
+<span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)</span>
+<span class="line">&#123;</span>
+<span class="line">    a[i].x += b[i].x;</span>
+<span class="line">    a[i].y += b[i].y;</span>
+<span class="line">&#125;</span>
+</pre></td></tr></table></figure>
 </li>
 </ul>
-<p>可以被改写为以下代码以获得更好的性能：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">double</span> Coord_a_x[N], Coord_a_y[N], Coord_b_x[N], Coord_b_y[N];</div><div class="line"><span class="comment">/* other codes */</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)</div><div class="line">&#123;</div><div class="line">    Coord_a_x[i] += Coord_b_x[i];</div><div class="line">    Coord_a_y[i] += Coord_b_y[i];</div><div class="line">&#125;</div></pre></td></tr></table></figure></p>
+<p>可以被改写为以下代码以获得更好的性能：<br><figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">double</span> Coord_a_x[N], Coord_a_y[N], Coord_b_x[N], Coord_b_y[N];</span>
+<span class="line"><span class="comment">/* other codes */</span></span>
+<span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)</span>
+<span class="line">&#123;</span>
+<span class="line">    Coord_a_x[i] += Coord_b_x[i];</span>
+<span class="line">    Coord_a_y[i] += Coord_b_y[i];</span>
+<span class="line">&#125;</span>
+</pre></td></tr></table></figure></p>
 <ul>
 <li>在满足精度的要求下，使用最小的数据类型：可以用 <code>short</code> 的就不要用 <code>int</code>，可以用 <code>float</code> 的就不要用 <code>double</code></li>
 <li>不要在想要向量化的循环中混合使用不同的数据类型</li>
@@ -237,7 +281,29 @@
 <li><code>#pragma vector nontemporal</code> : 提示编译器进行向量化，并且<strong>数据不经过 Cache，直接从内存进行读写</strong><br>如果不指定是 <code>temporal</code> 还是 <code>nontemporal</code>，编译器会自动决定。</li>
 <li><code>#pragma simd</code> : <strong>要求</strong>编译器进行向量化</li>
 <li><code>#pragma prefetch var:hint:distance</code> : KNC only，指示编译器进行预取。<code>var</code> 指定要预取的数组；<code>hint</code> 选 0 表示取到 L1 Cache，1 表示取到 L2 Cache；<code>distance</code> 表示提前多少个向量单元进行预取，比如其取值为 8 时，则提前 8 <em> 16 个 float 或者 8 </em> 8 个 double 进行预取。<br>除了编译制导语句，也可以使用 Intrinsic 进行手动预取。函数是 <code>void _mm_prefetch(char const*address, int hint)</code>，<code>address</code> 是要预取回来的数据的头地址，<code>hint</code> 同制导语句含义。在手动预取时，需要设置 <code>-opt-prefetch=0</code> 或 <code>#pragma noprefetch</code> 以关闭编译器预取，避免发生不可知的冲突。</li>
-<li><code>#pragma unroll(&lt;UNROLL_NUM&gt;)</code> : 提示编译器进行 <code>&lt;UNROLL_NUM&gt;</code> 路循环展开，因为太短的循环体不利于进行指令调度。下面是一个等效 Demo：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i += <span class="number">4</span>) <span class="comment">// 假设 N 是 4 的倍数</span></div><div class="line">&#123;</div><div class="line">    y[i    ] += alpha * x[i];</div><div class="line">    y[i + <span class="number">1</span>] += alpha * x[i + <span class="number">1</span>];</div><div class="line">    y[i + <span class="number">2</span>] += alpha * x[i + <span class="number">2</span>];</div><div class="line">    y[i + <span class="number">3</span>] += alpha * x[i + <span class="number">3</span>];</div><div class="line">&#125;</div><div class="line"><span class="comment">// 上面的代码等效于下面的代码</span></div><div class="line"><span class="meta">#<span class="meta-keyword">pragma</span> unroll(4)</span></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)</div><div class="line">    y[i] += alpha * x[i];</div></pre></td></tr></table></figure>
+<li><code>#pragma unroll(&lt;UNROLL_NUM&gt;)</code> : 提示编译器进行 <code>&lt;UNROLL_NUM&gt;</code> 路循环展开，因为太短的循环体不利于进行指令调度。下面是一个等效 Demo：<figure class="highlight cpp"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+</pre></td><td class="code"><pre><span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i += <span class="number">4</span>) <span class="comment">// 假设 N 是 4 的倍数</span></span>
+<span class="line">&#123;</span>
+<span class="line">    y[i    ] += alpha * x[i];</span>
+<span class="line">    y[i + <span class="number">1</span>] += alpha * x[i + <span class="number">1</span>];</span>
+<span class="line">    y[i + <span class="number">2</span>] += alpha * x[i + <span class="number">2</span>];</span>
+<span class="line">    y[i + <span class="number">3</span>] += alpha * x[i + <span class="number">3</span>];</span>
+<span class="line">&#125;</span>
+<span class="line"><span class="comment">// 上面的代码等效于下面的代码</span></span>
+<span class="line"><span class="meta">#<span class="meta-keyword">pragma</span> unroll(4)</span></span>
+<span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; N; i++)</span>
+<span class="line">    y[i] += alpha * x[i];</span>
+</pre></td></tr></table></figure>
 </li>
 </ul>
 <h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
@@ -264,163 +330,56 @@
 </li>
 </ol>
 
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/09/29/AVX-SIMD/" data-id="ckgz7b4hx0005nksi4xfvi1pb" class="article-share-link">Share</a>
-      
 
       
 
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/ICC/">ICC</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SIMD/">SIMD</a></li></ul>
-
-    </footer>
-  </div>
-  
+    </section>
     
-<nav id="article-nav">
-  
-    <a href="/2017/12/01/PoissonEqu_FDMCD_Multigrid/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          泊松方程的中心差分格式与多重网格法
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2017/08/26/Install-Arch-on-USBKey/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">Install Arch Linux on a USB Key</div>
-    </a>
-  
-</nav>
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2017-09-29T19:45:10.000Z" itemprop="datePublished">
+              2017-09-29
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/SIMD/">SIMD</a> }
+  </li>
 
-  
+  <li class="meta-text">
+  { <a href="/tags/ICC/">ICC</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/C/">C</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
 </article>
 
-</section>
-      
-      <aside id="sidebar">
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/C/" style="font-size: 15.71px;">C</a> <a href="/tags/C/" style="font-size: 12.86px;">C++</a> <a href="/tags/CUDA/" style="font-size: 17.14px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 11.43px;">Cache</a> <a href="/tags/Conference/" style="font-size: 11.43px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 11.43px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 12.86px;">HPC</a> <a href="/tags/ICC/" style="font-size: 14.29px;">ICC</a> <a href="/tags/Japan/" style="font-size: 17.14px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 14.29px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 12.86px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18.57px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 12.86px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 11.43px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 12.86px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 12.86px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/10/31/CUDA-separate-compilation-library/">分离编译并打包 CUDA 函数库</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Links</h3>
-    <div class="widget">
-      <ul>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-      
-    </div>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Enigma Huang<br>
-      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
-      .
-      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
-    </div>
-  </div>
-</footer>
-  </div>
-  <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/About" class="mobile-nav-link">About</a>
-  
-    <a href="/SiteXC" class="mobile-nav-link">SiteXC</a>
-  
-</nav>
-  <!-- totop start -->
-<div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
-</div>
-
-<!-- totop end -->
-
-
-<!-- 百度分享 start -->
-
-<!-- 百度分享 end -->
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-
-
-
-<! -- mathjax config similar to math.stackexchange -->
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -457,9 +416,27 @@ MathJax.Hub.Queue(function() {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
+</div>
+            <footer>
+    <div>© 2020 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
 
-<script src="/js/script.js"></script>
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
 
-</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>

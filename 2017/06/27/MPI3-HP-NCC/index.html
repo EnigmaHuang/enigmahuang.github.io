@@ -1,108 +1,66 @@
-
 <!DOCTYPE html>
-<html>
+<html lang="zh-cmn-Hans">
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
-  
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>MPI-3 学习笔记（三）：混合编程与邻居集合通信 | Rainmaker&#39;s Notebook</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="MPI-3 混合编程（Hybrid Programming）与邻居集合通信（Neighborhood Collective Communication）特性学习笔记。">
-<meta name="keywords" content="MPI">
-<meta property="og:type" content="article">
-<meta property="og:title" content="MPI-3 学习笔记（三）：混合编程与邻居集合通信">
-<meta property="og:url" content="http://enigmahuang.github.io/2017/06/27/MPI3-HP-NCC/index.html">
-<meta property="og:site_name" content="Rainmaker&#39;s Notebook">
-<meta property="og:description" content="MPI-3 混合编程（Hybrid Programming）与邻居集合通信（Neighborhood Collective Communication）特性学习笔记。">
-<meta property="og:image" content="http://enigmahuang.github.io/2017/06/27/MPI3-HP-NCC/1.jpg">
-<meta property="og:image" content="http://enigmahuang.github.io/2017/06/27/MPI3-HP-NCC/2.jpg">
-<meta property="og:image" content="http://enigmahuang.github.io/2017/06/27/MPI3-HP-NCC/3.jpg">
-<meta property="og:updated_time" content="2019-12-17T04:33:08.362Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MPI-3 学习笔记（三）：混合编程与邻居集合通信">
-<meta name="twitter:description" content="MPI-3 混合编程（Hybrid Programming）与邻居集合通信（Neighborhood Collective Communication）特性学习笔记。">
-<meta name="twitter:image" content="http://enigmahuang.github.io/2017/06/27/MPI3-HP-NCC/1.jpg">
-  
-    <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
   
-    <link rel="icon" href="/favicon.png">
   
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
   <link rel="stylesheet" href="/css/style.css">
-  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
-  
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </head>
-<body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
-  <div id="wrap">
-    <header id="header">
-  <div id="banner"></div>
-  <div id="header-outer" class="outer">
-    <div id="header-title" class="inner">
-      <h1 id="logo-wrap">
-        <a href="/" id="logo">Rainmaker&#39;s Notebook</a>
-      </h1>
-      
-        <h2 id="subtitle-wrap">
-          <a href="/" id="subtitle">『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</a>
-        </h2>
-      
-    </div>
-    <div id="header-inner" class="inner">
-      <nav id="main-nav">
-        <a id="main-nav-toggle" class="nav-icon"></a>
-        
-          <a class="main-nav-link" href="/">Home</a>
-        
-          <a class="main-nav-link" href="/archives">Archives</a>
-        
-          <a class="main-nav-link" href="/About">About</a>
-        
-          <a class="main-nav-link" href="/SiteXC">SiteXC</a>
-        
-      </nav>
-      <nav id="sub-nav">
-        
-          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
-        
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
-      </nav>
-      <div id="search-form-wrap">
-        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
-          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
-          <input type="submit" value="" class="search-form-submit">
-          <input name=tn type=hidden value="bds">
-          <input name=cl type=hidden value="3">
-          <input name=ct type=hidden value="2097152">
-          <input type="hidden" name="si" value="enigmahuang.github.io">
-        </form>
-      </div>
-    </div>
-  </div>
-</header>
-    <div class="outer">
-      <section id="main"><article id="post-MPI3-HP-NCC" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2017/06/27/MPI3-HP-NCC/" class="article-date">
-  <time datetime="2017-06-27T18:55:21.000Z" itemprop="datePublished">2017-06-27</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 class="article-title" itemprop="name">
-      MPI-3 学习笔记（三）：混合编程与邻居集合通信
-    </h1>
-  
 
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>MPI-3 混合编程（Hybrid Programming）与邻居集合通信（Neighborhood Collective Communication）特性学习笔记。</p>
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>MPI-3 学习笔记（三）：混合编程与邻居集合通信</h1>
+    </header>
+
+    <section>
+      <p>MPI-3 混合编程（Hybrid Programming）与邻居集合通信（Neighborhood Collective Communication）特性学习笔记。</p>
 <a id="more"></a>
 <h2 id="混合编程与-MPI-共享内存"><a href="#混合编程与-MPI-共享内存" class="headerlink" title="混合编程与 MPI 共享内存"></a>混合编程与 MPI 共享内存</h2><p>MPI 定义了四种等级的线程安全性：</p>
 <ol>
@@ -121,7 +79,95 @@
 <li>MPI 系统内部维护了一些资源，而 MPI 语义要求所有线程都可以访问某些数据，在访问的时候需要依次取锁，导致额外开销;</li>
 <li>各线程调用 MPI 操作的顺序是不确定的，可能因此导致线程之间相互锁住。</li>
 </ul>
-<p>MPI-3 允许不同的进程使用 <code>MPI_Win_allocate_shared()</code> 分配并共享同一块内存，以进行 MPI + MPI 的混合编程。下面是一个样例代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// See: https://software.intel.com/en-us/articles/using-mpi-3-shared-memory-in-xeon-phi-processors</span></div><div class="line"></div><div class="line"><span class="keyword">long</span> LOCAL_MEM_CNT = ... <span class="comment">// The number of enteries each process have</span></div><div class="line">MPI_Comm shmcomm;</div><div class="line">MPI_Info win_info;</div><div class="line">MPI_Win shm_win;</div><div class="line"><span class="keyword">int</span> shm_size, my_shm_rank;</div><div class="line"></div><div class="line"><span class="comment">// Split communicator and get new ranking info</span></div><div class="line">MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED, <span class="number">0</span>, MPI_INFO_NULL, &amp;shmcomm);</div><div class="line">MPI_Comm_rank(shmcomm, &amp;my_shm_rank);</div><div class="line">MPI_Comm_size(shmcomm, &amp;shm_size);</div><div class="line">MPI_Info_create(&amp;win_info);</div><div class="line">MPI_Info_set(win_info, <span class="string">"alloc_shared_noncontig"</span>, <span class="string">"true"</span>);</div><div class="line"></div><div class="line"><span class="comment">// Allocate shared memory</span></div><div class="line"><span class="keyword">float</span> *base_ptr = <span class="literal">NULL</span>;</div><div class="line">MPI_Win_allocate_shared(</div><div class="line">	LOCAL_MEM_CNT * shm_size * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), <span class="keyword">sizeof</span>(<span class="keyword">float</span>), </div><div class="line">	win_info, shmcomm, &amp;base_ptr, &amp;shm_win</div><div class="line">);</div><div class="line"></div><div class="line"><span class="comment">// The following call on each process means each process </span></div><div class="line"><span class="comment">// can access data from other processes in group "shm_win"</span></div><div class="line">MPI_Win_lock_all(<span class="number">0</span>, shm_win); </div><div class="line"></div><div class="line"><span class="comment">// Retrieve ranks pointers</span></div><div class="line"><span class="keyword">int</span> dispunit, rep;</div><div class="line">MPI_Aint sz;</div><div class="line"><span class="keyword">float</span> *all_ptr[size];</div><div class="line"><span class="keyword">float</span> *my_ptr = <span class="literal">NULL</span>;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) all_ptr[i] = <span class="literal">NULL</span>;</div><div class="line"></div><div class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</div><div class="line">	MPI_Win_shared_query(win, i, &amp;sz, &amp;dispunit, &amp;(all_ptr[i]));</div><div class="line"></div><div class="line">my_ptr = all_ptr[my_rank];  </div><div class="line"></div><div class="line"><span class="comment">/*</span></div><div class="line">Main calculations.</div><div class="line">*/</div><div class="line"></div><div class="line">MPI_Win_unlock_all(shm_win);  <span class="comment">// Finished memory sharing</span></div></pre></td></tr></table></figure></p>
+<p>MPI-3 允许不同的进程使用 <code>MPI_Win_allocate_shared()</code> 分配并共享同一块内存，以进行 MPI + MPI 的混合编程。下面是一个样例代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment">// See: https://software.intel.com/en-us/articles/using-mpi-3-shared-memory-in-xeon-phi-processors</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">long</span> LOCAL_MEM_CNT = ... <span class="comment">// The number of enteries each process have</span></span>
+<span class="line">MPI_Comm shmcomm;</span>
+<span class="line">MPI_Info win_info;</span>
+<span class="line">MPI_Win shm_win;</span>
+<span class="line"><span class="keyword">int</span> shm_size, my_shm_rank;</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// Split communicator and get new ranking info</span></span>
+<span class="line">MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED, <span class="number">0</span>, MPI_INFO_NULL, &amp;shmcomm);</span>
+<span class="line">MPI_Comm_rank(shmcomm, &amp;my_shm_rank);</span>
+<span class="line">MPI_Comm_size(shmcomm, &amp;shm_size);</span>
+<span class="line">MPI_Info_create(&amp;win_info);</span>
+<span class="line">MPI_Info_set(win_info, <span class="string">"alloc_shared_noncontig"</span>, <span class="string">"true"</span>);</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// Allocate shared memory</span></span>
+<span class="line"><span class="keyword">float</span> *base_ptr = <span class="literal">NULL</span>;</span>
+<span class="line">MPI_Win_allocate_shared(</span>
+<span class="line">	LOCAL_MEM_CNT * shm_size * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), <span class="keyword">sizeof</span>(<span class="keyword">float</span>), </span>
+<span class="line">	win_info, shmcomm, &amp;base_ptr, &amp;shm_win</span>
+<span class="line">);</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// The following call on each process means each process </span></span>
+<span class="line"><span class="comment">// can access data from other processes in group "shm_win"</span></span>
+<span class="line">MPI_Win_lock_all(<span class="number">0</span>, shm_win); </span>
+<span class="line"></span>
+<span class="line"><span class="comment">// Retrieve ranks pointers</span></span>
+<span class="line"><span class="keyword">int</span> dispunit, rep;</span>
+<span class="line">MPI_Aint sz;</span>
+<span class="line"><span class="keyword">float</span> *all_ptr[size];</span>
+<span class="line"><span class="keyword">float</span> *my_ptr = <span class="literal">NULL</span>;</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) all_ptr[i] = <span class="literal">NULL</span>;</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span>
+<span class="line">	MPI_Win_shared_query(win, i, &amp;sz, &amp;dispunit, &amp;(all_ptr[i]));</span>
+<span class="line"></span>
+<span class="line">my_ptr = all_ptr[my_rank];  </span>
+<span class="line"></span>
+<span class="line"><span class="comment">/*</span>
+<span class="line">Main calculations.</span>
+<span class="line">*/</span></span>
+<span class="line"></span>
+<span class="line">MPI_Win_unlock_all(shm_win);  <span class="comment">// Finished memory sharing</span></span>
+</pre></td></tr></table></figure></p>
 <p>注意：</p>
 <ul>
 <li>MPI-3 允许各进程申请不同数量的内存，甚至可以是 0 字节；</li>
@@ -179,163 +225,48 @@
 <li><a href="https://software.intel.com/en-us/articles/using-mpi-3-shared-memory-in-xeon-phi-processors" target="_blank" rel="external">Intel MPI-3 Demo on KNL</a></li>
 </ul>
 
-      
-    </div>
-    <footer class="article-footer">
-      
-        <a data-url="http://enigmahuang.github.io/2017/06/27/MPI3-HP-NCC/" data-id="ckgz7b4wp002nnksipjhp35o4" class="article-share-link">Share</a>
-      
 
       
 
-      
-  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li></ul>
-
-    </footer>
-  </div>
-  
+    </section>
     
-<nav id="article-nav">
-  
-    <a href="/2017/07/06/my-CUDA-SGEMM/" id="article-nav-newer" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Newer</strong>
-      <div class="article-nav-title">
-        
-          CUDA Case Study - SGEMM on Pascal
-        
-      </div>
-    </a>
-  
-  
-    <a href="/2017/06/26/MPI3-OSC/" id="article-nav-older" class="article-nav-link-wrap">
-      <strong class="article-nav-caption">Older</strong>
-      <div class="article-nav-title">MPI-3 学习笔记（二）：单边通信</div>
-    </a>
-  
-</nav>
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2017-06-27T18:55:21.000Z" itemprop="datePublished">
+              2017-06-27
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/MPI/">MPI</a> }
+  </li>
 
-  
+
+            </div>
+          
+      </section>
+    
+    
 </article>
 
-</section>
-      
-      <aside id="sidebar">
-  
-    
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tags</h3>
-    <div class="widget">
-      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Tag Cloud</h3>
-    <div class="widget tagcloud">
-      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/C/" style="font-size: 15.71px;">C</a> <a href="/tags/C/" style="font-size: 12.86px;">C++</a> <a href="/tags/CUDA/" style="font-size: 17.14px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 11.43px;">Cache</a> <a href="/tags/Conference/" style="font-size: 11.43px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 11.43px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 12.86px;">HPC</a> <a href="/tags/ICC/" style="font-size: 14.29px;">ICC</a> <a href="/tags/Japan/" style="font-size: 17.14px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 14.29px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 12.86px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18.57px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 12.86px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 11.43px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 12.86px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 12.86px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
-    <div class="widget">
-      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
-    <div class="widget">
-      <ul>
-        
-          <li>
-            <a href="/2020/10/31/CUDA-separate-compilation-library/">分离编译并打包 CUDA 函数库</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
-          </li>
-        
-          <li>
-            <a href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
-          </li>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-    
-  <div class="widget-wrap">
-    <h3 class="widget-title">Links</h3>
-    <div class="widget">
-      <ul>
-        
-      </ul>
-    </div>
-  </div>
-
-  
-</aside>
-      
-    </div>
-    <footer id="footer">
-  
-  <div class="outer">
-    <div id="footer-info" class="inner">
-      &copy; 2020 Enigma Huang<br>
-      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
-      .
-      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
-    </div>
-  </div>
-</footer>
-  </div>
-  <nav id="mobile-nav">
-  
-    <a href="/" class="mobile-nav-link">Home</a>
-  
-    <a href="/archives" class="mobile-nav-link">Archives</a>
-  
-    <a href="/About" class="mobile-nav-link">About</a>
-  
-    <a href="/SiteXC" class="mobile-nav-link">SiteXC</a>
-  
-</nav>
-  <!-- totop start -->
-<div id="totop">
-<a title="totop"><img src="/img/scrollup.png"/></a>
-</div>
-
-<!-- totop end -->
-
-
-<!-- 百度分享 start -->
-
-<!-- 百度分享 end -->
-
-<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
-
-
-
-
-<! -- mathjax config similar to math.stackexchange -->
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -372,9 +303,27 @@ MathJax.Hub.Queue(function() {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
+</div>
+            <footer>
+    <div>© 2020 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
 
-<script src="/js/script.js"></script>
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
 
-</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
