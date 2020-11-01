@@ -1,66 +1,104 @@
+
 <!DOCTYPE html>
-<html lang="zh-cmn-Hans">
+<html>
 <head>
-  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="utf-8">
+  
   <title>奇技淫巧：非对称 MPI + OpenMP 并行 | Rainmaker&#39;s Notebook</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <meta name="description" content="MPI + OpenMP/multi-threading 是如今大部分高性能计算程序的并行方式。一般情况下，各 MPI 进程地位对等（对称），可用的 CPU 资源和并行出来的线程数也相同。今天讲一个奇技淫巧：如何进行非对称 MPI + OpenMP 并行。">
+<meta name="keywords" content="C,MPI,OpenMP,Affinity">
+<meta property="og:type" content="article">
+<meta property="og:title" content="奇技淫巧：非对称 MPI + OpenMP 并行">
+<meta property="og:url" content="http://enigmahuang.github.io/2019/09/02/MPI-asymmetric-OMP/index.html">
+<meta property="og:site_name" content="Rainmaker&#39;s Notebook">
+<meta property="og:description" content="MPI + OpenMP/multi-threading 是如今大部分高性能计算程序的并行方式。一般情况下，各 MPI 进程地位对等（对称），可用的 CPU 资源和并行出来的线程数也相同。今天讲一个奇技淫巧：如何进行非对称 MPI + OpenMP 并行。">
+<meta property="og:updated_time" content="2020-04-12T01:22:12.792Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="奇技淫巧：非对称 MPI + OpenMP 并行">
+<meta name="twitter:description" content="MPI + OpenMP/multi-threading 是如今大部分高性能计算程序的并行方式。一般情况下，各 MPI 进程地位对等（对称），可用的 CPU 资源和并行出来的线程数也相同。今天讲一个奇技淫巧：如何进行非对称 MPI + OpenMP 并行。">
+  
+    <link rel="alternative" href="/atom.xml" title="Rainmaker&#39;s Notebook" type="application/atom+xml">
   
   
+    <link rel="icon" href="/favicon.png">
   
-  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
-  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
   <link rel="stylesheet" href="/css/style.css">
-<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  <!--[if lt IE 9]><script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7/html5shiv.min.js"></script><![endif]--><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+  
 </head>
-
 <body>
-<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
-    <aside class='SideBar'>
-    <section class='avatar' style="background-image: url(undefined)">
-        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
-        </div>
-    </section>
-    <section class='menu'>
-        <div>Rainmaker&#39;s Notebook</div>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div id="container">
+  <div id="wrap">
+    <header id="header">
+  <div id="banner"></div>
+  <div id="header-outer" class="outer">
+    <div id="header-title" class="inner">
+      <h1 id="logo-wrap">
+        <a href="/" id="logo">Rainmaker&#39;s Notebook</a>
+      </h1>
+      
+        <h2 id="subtitle-wrap">
+          <a href="/" id="subtitle">『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</a>
+        </h2>
+      
+    </div>
+    <div id="header-inner" class="inner">
+      <nav id="main-nav">
+        <a id="main-nav-toggle" class="nav-icon"></a>
         
-            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+          <a class="main-nav-link" href="/">Home</a>
         
-        <ul>
-          
-            <a href="/" class="Btn">
-              <li>Home</li>
-            </a>  
-          
-            <a href="/archives" class="Btn">
-              <li>Archives</li>
-            </a>  
-          
-            <a href="/About" class="Btn">
-              <li>About</li>
-            </a>  
-          
-            <a href="/SiteXC" class="Btn">
-              <li>SiteXC</li>
-            </a>  
-          
-        </ul>
-    </section>
-    <section class="media">
+          <a class="main-nav-link" href="/archives">Archives</a>
         
-    </section>
-</aside>
+          <a class="main-nav-link" href="/About">About</a>
+        
+          <a class="main-nav-link" href="/SiteXC">SiteXC</a>
+        
+      </nav>
+      <nav id="sub-nav">
+        
+          <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
+        
+        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+      </nav>
+      <div id="search-form-wrap">
+        <form action="//www.baidu.com/baidu" method="get" accept-charset="utf-8" class="search-form">
+          <input type="search" name="word" maxlength="20" class="search-form-input" placeholder="Search">
+          <input type="submit" value="" class="search-form-submit">
+          <input name=tn type=hidden value="bds">
+          <input name=cl type=hidden value="3">
+          <input name=ct type=hidden value="2097152">
+          <input type="hidden" name="si" value="enigmahuang.github.io">
+        </form>
+      </div>
+    </div>
+  </div>
+</header>
+    <div class="outer">
+      <section id="main"><article id="post-MPI-asymmetric-OMP" class="article article-type-post" itemscope itemprop="blogPost">
+  <div class="article-meta">
+    <a href="/2019/09/02/MPI-asymmetric-OMP/" class="article-date">
+  <time datetime="2019-09-02T15:45:14.000Z" itemprop="datePublished">2019-09-02</time>
+</a>
+    
+  </div>
+  <div class="article-inner">
+    
+    
+      <header class="article-header">
+        
+  
+    <h1 class="article-title" itemprop="name">
+      奇技淫巧：非对称 MPI + OpenMP 并行
+    </h1>
+  
 
-    <div class="container">
-        <div data-pager-shell>
-            <div>
-  <article class='ContentView'>
-    <header class='PageTitle'>
-        <h1>奇技淫巧：非对称 MPI + OpenMP 并行</h1>
-    </header>
-
-    <section>
-      <p>MPI + OpenMP/multi-threading 是如今大部分高性能计算程序的并行方式。一般情况下，各 MPI 进程地位对等（对称），可用的 CPU 资源和并行出来的线程数也相同。今天讲一个奇技淫巧：如何进行非对称 MPI + OpenMP 并行。</p>
+      </header>
+    
+    <div class="article-entry" itemprop="articleBody">
+      
+        <p>MPI + OpenMP/multi-threading 是如今大部分高性能计算程序的并行方式。一般情况下，各 MPI 进程地位对等（对称），可用的 CPU 资源和并行出来的线程数也相同。今天讲一个奇技淫巧：如何进行非对称 MPI + OpenMP 并行。</p>
 <a id="more"></a>
 <p>最近干活的时候遇到一个情况：一个纯 MPI 程序中有一个 eigen solver 只在 rank 0 上计算，因为矩阵尺寸不大（&lt;2000），用 ScaLAPACK 或者其他 MPI 库并行得不偿失，然而单线程求解又有点慢。因此甲方想在这一步的时候让 rank 0 用多线程来做 eigen solver, 其他 MPI 进程休眠等待 rank 0 完成计算。</p>
 <p>乍一看这下，这个需求似乎很好实现，只要在 rank 0 上手动将线程数设大一点然后调 LAPACK 就行了。这就是我碰到的第一个钉子：有些高性能的 MPI 库默认做了自动绑核以提高性能（比如 Intel MPI 默认 <code>I_MPI_PIN=1</code>，MVAPICH2 默认 <code>MV2_ENABLE_AFFINITY=1</code>），每个 MPI 进程只能在指定的几个核心上执行。不关掉 MPI 的自动绑核，rank 0 就没办法用属于其他 MPI 进程的核心。但是关掉了自动绑核，其他部分的性能可能会严重下降。因此，我们首先需要手动进行绑核：rank 0 绑到所有核心上，其他进程只绑到一个物理核心上。</p>
@@ -71,60 +109,163 @@
 <figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div><div class="line">50</div><div class="line">51</div><div class="line">52</div><div class="line">53</div><div class="line">54</div><div class="line">55</div><div class="line">56</div><div class="line">57</div><div class="line">58</div><div class="line">59</div><div class="line">60</div><div class="line">61</div><div class="line">62</div><div class="line">63</div><div class="line">64</div><div class="line">65</div><div class="line">66</div><div class="line">67</div><div class="line">68</div><div class="line">69</div><div class="line">70</div><div class="line">71</div><div class="line">72</div><div class="line">73</div><div class="line">74</div><div class="line">75</div><div class="line">76</div><div class="line">77</div><div class="line">78</div><div class="line">79</div><div class="line">80</div><div class="line">81</div><div class="line">82</div><div class="line">83</div><div class="line">84</div><div class="line">85</div><div class="line">86</div><div class="line">87</div><div class="line">88</div><div class="line">89</div><div class="line">90</div><div class="line">91</div><div class="line">92</div><div class="line">93</div><div class="line">94</div><div class="line">95</div><div class="line">96</div><div class="line">97</div><div class="line">98</div><div class="line">99</div><div class="line">100</div><div class="line">101</div><div class="line">102</div><div class="line">103</div><div class="line">104</div><div class="line">105</div><div class="line">106</div><div class="line">107</div><div class="line">108</div><div class="line">109</div><div class="line">110</div><div class="line">111</div><div class="line">112</div><div class="line">113</div><div class="line">114</div><div class="line">115</div><div class="line">116</div><div class="line">117</div><div class="line">118</div><div class="line">119</div><div class="line">120</div><div class="line">121</div><div class="line">122</div><div class="line">123</div><div class="line">124</div><div class="line">125</div><div class="line">126</div><div class="line">127</div><div class="line">128</div><div class="line">129</div><div class="line">130</div><div class="line">131</div><div class="line">132</div><div class="line">133</div><div class="line">134</div><div class="line">135</div><div class="line">136</div><div class="line">137</div><div class="line">138</div><div class="line">139</div><div class="line">140</div><div class="line">141</div><div class="line">142</div><div class="line">143</div><div class="line">144</div><div class="line">145</div><div class="line">146</div><div class="line">147</div><div class="line">148</div><div class="line">149</div><div class="line">150</div><div class="line">151</div><div class="line">152</div><div class="line">153</div><div class="line">154</div><div class="line">155</div><div class="line">156</div><div class="line">157</div><div class="line">158</div><div class="line">159</div><div class="line">160</div><div class="line">161</div><div class="line">162</div><div class="line">163</div><div class="line">164</div><div class="line">165</div><div class="line">166</div><div class="line">167</div><div class="line">168</div><div class="line">169</div><div class="line">170</div><div class="line">171</div><div class="line">172</div><div class="line">173</div><div class="line">174</div><div class="line">175</div><div class="line">176</div><div class="line">177</div><div class="line">178</div><div class="line">179</div><div class="line">180</div><div class="line">181</div><div class="line">182</div><div class="line">183</div><div class="line">184</div><div class="line">185</div><div class="line">186</div><div class="line">187</div><div class="line">188</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">define</span> _XOPEN_SOURCE 500 <span class="comment">// For srand48(), drand48(), usleep()</span></span></div><div class="line"></div><div class="line"><span class="comment">// For sched_setaffinity</span></div><div class="line"><span class="meta">#<span class="meta-keyword">define</span>  _GNU_SOURCE</span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;sched.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;unistd.h&gt;  // Also for usleep()</span></span></div><div class="line"></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdlib.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;string.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;math.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;omp.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mkl.h&gt;</span></span></div><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;mpi.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_dgemm</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> rank, <span class="keyword">const</span> <span class="keyword">int</span> n)</span></span></div><div class="line">&#123;</div><div class="line">    mkl_set_dynamic(<span class="number">0</span>);</div><div class="line">    mkl_set_num_threads(<span class="number">1</span>);</div><div class="line">    </div><div class="line">    <span class="keyword">size_t</span> mat_msize = <span class="keyword">sizeof</span>(<span class="keyword">double</span>) * n * n;</div><div class="line">    <span class="keyword">double</span> *A = (<span class="keyword">double</span>*) <span class="built_in">malloc</span>(mat_msize);</div><div class="line">    <span class="keyword">double</span> *B = (<span class="keyword">double</span>*) <span class="built_in">malloc</span>(mat_msize);</div><div class="line">    <span class="keyword">double</span> *C = (<span class="keyword">double</span>*) <span class="built_in">malloc</span>(mat_msize);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n * n; i++)</div><div class="line">    &#123;</div><div class="line">        A[i] = drand48();</div><div class="line">        B[i] = drand48();</div><div class="line">    &#125;</div><div class="line">    cblas_dgemm(</div><div class="line">        CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, </div><div class="line">        <span class="number">1.0</span>, A, n, B, n, <span class="number">0.0</span>, C, n</div><div class="line">    );</div><div class="line">    MPI_Barrier(MPI_COMM_WORLD);</div><div class="line">    </div><div class="line">    <span class="keyword">double</span> st = omp_get_wtime();</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</div><div class="line">    &#123;</div><div class="line">        cblas_dgemm(</div><div class="line">            CblasRowMajor, CblasNoTrans, CblasNoTrans, n, n, n, </div><div class="line">            <span class="number">1.0</span>, A, n, B, n, <span class="number">0.0</span>, C, n</div><div class="line">        );</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">double</span> ut = (omp_get_wtime() - st) * <span class="number">1000.0</span> / <span class="number">5.0</span>;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"Rank %2d single thread %d*%d*%d dgemm used %.3lf ms\n"</span>, rank, n, n, n, ut);</div><div class="line">    </div><div class="line">    mkl_set_dynamic(<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">test_dsyev</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> rank, <span class="keyword">const</span> <span class="keyword">int</span> n)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> my_nthreads = <span class="number">1</span>;</div><div class="line">    <span class="keyword">char</span> *env_ntheads = getenv(<span class="string">"NTHREADS"</span>); </div><div class="line">    <span class="keyword">if</span> (env_ntheads != <span class="literal">NULL</span>) my_nthreads = atoi(env_ntheads);</div><div class="line">    <span class="keyword">if</span> (my_nthreads &lt; <span class="number">1</span>) my_nthreads = <span class="number">1</span>;</div><div class="line">    </div><div class="line">    <span class="keyword">int</span> save = mkl_get_max_threads();</div><div class="line">    mkl_set_dynamic(<span class="number">0</span>);</div><div class="line">    mkl_set_num_threads(my_nthreads);</div><div class="line">    </div><div class="line">    <span class="keyword">size_t</span> mat_msize = <span class="keyword">sizeof</span>(<span class="keyword">double</span>) * n * n;</div><div class="line">    <span class="keyword">double</span> *A  = (<span class="keyword">double</span>*) <span class="built_in">malloc</span>(mat_msize);</div><div class="line">    <span class="keyword">double</span> *B  = (<span class="keyword">double</span>*) <span class="built_in">malloc</span>(mat_msize);</div><div class="line">    <span class="keyword">double</span> *A0 = (<span class="keyword">double</span>*) <span class="built_in">malloc</span>(mat_msize);</div><div class="line">    </div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; n; i++)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> j = <span class="number">0</span>; j &lt; i; j++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">double</span> val = drand48();</div><div class="line">            A[i * n + j] = val;</div><div class="line">            A[j * n + i] = val;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line"></div><div class="line">    <span class="built_in">memcpy</span>(A, A0, mat_msize);</div><div class="line">    LAPACKE_dsyev(LAPACK_ROW_MAJOR, <span class="string">'V'</span>, <span class="string">'U'</span>, n, A, n, B);</div><div class="line">    <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; <span class="number">5</span>; i++)</div><div class="line">    &#123;</div><div class="line">        <span class="built_in">memcpy</span>(A, A0, mat_msize);</div><div class="line">        <span class="keyword">double</span> st = omp_get_wtime();</div><div class="line">        LAPACKE_dsyev(LAPACK_ROW_MAJOR, <span class="string">'V'</span>, <span class="string">'U'</span>, n, A, n, B);</div><div class="line">        <span class="keyword">double</span> ut = (omp_get_wtime() - st) * <span class="number">1000.0</span>;</div><div class="line">        <span class="built_in">printf</span>(<span class="string">"Rank %d LAPACKE_dsyev use %.3lf ms\n"</span>, rank, ut);</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="built_in">printf</span>(<span class="string">"\n"</span>);</div><div class="line">    </div><div class="line">    <span class="built_in">free</span>(A);</div><div class="line">    <span class="built_in">free</span>(B);</div><div class="line">    <span class="built_in">free</span>(A0);</div><div class="line">    </div><div class="line">    mkl_set_dynamic(<span class="number">1</span>);</div><div class="line">    mkl_set_num_threads(<span class="number">1</span>);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">get_phys_core_id_dist</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> core0_id, core1_id;</div><div class="line">    FILE *inf0 = fopen(<span class="string">"/sys/devices/system/cpu/cpu0/topology/thread_siblings_list"</span>, <span class="string">"r"</span>);</div><div class="line">    FILE *inf1 = fopen(<span class="string">"/sys/devices/system/cpu/cpu1/topology/thread_siblings_list"</span>, <span class="string">"r"</span>);</div><div class="line">    <span class="built_in">fscanf</span>(inf0, <span class="string">"%d,"</span>, &amp;core0_id);</div><div class="line">    <span class="built_in">fscanf</span>(inf1, <span class="string">"%d,"</span>, &amp;core1_id);</div><div class="line">    fclose(inf0);</div><div class="line">    fclose(inf1);</div><div class="line">    <span class="keyword">return</span> (core1_id - core0_id);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="comment">// This function is based on Kent Milfeld's &lt;milfeld@tacc.utexas.edu&gt; code</span></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">set_core_affinity</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> ncore, <span class="keyword">const</span> <span class="keyword">int</span> ntarget, <span class="keyword">const</span> <span class="keyword">int</span> *cores)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">cpu_set_t</span> *mask = CPU_ALLOC(ncore);</div><div class="line">    <span class="keyword">size_t</span> size = CPU_ALLOC_SIZE(ncore);</div><div class="line">    CPU_ZERO_S(size, mask);</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (ntarget &lt; <span class="number">0</span>)  </div><div class="line">    &#123;</div><div class="line">        <span class="comment">// Allow to run on all cores</span></div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> core_id = <span class="number">0</span>; core_id &lt; ncore; core_id++)</div><div class="line">            CPU_SET_S(core_id, size, mask);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; ntarget; i++)</div><div class="line">        &#123;</div><div class="line">            <span class="keyword">int</span> core_id = cores[i];</div><div class="line">            CPU_SET_S(core_id, size, mask);</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    </div><div class="line">    <span class="keyword">return</span> sched_setaffinity((<span class="keyword">pid_t</span>) <span class="number">0</span>, size, mask);</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">bind_rank0_to_all_cores</span><span class="params">(<span class="keyword">const</span> <span class="keyword">int</span> nproc, <span class="keyword">const</span> <span class="keyword">int</span> rank)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> phys_core_id_dist = get_phys_core_id_dist();</div><div class="line">    <span class="keyword">if</span> (rank == <span class="number">0</span>)</div><div class="line">    &#123;</div><div class="line">        <span class="keyword">int</span> *cores = (<span class="keyword">int</span>*) <span class="built_in">malloc</span>(<span class="keyword">sizeof</span>(<span class="keyword">int</span>) * nproc);</div><div class="line">        <span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; nproc; i++)</div><div class="line">            cores[i] = i * phys_core_id_dist;</div><div class="line">        set_core_affinity(nproc, nproc, cores);</div><div class="line">        <span class="built_in">free</span>(cores);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">int</span> core_id = rank * phys_core_id_dist;</div><div class="line">        set_core_affinity(nproc, <span class="number">1</span>, &amp;core_id);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">void</span> <span class="title">MPI_Wait_nonblocking</span><span class="params">(MPI_Request *req, <span class="keyword">const</span> <span class="keyword">int</span> microseconds)</span></span></div><div class="line">&#123;</div><div class="line">    <span class="keyword">int</span> flag;</div><div class="line">    MPI_Status status;</div><div class="line">    MPI_Test(req, &amp;flag, &amp;status);</div><div class="line">    <span class="keyword">while</span> (!flag)</div><div class="line">    &#123;</div><div class="line">        usleep(microseconds);</div><div class="line">        MPI_Test(req, &amp;flag, &amp;status);</div><div class="line">    &#125;</div><div class="line">&#125;</div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">(<span class="keyword">int</span> argc, <span class="keyword">char</span> **argv)</span></span></div><div class="line">&#123;</div><div class="line">    MPI_Init(&amp;argc, &amp;argv);</div><div class="line">    </div><div class="line">    <span class="keyword">int</span> rank, nproc;</div><div class="line">    MPI_Comm_rank(MPI_COMM_WORLD, &amp;rank);</div><div class="line">    MPI_Comm_size(MPI_COMM_WORLD, &amp;nproc);</div><div class="line">    </div><div class="line">    MPI_Barrier(MPI_COMM_WORLD);</div><div class="line">    </div><div class="line">    <span class="keyword">int</span> n = <span class="number">1000</span>;</div><div class="line">    <span class="keyword">if</span> (argc &gt;= <span class="number">2</span>) n = atoi(argv[<span class="number">1</span>]);</div><div class="line">    <span class="keyword">if</span> (rank == <span class="number">0</span>) <span class="built_in">printf</span>(<span class="string">"Matrix size = %d\n"</span>, n);</div><div class="line">    </div><div class="line">    srand48(<span class="number">114514</span> + rank);</div><div class="line">    </div><div class="line">    bind_rank0_to_all_cores(nproc, rank);</div><div class="line">    </div><div class="line">    test_dgemm(rank, <span class="number">1000</span>);</div><div class="line">    MPI_Barrier(MPI_COMM_WORLD);</div><div class="line">    </div><div class="line">    <span class="keyword">if</span> (rank == <span class="number">0</span>) test_dsyev(rank, n);</div><div class="line">    </div><div class="line">    MPI_Request req;</div><div class="line">    MPI_Ibarrier(MPI_COMM_WORLD, &amp;req);</div><div class="line">    MPI_Wait_nonblocking(&amp;req, <span class="number">10000</span>);</div><div class="line">    </div><div class="line">    MPI_Finalize(); </div><div class="line">&#125;</div></pre></td></tr></table></figure>
 <p>顺带吐槽一句，<code>LAPACKE_dsyev()</code> 的并行扩展性真的不行……</p>
 
+      
+    </div>
+    <footer class="article-footer">
+      
+        <a data-url="http://enigmahuang.github.io/2019/09/02/MPI-asymmetric-OMP/" data-id="ckgz7b4wn002knksiq6vrs5i7" class="article-share-link">Share</a>
+      
 
       
 
-    </section>
+      
+  <ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Affinity/">Affinity</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/C/">C</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MPI/">MPI</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/OpenMP/">OpenMP</a></li></ul>
+
+    </footer>
+  </div>
+  
     
-      <section class='ArticleMeta'>
-          <div>
-            发布于&nbsp;
-            <time datetime="2019-09-02T15:45:14.000Z" itemprop="datePublished">
-              2019-09-02
-            </time>
-          </div>
-          
-            <div>
-              tags: 
-  <li class="meta-text">
-  { <a href="/tags/C/">C</a> }
-  </li>
+<nav id="article-nav">
+  
+    <a href="/2019/12/16/SC19/" id="article-nav-newer" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Newer</strong>
+      <div class="article-nav-title">
+        
+          SC19：年轻人的第一次公费旅游
+        
+      </div>
+    </a>
+  
+  
+    <a href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/" id="article-nav-older" class="article-nav-link-wrap">
+      <strong class="article-nav-caption">Older</strong>
+      <div class="article-nav-title">MKL + CUDA 编译 MAGMA 以及使用 MAGMA</div>
+    </a>
+  
+</nav>
 
-  <li class="meta-text">
-  { <a href="/tags/MPI/">MPI</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/OpenMP/">OpenMP</a> }
-  </li>
-
-  <li class="meta-text">
-  { <a href="/tags/Affinity/">Affinity</a> }
-  </li>
-
-
-            </div>
-          
-      </section>
-    
-    
+  
 </article>
 
-  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
-<div id="gitalk-container"></div>
-<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
-<script type="text/javascript">
-    var gitalk = new Gitalk({
-        clientID: '94e58ed5c77bee610a9d',
-        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
-        id: window.location.pathname,
-        repo: 'enigmahuang.github.io',
-        owner: 'EnigmaHuang',
-        admin: 'EnigmaHuang'
-    })
-    gitalk.render('gitalk-container')
-</script>
-  <! -- mathjax config similar to math.stackexchange -->
+</section>
+      
+      <aside id="sidebar">
+  
+    
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tags</h3>
+    <div class="widget">
+      <ul class="tag-list"><li class="tag-list-item"><a class="tag-list-link" href="/tags/Affinity/">Affinity</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C</a><span class="tag-list-count">7</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/C/">C++</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/CUDA/">CUDA</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Cache/">Cache</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Conference/">Conference</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/GEMM/">GEMM</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/HPC/">HPC</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/ICC/">ICC</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Japan/">Japan</a><span class="tag-list-count">8</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/LinearSystemSolver/">LinearSystemSolver</a><span class="tag-list-count">4</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Linux/">Linux</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/MPI/">MPI</a><span class="tag-list-count">10</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Multigrid/">Multigrid</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/NFS/">NFS</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenCL/">OpenCL</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/OpenMP/">OpenMP</a><span class="tag-list-count">2</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/PDE/">PDE</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/SIMD/">SIMD</a><span class="tag-list-count">3</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Sorting/">Sorting</a><span class="tag-list-count">1</span></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/Travel/">Travel</a><span class="tag-list-count">12</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Tag Cloud</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/Affinity/" style="font-size: 10px;">Affinity</a> <a href="/tags/C/" style="font-size: 15.71px;">C</a> <a href="/tags/C/" style="font-size: 12.86px;">C++</a> <a href="/tags/CUDA/" style="font-size: 17.14px;">CUDA</a> <a href="/tags/Cache/" style="font-size: 11.43px;">Cache</a> <a href="/tags/Conference/" style="font-size: 11.43px;">Conference</a> <a href="/tags/GEMM/" style="font-size: 11.43px;">GEMM</a> <a href="/tags/HPC/" style="font-size: 12.86px;">HPC</a> <a href="/tags/ICC/" style="font-size: 14.29px;">ICC</a> <a href="/tags/Japan/" style="font-size: 17.14px;">Japan</a> <a href="/tags/LinearSystemSolver/" style="font-size: 14.29px;">LinearSystemSolver</a> <a href="/tags/Linux/" style="font-size: 12.86px;">Linux</a> <a href="/tags/MPI/" style="font-size: 18.57px;">MPI</a> <a href="/tags/Multigrid/" style="font-size: 12.86px;">Multigrid</a> <a href="/tags/NFS/" style="font-size: 10px;">NFS</a> <a href="/tags/OpenCL/" style="font-size: 10px;">OpenCL</a> <a href="/tags/OpenMP/" style="font-size: 11.43px;">OpenMP</a> <a href="/tags/PDE/" style="font-size: 12.86px;">PDE</a> <a href="/tags/SIMD/" style="font-size: 12.86px;">SIMD</a> <a href="/tags/Sorting/" style="font-size: 10px;">Sorting</a> <a href="/tags/Travel/" style="font-size: 20px;">Travel</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Archives</h3>
+    <div class="widget">
+      <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/10/">October 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/09/">September 2020</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/04/">April 2020</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/12/">December 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/09/">September 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/03/">March 2019</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2019/02/">February 2019</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/11/">November 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/09/">September 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/05/">May 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/02/">February 2018</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2018/01/">January 2018</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/12/">December 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/09/">September 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/08/">August 2017</a><span class="archive-list-count">1</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/07/">July 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/06/">June 2017</a><span class="archive-list-count">4</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/05/">May 2017</a><span class="archive-list-count">3</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/04/">April 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2017/02/">February 2017</a><span class="archive-list-count">2</span></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2016/12/">December 2016</a><span class="archive-list-count">1</span></li></ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Recent Posts</h3>
+    <div class="widget">
+      <ul>
+        
+          <li>
+            <a href="/2020/10/31/CUDA-separate-compilation-library/">分离编译并打包 CUDA 函数库</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/05/Kokkos-Notes-3/">Kokkos笔记（三）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/05/Kokkos-Notes-2/">Kokkos笔记（二）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/09/05/Kokkos-Notes-1/">Kokkos笔记（一）</a>
+          </li>
+        
+          <li>
+            <a href="/2020/04/11/C-macro-template-programming/">雕虫小技：用 C Macro 进行『模板编程』</a>
+          </li>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">Links</h3>
+    <div class="widget">
+      <ul>
+        
+      </ul>
+    </div>
+  </div>
+
+  
+</aside>
+      
+    </div>
+    <footer id="footer">
+  
+  <div class="outer">
+    <div id="footer-info" class="inner">
+      &copy; 2020 Enigma Huang<br>
+      Powered by <a href="//hexo.io/" target="_blank">Hexo</a>
+      .
+      Theme by <a href="https://github.com/xiangming/landscape-plus" target="_blank">Landscape-plus</a>
+    </div>
+  </div>
+</footer>
+  </div>
+  <nav id="mobile-nav">
+  
+    <a href="/" class="mobile-nav-link">Home</a>
+  
+    <a href="/archives" class="mobile-nav-link">Archives</a>
+  
+    <a href="/About" class="mobile-nav-link">About</a>
+  
+    <a href="/SiteXC" class="mobile-nav-link">SiteXC</a>
+  
+</nav>
+  <!-- totop start -->
+<div id="totop">
+<a title="totop"><img src="/img/scrollup.png"/></a>
+</div>
+
+<!-- totop end -->
+
+
+<!-- 百度分享 start -->
+
+<!-- 百度分享 end -->
+
+<script src="//cdnjs.cloudflare.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+
+
+<! -- mathjax config similar to math.stackexchange -->
 
 <script type="text/x-mathjax-config">
 MathJax.Hub.Config({
@@ -161,27 +302,9 @@ MathJax.Hub.Queue(function() {
 <script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
-</div>
-            <footer>
-    <div>© 2020 - Enigma Huang </div>
-    <div>
-        <span>
-            Powered by <a href="https://hexo.io">Hexo</a>
-        </span>
-        ,
-        <span>
-            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
-        </span>
-    </div>
-</footer>
 
-        </div>
-    </div>
-</div>
-<script src="/js/pager/dist/singlepager.js"></script>
-<script>
-var sp = new Pager('data-pager-shell')
+<script src="/js/script.js"></script>
 
-</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</div><!-- hexo-inject:begin --><!-- hexo-inject:end -->
 </body>
 </html>
