@@ -1,0 +1,373 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CUDA 与 OpenCL 简明对比 | Rainmaker&#39;s Notebook</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>CUDA 与 OpenCL 简明对比</h1>
+    </header>
+
+    <section>
+      <p>又称『如何一把梭在 CUDA 和 OpenCL 之间进行转换』。</p>
+<a id="more"></a>
+<p>更多具体用法请参见最后的参考来源中的语言手册。</p>
+<h2 id="硬件层次"><a href="#硬件层次" class="headerlink" title="硬件层次"></a>硬件层次</h2><table>
+<thead>
+<tr>
+<th>CUDA 术语</th>
+<th>OpenCL 术语</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GPU</td>
+<td>Device</td>
+</tr>
+<tr>
+<td>Stream Multiprocessor</td>
+<td>Compute Unit</td>
+</tr>
+<tr>
+<td>CUDA Core</td>
+<td>Processing Element</td>
+</tr>
+</tbody>
+</table>
+<h2 id="内存层次"><a href="#内存层次" class="headerlink" title="内存层次"></a>内存层次</h2><table>
+<thead>
+<tr>
+<th>CUDA 术语</th>
+<th>OpenCL 术语</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Global Memory</td>
+<td>Global Memory</td>
+</tr>
+<tr>
+<td>Shared Memory</td>
+<td>Local Memory</td>
+</tr>
+<tr>
+<td>Register</td>
+<td>Private Memory (register file?)</td>
+</tr>
+</tbody>
+</table>
+<p>CUDA 中，传一个指向 Global Memory 中地址的指针给 kernel, 只需像 C 语言一样写即可，如：<code>kernel_func(float *a, ...)</code>. OpenCL 中进行同样的操作，需要在类型前面加上 <code>__global</code>, 即应该写成 <code>kernel_func(__global float *a, ...)</code>.</p>
+<p>CUDA 中，定义一个固定大小的 Shared Memory 数组可以在一个 kernel 函数体内用形如  <code>__shared__ shm_a[1024];</code> 来定义。OpenCL 中定义一个固定大小的 Local Memory 可以在一个 kernel 函数体内用形如 <code>__local local_a[1024];</code> 来定义。</p>
+<p>所有在 CUDA kernel 内部定义和使用的变量都使用 Register 来保存。所有在 OpenCL kernel 内部使用的变量或者传入函数内部的参数都是 Private Memory。</p>
+<h2 id="线程层次"><a href="#线程层次" class="headerlink" title="线程层次"></a>线程层次</h2><table>
+<thead>
+<tr>
+<th>CUDA 术语</th>
+<th>OpenCL 术语</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Grids</td>
+<td>工作空间（Workspace?）</td>
+</tr>
+<tr>
+<td>Thread Block</td>
+<td>Work Group</td>
+</tr>
+<tr>
+<td>Warp</td>
+<td>Wavefront</td>
+</tr>
+<tr>
+<td>Thread</td>
+<td>Work Item</td>
+</tr>
+</tbody>
+</table>
+<p>CUDA 中，每次启动 kernel 所有的 Thread 会排列成一个 Grid。每一个 Grid 中有若干个 Thread Block, 这些 Thread Block 排列成一个 3D 立方体：在 x, y, z 方向上，一个 Grid 有 <code>gridDim.{x, y, z}</code> 个 Thread Block, 每个 Thread Block 在 Grid 中 x, y, z 方向的编号为 <code>blockIdx.{x, y, z}</code>。每一个 Thread Block 中有若干个 Thread, 也排成一个 3D 立方体：在 x, y, z 方向上，一个 Thread Block 有 <code>blockDim.{x, y, z}</code> 个 Thread, 每个 Thread 在 Thread Block 中 x, y, z 方向的编号为 <code>threadIdx.{x, y, z}</code>. </p>
+<p>OpenCL 中，每次启动 kernel 所有的 Work Item 会排列成一个工作空间（AMD 出的教程里面是这么叫的，没写英文）。每一个工作空间中有若干个 Work Group, 这些 Work Group 排列成一个 3D 立方体：在 x, y, z 方向上，一个工作空间有 G_{x, y, z} 个 Work Item，每个方向上有多少个 Work Group 则需要计算。每一个 Work Group 在工作空间中 x, y, z 方向的编号为 <code>get_group_id({0, 1, 2})</code>. 每一个 Work Group 中有若干个 Work Item, 也排成一个 3D 立方体：在 x, y, z 方向上，一个 Work Group 有 <code>get_local_size({0, 1, 2})</code> 个 Work Item, 每个 Work Item 在 Work Group 中 x, y, z 方向的编号为 <code>get_local_id({0, 1, 2})</code>. </p>
+<p>CUDA 中，每个 warp 中的 Thread 的执行步骤是一致的；在 OpenCL 中，每个 Wavefront 中的 Work Item 的执行步骤是一致的。或者说，应该将 CUDA 中的每个 warp 和 OpenCL 中的每个 Wavefront 视作一个 SIMT/SIMD 单元。</p>
+<p>CUDA 中同步一个 Thread Block 里所有 Thread 需要使用 <code>__syncthreads()</code>. OpenCL 中使用 <code>barrier(CLK_LOCAL_MEM_FENCE/CLK_GLOBAL_MEM_FENCE)</code> 来同步同一个 Work Group 里所有 Work Item 在调用此函数之前对 Local/Global Memory 的读写操作。OpenCL 还可以使用 <code>read_mem_fence(flags)/write_mem_fence(flag)</code> 来同步在此之前对指定 <code>flag</code> （<code>CLK_LOCAL_MEM_FENCE/CLK_GLOBAL_MEM_FENCE</code>）的读/写操作。</p>
+<h2 id="定义函数"><a href="#定义函数" class="headerlink" title="定义函数"></a>定义函数</h2><p>CUDA 中所有在设备上执行的函数需要在函数前面加上 <code>__global__</code>, <code>__device__</code> 或 <code>__host__</code> 关键字。使用 <code>__global__</code> 关键字的函数即为从主机上启动在设备上执行的 kernel，其函数类型必须为 <code>void</code>. 使用 <code>__device__</code> 关键字的函数只能在设备上从 kernel 中调用，不能在主机调用。如果不加关键字，即为默认使用 <code>__host__</code>, 函数只能在主机上调用。同一个文件中可以包含这三种函数，不需要分开写。</p>
+<p>OpenCL 中定义设备上运行的 kernel 需要在函数前面加上 <code>__kernel</code> 关键字。如果需要从 kernel 中调用其它函数（而不是启动其他 kernel），被调用的函数前面不需要加上其他的关键字。kernel 函数必须写在同一个或几个文件中，并且这些文件中不应该包含在主机端执行的函数。</p>
+<h2 id="数据移动"><a href="#数据移动" class="headerlink" title="数据移动"></a>数据移动</h2><p>CUDA 中分配设备上的内存和将数据在主机端和设备端移动的样例代码如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment">// 在设备端分配内存</span></span>
+<span class="line">cudaMalloc(<span class="keyword">void</span> **devPtr, <span class="keyword">size_t</span> size); </span>
+<span class="line"></span>
+<span class="line"><span class="comment">// 在主机和设备之间拷贝数据, kind 指定操作类型</span></span>
+<span class="line"><span class="comment">// cudaMemcpyHostToDevice:   主机端拷贝到设备端</span></span>
+<span class="line"><span class="comment">// cudaMemcpyDeviceToDevice: 设备端拷贝到设备端</span></span>
+<span class="line"><span class="comment">// cudaMemcpyDeviceToHost:   设备端拷贝到主机端</span></span>
+<span class="line">cudaMemcpy(<span class="keyword">void</span> *dst, <span class="keyword">const</span> <span class="keyword">void</span> *src, <span class="keyword">size_t</span> size, cudaMemcpyKind kind);</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// 释放设备端内存</span></span>
+<span class="line">cudaFree(<span class="keyword">void</span> *ptr);</span>
+</pre></td></tr></table></figure>
+<p>同样功能的 OpenCL 代码就复杂很多了……需要写成下面这个样子：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+</pre></td><td class="code"><pre><span class="line">cl_context       context;</span>
+<span class="line">cl_command_queue command_queue;</span>
+<span class="line">cl_int           err;</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// 其他 OpenCL 初始化, context, command_queue 会被初始化</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment">// 在设备端分配内存</span></span>
+<span class="line"><span class="comment">// cl_mem buffer = clCreateBuffer(cl_context context, cl_mem_flags flags, size_t size, void *host_ptr, cl_int *errcode);</span></span>
+<span class="line"></span>
+<span class="line"><span class="comment">// 将数据从主机端拷贝到设备端</span></span>
+<span class="line">err = clEnqueueWriteBuffer(</span>
+<span class="line">	cl_command_queue command_queue,</span>
+<span class="line">	cl_mem           buffer,</span>
+<span class="line">	cl_bool          blocking_write,</span>
+<span class="line">	<span class="keyword">size_t</span>           buff_write_offset,</span>
+<span class="line">	<span class="keyword">size_t</span>           buff_size_in_bytes,</span>
+<span class="line">	<span class="keyword">void</span>             *host_src_ptr,</span>
+<span class="line">	cl_uint          num_events_in_wait_list,</span>
+<span class="line">	<span class="keyword">const</span> cl_event   *event_wait_list,</span>
+<span class="line">	cl_event         *event</span>
+<span class="line">);</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// 将设备从设备端拷贝到主机端</span></span>
+<span class="line">err = clEnqueueReadBuffer(</span>
+<span class="line">	cl_command_queue command_queue,</span>
+<span class="line">	cl_mem           buffer,</span>
+<span class="line">	cl_bool          blocking_read,</span>
+<span class="line">	<span class="keyword">size_t</span>           buff_read_offset,</span>
+<span class="line">	<span class="keyword">size_t</span>           buff_size_in_bytes,</span>
+<span class="line">	<span class="keyword">void</span>             *host_dst_ptr,</span>
+<span class="line">	cl_uint          num_events_in_wait_list,</span>
+<span class="line">	<span class="keyword">const</span> cl_event   *event_wait_list,</span>
+<span class="line">	cl_event         *event</span>
+<span class="line">)</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// 释放设备端内存</span></span>
+<span class="line">clReleaseMemObject(cl_mem memObj);</span>
+</pre></td></tr></table></figure>
+<p>使用其他设备内存如常量内存的方式请参见 API 手册。</p>
+<h2 id="启动方式"><a href="#启动方式" class="headerlink" title="启动方式"></a>启动方式</h2><p>CUDA 中不使用 Stream 直接启动一个 kernel 的示例如下：</p>
+<figure class="highlight c"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment">// 设置 kernel 运行的线程分组参数</span></span>
+<span class="line"><span class="function">dim3 <span class="title">grid</span><span class="params">(block_dim_x, block_dim_y, block_dim_z)</span></span>;</span>
+<span class="line"><span class="function">dim3 <span class="title">block</span><span class="params">(grid_dim_x, grid_dim_y, grid_dim_z)</span></span>;</span>
+<span class="line"><span class="comment">// 启动 kernel</span></span>
+<span class="line">cuda_kernel&lt;&lt;&lt;grid, block&gt;&gt;&gt;(...);</span>
+</pre></td></tr></table></figure>
+<p>OpenCL 中完成对应的操作实在太烦了。我按照网上的资料写了一个小的 Repo，在<a href="https://github.com/EnigmaHuang/CUDA_OpenCL_Demo_Compare" target="_blank" rel="external">这里</a>。</p>
+<h2 id="Reference"><a href="#Reference" class="headerlink" title="Reference"></a>Reference</h2><ol>
+<li><a href="http://docs.nvidia.com/cuda/cuda-c-programming-guide/index.html" target="_blank" rel="external">CUDA C Programming Guide</a></li>
+<li><a href="http://developer.amd.com/wordpress/media/2013/12/AMD_OpenCL_Programming_User_Guide2.pdf" target="_blank" rel="external">AMD OpenCL User Guide</a></li>
+<li><a href="https://www.khronos.org/registry/OpenCL/sdk/1.2/docs/man/xhtml/" target="_blank" rel="external">OpenCL 1.2 Reference Pages</a></li>
+<li><a href="http://home.ustc.edu.cn/~lwh1990/hppa/OpenCL-course.pdf" target="_blank" rel="external">AMD上海研发中心编著的 OpenCL 教程</a></li>
+<li><a href="https://www.researchgate.net/publication/268404157_Experiences_porting_from_CUDA_to_OpenCL" target="_blank" rel="external">Experiences porting from CUDA to OpenCL</a></li>
+<li><a href="https://www.cnblogs.com/leiben/archive/2012/06/05/2536508.html" target="_blank" rel="external">OpenCL 快速入门</a></li>
+</ol>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2018-01-13T15:28:37.000Z" itemprop="datePublished">
+              2018-01-13
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/OpenCL/">OpenCL</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</div>
+            <footer>
+    <div>© 2021 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

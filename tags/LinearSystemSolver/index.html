@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Rainmaker&#39;s Notebook</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <ul class="Index">
+  
+    <header class='PageTitle'>
+        <h1>{ LinearSystemSolver }</h1>
+    </header>
+  
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/">MKL + CUDA 编译 MAGMA 以及使用 MAGMA</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2019-03-20T03:37:21.000Z" itemprop="datePublished">
+    2019-03-19
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/LinearSystemSolver/">LinearSystemSolver</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>久闻 MAGMA 大名若干年以后，最近终于要用到它来做测试。记录一下安装和使用的一些步骤。</p>
+        
+          <div class="more-link">
+            <a href="/2019/03/19/Install-MAGMA-and-CG-Sample-Code/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2018/01/01/AMG_Introduce/">代数多重网格（Algebraic Multigrid）简介</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-01-01T21:37:21.000Z" itemprop="datePublished">
+    2018-01-01
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/Multigrid/">Multigrid</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/LinearSystemSolver/">LinearSystemSolver</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>代数多重网格（AMG）是利用几何多重网格（Geometric Multigrid, GMG）的一些重要原则和理念发展起来的不依赖于实际几何网格的多重网格方法。它继承了几何多重网格的主要优点，并且可以被用于更多类型的线性方程组。本文将介绍 Classic AMG 的基本算法并忽略数学推导过程。</p>
+        
+          <div class="more-link">
+            <a href="/2018/01/01/AMG_Introduce/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12/27/HPCG_3_Notes/">HPCG 3.0 reference implementation 阅读笔记</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-27T13:26:33.000Z" itemprop="datePublished">
+    2017-12-27
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/Multigrid/">Multigrid</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/LinearSystemSolver/">LinearSystemSolver</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/MPI/">MPI</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/PDE/">PDE</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>HPCG (High-Performance Conjugate Gradient) 是如今主要的 HPC 系统性能测试基准之一，是一个精简的大型稀疏方程组并行求解器，包含了区域分解（Domain Decomposition）、多重网格（Multigrid）和预条件子（Preconditioner）这些重要的线性方程组求解技术。我在学完 MATH 6644 这门课以及自己动手写了 3D Multigrid 以后，我便一直想看看 HPCG 是如何实现的（虽然我还没学过 DD）。下面的记录是我阅读 HPCG 3.0 官方参考实现的源代码的笔记，源代码参见 <a href="https://github.com/hpcg-benchmark/hpcg" target="_blank" rel="external">GitHub</a> .</p>
+        
+          <div class="more-link">
+            <a href="/2017/12/27/HPCG_3_Notes/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/12/01/PoissonEqu_FDMCD_Multigrid/">泊松方程的中心差分格式与多重网格法</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-12-01T16:45:10.000Z" itemprop="datePublished">
+    2017-12-01
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/Multigrid/">Multigrid</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/LinearSystemSolver/">LinearSystemSolver</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/PDE/">PDE</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>这个学期上 MATH 6644 接触了多重网格（Multigrid, MG）法，觉得这是一个很有意思的方法。课程作业和期末项目的选项之一就是用 MG 加速泊松方程中心差分格式的求解。虽然我期末项目选了另一个题目，然而我也写了一下这个。这篇东西算是一点小的总结。</p>
+        
+          <div class="more-link">
+            <a href="/2017/12/01/PoissonEqu_FDMCD_Multigrid/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+</ul>
+
+
+
+            <footer>
+    <div>© 2021 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

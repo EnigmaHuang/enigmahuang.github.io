@@ -1,0 +1,329 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>MPI-3 学习笔记（三）：混合编程与邻居集合通信 | Rainmaker&#39;s Notebook</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>MPI-3 学习笔记（三）：混合编程与邻居集合通信</h1>
+    </header>
+
+    <section>
+      <p>MPI-3 混合编程（Hybrid Programming）与邻居集合通信（Neighborhood Collective Communication）特性学习笔记。</p>
+<a id="more"></a>
+<h2 id="混合编程与-MPI-共享内存"><a href="#混合编程与-MPI-共享内存" class="headerlink" title="混合编程与 MPI 共享内存"></a>混合编程与 MPI 共享内存</h2><p>MPI 定义了四种等级的线程安全性：</p>
+<ol>
+<li>MPI_THREAD_SINGLE：默认模式，MPI 进程中只有单个线程；</li>
+<li>MPI_THREAD_FUNNEL：只有主线程可以调用 MPI 函数，即 OpenMP 中的 master 线程或者 OpenMP 中的非并行区调用；</li>
+<li>MPI_THREAD_SERIALIZED：只有单个线程可以调用 MPI 函数；</li>
+<li>MPI_THREAD_MULTIPLE：所有线程都可以调用 MPI 函数。<br>调用 <code>MPI_Init_thread(requested, provided)</code> 来初始化多线程 MPI，返回的 <code>provided</code> 等级与请求的 <code>requested</code> 等级可能不一样。</li>
+</ol>
+<p>使用 MPI 多线程注意：</p>
+<ul>
+<li>程序员必须保证所有通讯的顺序是正确的以及可以匹配；</li>
+<li>如果调用的是阻塞通信函数，只有调用该函数的进程会被阻塞。</li>
+</ul>
+<p>为什么使用 MPI_THREAD_MULTIPLE 难以优化：</p>
+<ul>
+<li>MPI 系统内部维护了一些资源，而 MPI 语义要求所有线程都可以访问某些数据，在访问的时候需要依次取锁，导致额外开销;</li>
+<li>各线程调用 MPI 操作的顺序是不确定的，可能因此导致线程之间相互锁住。</li>
+</ul>
+<p>MPI-3 允许不同的进程使用 <code>MPI_Win_allocate_shared()</code> 分配并共享同一块内存，以进行 MPI + MPI 的混合编程。下面是一个样例代码：<br><figure class="highlight c++"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+<span class="line">17</span>
+<span class="line">18</span>
+<span class="line">19</span>
+<span class="line">20</span>
+<span class="line">21</span>
+<span class="line">22</span>
+<span class="line">23</span>
+<span class="line">24</span>
+<span class="line">25</span>
+<span class="line">26</span>
+<span class="line">27</span>
+<span class="line">28</span>
+<span class="line">29</span>
+<span class="line">30</span>
+<span class="line">31</span>
+<span class="line">32</span>
+<span class="line">33</span>
+<span class="line">34</span>
+<span class="line">35</span>
+<span class="line">36</span>
+<span class="line">37</span>
+<span class="line">38</span>
+<span class="line">39</span>
+<span class="line">40</span>
+<span class="line">41</span>
+<span class="line">42</span>
+<span class="line">43</span>
+<span class="line">44</span>
+</pre></td><td class="code"><pre><span class="line"><span class="comment">// See: https://software.intel.com/en-us/articles/using-mpi-3-shared-memory-in-xeon-phi-processors</span></span>
+<span class="line"></span>
+<span class="line"><span class="keyword">long</span> LOCAL_MEM_CNT = ... <span class="comment">// The number of enteries each process have</span></span>
+<span class="line">MPI_Comm shmcomm;</span>
+<span class="line">MPI_Info win_info;</span>
+<span class="line">MPI_Win shm_win;</span>
+<span class="line"><span class="keyword">int</span> shm_size, my_shm_rank;</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// Split communicator and get new ranking info</span></span>
+<span class="line">MPI_Comm_split_type(MPI_COMM_WORLD, MPI_COMM_TYPE_SHARED, <span class="number">0</span>, MPI_INFO_NULL, &amp;shmcomm);</span>
+<span class="line">MPI_Comm_rank(shmcomm, &amp;my_shm_rank);</span>
+<span class="line">MPI_Comm_size(shmcomm, &amp;shm_size);</span>
+<span class="line">MPI_Info_create(&amp;win_info);</span>
+<span class="line">MPI_Info_set(win_info, <span class="string">"alloc_shared_noncontig"</span>, <span class="string">"true"</span>);</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// Allocate shared memory</span></span>
+<span class="line"><span class="keyword">float</span> *base_ptr = <span class="literal">NULL</span>;</span>
+<span class="line">MPI_Win_allocate_shared(</span>
+<span class="line">	LOCAL_MEM_CNT * shm_size * <span class="keyword">sizeof</span>(<span class="keyword">float</span>), <span class="keyword">sizeof</span>(<span class="keyword">float</span>), </span>
+<span class="line">	win_info, shmcomm, &amp;base_ptr, &amp;shm_win</span>
+<span class="line">);</span>
+<span class="line"></span>
+<span class="line"><span class="comment">// The following call on each process means each process </span></span>
+<span class="line"><span class="comment">// can access data from other processes in group "shm_win"</span></span>
+<span class="line">MPI_Win_lock_all(<span class="number">0</span>, shm_win); </span>
+<span class="line"></span>
+<span class="line"><span class="comment">// Retrieve ranks pointers</span></span>
+<span class="line"><span class="keyword">int</span> dispunit, rep;</span>
+<span class="line">MPI_Aint sz;</span>
+<span class="line"><span class="keyword">float</span> *all_ptr[size];</span>
+<span class="line"><span class="keyword">float</span> *my_ptr = <span class="literal">NULL</span>;</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++) all_ptr[i] = <span class="literal">NULL</span>;</span>
+<span class="line"></span>
+<span class="line"><span class="keyword">for</span> (<span class="keyword">int</span> i = <span class="number">0</span>; i &lt; size; i++)</span>
+<span class="line">	MPI_Win_shared_query(win, i, &amp;sz, &amp;dispunit, &amp;(all_ptr[i]));</span>
+<span class="line"></span>
+<span class="line">my_ptr = all_ptr[my_rank];  </span>
+<span class="line"></span>
+<span class="line"><span class="comment">/*</span>
+<span class="line">Main calculations.</span>
+<span class="line">*/</span></span>
+<span class="line"></span>
+<span class="line">MPI_Win_unlock_all(shm_win);  <span class="comment">// Finished memory sharing</span></span>
+</pre></td></tr></table></figure></p>
+<p>注意：</p>
+<ul>
+<li>MPI-3 允许各进程申请不同数量的内存，甚至可以是 0 字节；</li>
+<li>MPI 标准没有规定申请的内存会被放在什么位置；</li>
+<li>默认设置下，一个通信子（communicator）中申请的所有共享内存是连续的；然而，用户可以通过传入 “noncontig” 参数来提示 MPI 系统将内存放在某些位置以对齐到合适的边界。</li>
+</ul>
+<h2 id="拓扑映射与邻居集合通信"><a href="#拓扑映射与邻居集合通信" class="headerlink" title="拓扑映射与邻居集合通信"></a>拓扑映射与邻居集合通信</h2><p>MPI 拓扑功能历史：</p>
+<ul>
+<li>MPI-1：笛卡尔坐标系拓扑，允许在 n 维空间中查询邻居；</li>
+<li>MPI-2.2：可扩展的图拓扑（graph topology），每个进程可以指定其邻居；</li>
+<li>MPI-3：邻居集合通信。</li>
+</ul>
+<p>创建邻居图：</p>
+<ul>
+<li><code>MPI_Dist_graph_create_adjacent()</code>：每个进程作为图上的一个节点，指出其出度、入度、出边、入边和各边权重；<br><img src="/2017/06/27/MPI3-HP-NCC/1.jpg" alt="DGCA"></li>
+<li><code>MPI_Dist_graph_creat()</code>：每个进程提供全图一部分的信息。<br><img src="/2017/06/27/MPI3-HP-NCC/2.jpg" alt="DGC"></li>
+</ul>
+<p>查询邻居：</p>
+<ul>
+<li><code>MPI_Dist_graph_neighbors_count()</code>：查询有多少个邻居，返回入度、出度以及可能可用的边权重信息；</li>
+<li><code>MPI_Dist_graph_neighbors()</code>：查询邻居列表，可能会返回边的权重信息，邻居列表顺序决定了邻居集合通信的数据排放顺序。</li>
+</ul>
+<p>邻居集合通信须知：</p>
+<ul>
+<li>建立拓扑关系只是告诉 MPI 系统通信模式，让 MPI 系统自行选择优化方法；</li>
+<li>邻居集合通信仅覆盖了部分的通信模式。</li>
+</ul>
+<p>笛卡尔坐标系中的邻居集合通信：</p>
+<ul>
+<li>只和直接相邻的邻居进行通信；</li>
+<li>通信子中的所有进程都必须调用，不论该进程是否有邻居；</li>
+<li>收到的数据在缓冲区中按照邻居的顺序进行存放：<ul>
+<li>依次存放各维度，每个维度先存 -1 方向的邻居再存 +1 方向的邻居；</li>
+<li>2 * ndims 个源进程和目的进程；</li>
+<li>在边界的进程，如果对应方向上没有邻居（不是环面结构），则对应的缓冲区位置不会有数据；<br><img src="/2017/06/27/MPI3-HP-NCC/3.jpg" alt="CNC"></li>
+</ul>
+</li>
+</ul>
+<p>图中的邻居集合通信：</p>
+<ul>
+<li>Collective communication along arbitrary neighbors;</li>
+<li>邻居的顺序由 <code>MPI_Dist_graph_neighbors()</code> 返回的邻居顺序决定；</li>
+<li>图是有向的，因此可以有不同的 Send/Recv 邻居数量；</li>
+<li>可以进行稠密集合操作，对于固定的通信模式效果较好。</li>
+</ul>
+<p>两个邻居集合通信函数：</p>
+<ol>
+<li><code>MPI_Neighbor_allgather(*sendbuf, sendcount, sendtype, *recvbuf, recvcount, recvtype, comm)</code></li>
+<li><code>MPI_Neighbor_alltoall(*sendbuf, sendcount, sendtype, *recvbuf, recvcount, recvtype, comm)</code><br>这两个函数的用法和 <code>Allgather</code>, <code>Alltoall</code> 类似，只是通信对象变成了自己的邻居。这两个函数也有非阻塞和消息变长的版本：<code>**I**neighbor_allgather/alltoall**v**</code>。</li>
+</ol>
+<p>样例代码：参见文件 <code>stencil_mpi_overlap_carttopo_neighcolls.cpp</code> in <a href="http://htor.inf.ethz.ch/teaching/mpi_tutorials/speedup15/examples.tgz" target="_blank" rel="external">demo source code</a></p>
+<h2 id="MPI-3-学习笔记参考资料"><a href="#MPI-3-学习笔记参考资料" class="headerlink" title="MPI-3 学习笔记参考资料"></a>MPI-3 学习笔记参考资料</h2><ul>
+<li><a href="http://htor.inf.ethz.ch/teaching/mpi_tutorials/speedup15/" target="_blank" rel="external">Advanced MPI at Speepup’15 (slides &amp; demo codes)</a></li>
+<li><a href="http://wgropp.cs.illinois.edu/courses/cs598-s16/" target="_blank" rel="external">UIUC CS 598 course slides</a> (<a href="http://wgropp.cs.illinois.edu/courses/cs598-s16/lectures/lecture{29,34,35,36,37}.pdf" target="_blank" rel="external">http://wgropp.cs.illinois.edu/courses/cs598-s16/lectures/lecture{29,34,35,36,37}.pdf</a>)</li>
+<li><a href="https://software.intel.com/en-us/articles/using-mpi-3-shared-memory-in-xeon-phi-processors" target="_blank" rel="external">Intel MPI-3 Demo on KNL</a></li>
+</ul>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2017-06-27T18:55:21.000Z" itemprop="datePublished">
+              2017-06-27
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/MPI/">MPI</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</div>
+            <footer>
+    <div>© 2021 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

@@ -1,0 +1,360 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Install Arch Linux on a USB Key | Rainmaker&#39;s Notebook</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>Install Arch Linux on a USB Key</h1>
+    </header>
+
+    <section>
+      <p>前些天学校发了一个 2GB 大小的 U 盘，这样一来我手上就多了个 U 盘。我就把原来的一个 16GB 的 Kingston USB Data Traveler 腾了出来，打算装个 Arch Linux 在上面随带随用。Arch 的安装教程网上也是多不胜数了，个人觉得写得比较好的是这个 <a href="https://blog.yoitsu.moe/arch-linux/installing_arch_linux_for_complete_newbies.html" target="_blank" rel="external">给 Linux 萌新的 Arch 安装指南</a> . 本文下面的记录与这个指南大体相同，只是增加了一些个人需要的东西。</p>
+<a id="more"></a>
+<h2 id="前期准备"><a href="#前期准备" class="headerlink" title="前期准备"></a>前期准备</h2><p>1 . 挂载 Arch ISO 和 USB Key 设备到虚拟机上，启动进入 Arch Live CD。</p>
+<p>2 . 划分分区。我手上这个 U 盘已经被格式化过了，大小是 14.6 G。执行 <code>lsblk -f</code> 查看是哪一个设备，在我的虚拟机里显示是 <code>/dev/sdb</code>。 执行 <code>cgdisk /dev/sdb</code> 进行分区。我需要划分一个 EFI 分区和一个文件系统区。如果需要重新分区，可以直接在 <code>cgdisk</code> 里进行删除和划分。我需要进行两次新建操作。每次新建操作会询问四个问题：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+</pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 下面的数字是我 U 盘的情况</span>
+<span class="line"><span class="meta">#</span> 起始扇区的位置，一般不作修改</span>
+<span class="line">First sector (2048-30736350, default = 2048):</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 分区大小，可以</span>
+<span class="line">Size in sectors or &#123;KMGTP&#125; (default = 30734303):100MB</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 分区类型，默认为 Linux 文件系统，EFI 分区代码 ef00，交换空间分区代码 8200</span>
+<span class="line">Current type is 8300 (Linux filesystem)</span>
+<span class="line">Hex code or GUID (L to show codes, Enter = 8300): ef00</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 卷标，可留空</span>
+<span class="line">Current partition name is ''</span>
+<span class="line">Enter new partition name, or &lt;Enter&gt; to use the current name: EFI</span>
+</pre></td></tr></table></figure>
+<p>3 . 在 U 盘上创建文件系统并挂载到当前系统。由于我是先创建 EFI 分区再创建主文件系统的，所以我需要依次执行如下命令：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+</pre></td><td class="code"><pre><span class="line">mkfs.vfat /dev/sdb1 # 为 /dev/sdb1 建立 EFI 分区</span>
+<span class="line">mkfs.ext4 /dev/sdb2 # 为 /dev/sdb2 建立 ext4 分区</span>
+<span class="line"></span>
+<span class="line">mount /dev/sdb2 /mnt       # 挂载主文件系统</span>
+<span class="line">mkdir /mnt/boot            # 挂载 EFI 分区的文件夹</span>
+<span class="line">mount /dev/sdb1 /mnt/boot  # 挂载 EFI 分区</span>
+</pre></td></tr></table></figure>
+<p>4 . 修改软件源。用你惯用的编辑器（nano/vim/emacs/…）打开 <code>/etc/pacman.d/mirrorlist</code>，将你想要的 Server 地址写在最前面。大陆用户一般使用如下几个镜像源：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">Server = https://mirrors.tuna.tsinghua.edu.cn/archlinux/$repo/os/$arch # 清华大学 TUNA 协会</span>
+<span class="line">Server = https://mirrors.ustc.edu.cn/archlinux/$repo/os/$arch # 中科大</span>
+<span class="line">Server = http://mirrors.163.com/archlinux/$repo/os/$arch # 网易</span>
+</pre></td></tr></table></figure>
+<p>由于我们学校有一个镜像源，我就选了我们学校的：<code>Server = http://www.gtlib.gatech.edu/pub/archlinux/$repo/os/$arch</code>。修改完成以后执行 <code>pacman -Syy</code> 更新软件源信息。</p>
+<h2 id="安装基本系统"><a href="#安装基本系统" class="headerlink" title="安装基本系统"></a>安装基本系统</h2><p>5 . 安装基本包。其中 <code>iw</code> <code>dialog</code> <code>wpa_supplicant</code> <code>wpa_actiond</code> 这几个包最好先装上，因为是连接无线网络需要用到的。<code>networkmanager</code> 是用于管理网络的包，<code>vim</code> 是我使用的编辑器，<code>zsh</code> 是我使用的 shell。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">pacstrap /mnt base base-devel iw dialog wpa_supplicant wpa_actiond vim zsh htop git networkmanager wget ntp</span>
+</pre></td></tr></table></figure>
+<p>6 . 生成 fstab。执行以下命令：<code>genfstab -U /mnt &gt;&gt; /mnt/etc/fstab</code>。<code>-U</code> 参数表示使用 UUID 进行标识，由于我需要从 U 盘上启动系统，这个选项是必不可少的。</p>
+<p>7 . chroot 到新系统中：<code>arch-chroot /mnt /bin/bash</code></p>
+<p>8 . 修改时区与语言设置。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+</pre></td><td class="code"><pre><span class="line">rm -f /etc/localtime</span>
+<span class="line">ln -s /usr/share/zoneinfo/US/Eastern /etc/localtime</span>
+<span class="line"><span class="meta">#</span> ln -s /usr/share/zoneinfo/Asia/Shanghai /etc/localtime &lt;--- 中国用户</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 用编辑器打开 /etc/locale.gen，在顶部填入如下两行，打开简体中文和英文的本地化选项</span>
+<span class="line">en_US.UTF-8 UTF-8</span>
+<span class="line">zh_CN.UTF-8 UTF-8</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 保存以后执行</span>
+<span class="line">locale-gen</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 设置系统语言为英文，以避免终端和 Log 输出乱码：</span>
+<span class="line">echo LANG=en_US.UTF-8 &gt; /etc/locale.conf</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 打开网络管理服务（以自动获取IP，注意 N M 大写）和 NTP 网络时间服务</span>
+<span class="line">systemctl enable NetworkManager ntpd</span>
+</pre></td></tr></table></figure>
+<p>9 . 设置主机名、root 密码并创建新用户。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+</pre></td><td class="code"><pre><span class="line">echo USBArch &gt; /etc/hostname</span>
+<span class="line">passwd # 注意，现在应该是 [root@archiso]，所以这个是设置 root 密码的操作</span>
+<span class="line">useradd -m -s /bin/zsh eh # 创建新用户 eh，并且使用 /bin/zsh 作为默认 shell</span>
+<span class="line">passwd eh # 修改 eh 用户的密码</span>
+<span class="line"></span>
+<span class="line">visudo # 将 eh 设置为 sudoer</span>
+<span class="line"><span class="meta">#</span> 在 root ALL=(ALL) ALL 下面加一行 eh ALL=(ALL) ALL</span>
+</pre></td></tr></table></figure>
+<p>10 . 安装 UEFI 引导<br>  我用 GRUB 来进行引导。先安装需要的包：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+</pre></td><td class="code"><pre><span class="line">pacman -S efibootmgr dosfstools grub os-prober</span>
+</pre></td></tr></table></figure></p>
+<p>然后向 U 盘中安装 GRUB：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">grub-install --target=x86_64-efi --efi-directory=/boot --bootloader-id=grub --recheck --removable</span>
+<span class="line"><span class="meta">#</span> efi-directory 对应 /mnt/boot，现在已经 chroot 到 /mnt 了</span>
+<span class="line"><span class="meta">#</span> 由于是安装在 U 盘，所以一定要加上 --removable 参数</span>
+</pre></td></tr></table></figure></p>
+<p>生成必要的配置文件：<br><figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+</pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 抄一句 Arch Wiki 里的话，我经常漏了导致失败的：</span>
+<span class="line"><span class="meta">#</span> 用 mkinitcpio -p linux 创建 RAM Disk 前，修改 /etc/mkinitcpio.conf，</span>
+<span class="line"><span class="meta">#</span> 将 block 添加到紧挨 udev 的后面. 只有这样早期用户空间才能正确的装入模块。</span>
+<span class="line">mkinitcpio -p linux </span>
+<span class="line">grub-mkconfig -o /boot/grub/grub.cfg</span>
+</pre></td></tr></table></figure></p>
+<h2 id="安装桌面系统"><a href="#安装桌面系统" class="headerlink" title="安装桌面系统"></a>安装桌面系统</h2><p>11 . 安装图形界面</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+</pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 安装 xorg, Dolphin（文件管理器），Kate（文字编辑器）和 Konsole（终端模拟器）</span>
+<span class="line">pacman -S xorg plasma dolphin kate konsole sddm kde-l10n-zh_cn</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 如果需要直接启动到图形界面，可以执行 systemctl enable sddm</span>
+</pre></td></tr></table></figure>
+<p>12 . 安装中文字体</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+</pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 三者选其一应该就可以了</span>
+<span class="line">pacman -S noto-fonts noto-fonts-cjk noto-fonts-emoji # Google Noto 系列</span>
+<span class="line">pacman -S wqy-microhei wqy-zenhei # 文泉驿</span>
+<span class="line">pacman -S adobe-source-han-sans-otc-fonts # 思源黑体</span>
+</pre></td></tr></table></figure>
+<p>此时可以重启，直接进入装好的系统中。</p>
+<p>13 . 安装一些我需要用到的包。</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+<span class="line">4</span>
+<span class="line">5</span>
+<span class="line">6</span>
+<span class="line">7</span>
+<span class="line">8</span>
+<span class="line">9</span>
+<span class="line">10</span>
+<span class="line">11</span>
+<span class="line">12</span>
+<span class="line">13</span>
+<span class="line">14</span>
+<span class="line">15</span>
+<span class="line">16</span>
+</pre></td><td class="code"><pre><span class="line"><span class="meta">#</span> 安装 yaourt 额外包管理器</span>
+<span class="line"><span class="meta">#</span> 编辑 /etc/pacman.conf, 加入如下三行</span>
+<span class="line"><span class="meta">#</span> [archlinuxfr]</span>
+<span class="line"><span class="meta">#</span> SigLevel = Never</span>
+<span class="line"><span class="meta">#</span> Server = http://repo.archlinux.fr/$arch</span>
+<span class="line"><span class="meta">#</span> 然后执行</span>
+<span class="line">sudo pacman -Sy yaourt</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 安装一些我需要的包</span>
+<span class="line">sudo pacman -S filezilla notepadqq htop thunderbird gcc-fortran gnupg</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 安装 Google Chrome</span>
+<span class="line">yaourt -S google-chrome</span>
+<span class="line"><span class="meta"></span>
+<span class="line">#</span> 安装 oh-my-zsh</span>
+<span class="line">sh -c "$(wget https://raw.github.com/robbyrussell/oh-my-zsh/master/tools/install.sh -O -)"</span>
+</pre></td></tr></table></figure>
+<p>14 . 为 zsh 处理 Home, End, Del 无响应的问题。先运行 <code>cat</code>，然后依次按这几个键，会见到形如 <code>^[[2~</code> 这样的输出，<code>^[[2~</code> 就是按下的键对应的键位符。在我的机器上，我需要在用户主目录的 zshrc 文件 <code>/home/eh/.zshrc</code> 里加入如下几行设置：</p>
+<figure class="highlight shell"><table><tr><td class="gutter"><pre><span class="line">1</span>
+<span class="line">2</span>
+<span class="line">3</span>
+</pre></td><td class="code"><pre><span class="line">bindkey "^[[1~" beginning-of-line</span>
+<span class="line">bindkey "^[[4~" end-of-line</span>
+<span class="line">bindkey "^[[3~" delete-char</span>
+</pre></td></tr></table></figure>
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2017-08-27T03:45:10.000Z" itemprop="datePublished">
+              2017-08-26
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/Linux/">Linux</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</div>
+            <footer>
+    <div>© 2021 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

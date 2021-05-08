@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>CUDA Case Study - SGEMM on Pascal | Rainmaker&#39;s Notebook</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <div>
+  <article class='ContentView'>
+    <header class='PageTitle'>
+        <h1>CUDA Case Study - SGEMM on Pascal</h1>
+    </header>
+
+    <section>
+      <p>最近自己重新学 CUDA （以前上过课，长时间不用又忘记了），找些经典的 case study 自己照猫画虎弄一次加深一点认识。HPC 领域里一个绕不开的例子就是 xGEMM，即稠密矩阵-矩阵乘法。网上关于 CUDA 如何实现高性能 xGEMM 的介绍不多，而且很多都是 Fermi 时代的资料，面对 Kepler 有详细介绍的只有 Ref No.2 那个网页。我以 Ref No.1, No.2 两个网页的资料和代码为蓝本，一并参考了其他一些文章，自己动手实践了一下，代码在 <a href="https://github.com/EnigmaHuang/my_CUDA_SGEMM" target="_blank" rel="external">这里</a>。</p>
+<a id="more"></a>
+<p>2018-01-13 Update notes: 上个学期我的 HPC 课期末作业选了写 GPU SGEMM, 所以我重新写了一次这个代码，以及之前的代码似乎在尺寸不为 128 倍数的时候有 Bug, 在我的 GTX 1070 上面也跑得不是很快。</p>
+<h2 id="测试平台"><a href="#测试平台" class="headerlink" title="测试平台"></a>测试平台</h2><p>我用我座机上的 EVGA GTX 1070 进行测试：1920 SP @ 2002 MHz, 8GB GDDR @ 4004 MHz, 理论峰值单精度性能 7.68 TFlops, 理论峰值带宽 256BG/s. 编译平台是 Ubuntu 16.04 LTS + CUDA 8.0 + GCC 5.1。以 CUBLAS 作为性能和计算结果的参考。CUBLAS 录得最好性能为 7.2 TFlops, 为理论峰值单精度性能的 93.75%。</p>
+<h2 id="Kernel-1-Naive"><a href="#Kernel-1-Naive" class="headerlink" title="Kernel 1: Naive"></a>Kernel 1: Naive</h2><p>最基本的思想：每个 Block 计算 C 的一小块（这一点一直延续到后面所有的 kernel 中），每个 thread 直接计算 C 的一个元素的值，直接从显存里读数据进来。当然，性能也是要多差有多差了：只有 186 GFlops。</p>
+<h2 id="Kernel-2-3：-Tiling"><a href="#Kernel-2-3：-Tiling" class="headerlink" title="Kernel 2, 3： Tiling"></a>Kernel 2, 3： Tiling</h2><p>分块乘法是所有平台进行 xGEMM 都绕不开的步骤，因为这可以有效提高计算-访存比，充分利用高速缓存。<br><img src="https://cnugteren.github.io/tutorial/images/gemm2a.png" alt="tiled_mm"><br>我使用了 32 * 32 的分块大小。然而，shared memory 里的分块矩阵存放顺序如果搞错了会引起严重的 bank conflict 问题：kernel 2 只有 202 GFlops, kernel 3 则有 1001 GFlops。这两个 kernel 对应 Ref No.1 的第 2，3 步。</p>
+<h2 id="Kernel-4：4x-Workload-Per-Thread"><a href="#Kernel-4：4x-Workload-Per-Thread" class="headerlink" title="Kernel 4：4x Workload Per Thread"></a>Kernel 4：4x Workload Per Thread</h2><p>Kernel 4 中，每一个 thread 负责计算 C 中的 4 个元素。为了保持 coalesced memory access, 每半个 warp 中的 threads (即 16 个 threads) 应该访问连续的元素。记 <code>shm_C</code> 为一个 32x32 的 C 的子块，分配给一个 16x16 的thread block, 并分别记 <code>threadIdx.{x, y}</code> 为<code>tid{x, y}</code>. 则每个元素需要负责计算 <code>shm_C[tidy][tidx]</code>, <code>shm_C[tidy+16][tidx]</code>, <code>shm_C[tidy][tidx+16]</code>, <code>shm_C[tidy+16][tidx+16]</code> 这四个元素。这样每个 thread 的工作量更大，指令并行度（ILP）更高，性能也会更好。Kernel 4 的性能可以达到 1801 GFlops</p>
+<h2 id="Kernel-5-8x-Work-Per-Thread-Zero-Padding"><a href="#Kernel-5-8x-Work-Per-Thread-Zero-Padding" class="headerlink" title="Kernel 5: 8x Work Per Thread, Zero Padding"></a>Kernel 5: 8x Work Per Thread, Zero Padding</h2><p>Kernel 5 对应 Ref No.2 里的 kernel 3。这个 kernel 的思路相对简单一点：每一个 thread 读入 A, B 同一列四个相距为 8 的元素，计算 C 的同一行四个相距为 8 的元素，thread block size 是 (32, 8)。Ref No.2 里的实现是使用列优先 (Column-Major) 格式的，我仍旧使用行优先格式。同时，使用 <code>#pragma unroll</code> 来指示编译器展开最内层循环，加大 ILP。</p>
+<p>Kernel 1~4 中我没有显式为 A, B, C 矩阵填充 0 以满足 32x32 的分块大小，而是在 kernel 里进行判断。这样写起来比较麻烦，性能也会受到影响。因此我在 kernel 5 里先进行了填0，使得 A, B 的尺寸都是 32 的倍数，然后再计算，最后再把 C 周围填充的 0 给去掉。</p>
+<p>Kernel 5 的性能为 2375 GFlops.</p>
+<h2 id="Kernel-6-amp-7-More-2-Work-Per-Thread-amp-2D-Register"><a href="#Kernel-6-amp-7-More-2-Work-Per-Thread-amp-2D-Register" class="headerlink" title="Kernel 6 &amp; 7: More^2 Work Per Thread &amp; 2D Register"></a>Kernel 6 &amp; 7: More^2 Work Per Thread &amp; 2D Register</h2><p>更进一步！这次每个线程不止管 C 的一列了，而是管 C 的一个子块：每一列管 C 的 8 * 4 个元素，和 kernel 4 中的思路一样，每个线程管的元素在同一行中两两间隔有 15 个元素。这个思路其实就是 Ref No.3 论文里的 Fig.2，只是论文里的是一个线程管 16 个元素而不是 32 个。每个线程每次从 shared memory 的 A, B 分块中取出一列 4 个元素和一行 8 个元素，对自己寄存器中的 C 子块进行秩1修正（一个列向量乘一个行向量），这样可以最大限度提高读入到寄存器中的数据的使用率（秩1修正读 $2n$ 个元素计算 $2n^2$ 次，前提是计算的结果必须能存在 fast mem 里）。Kernel 7 和 kernel 6 类似，不过存在 shared memory 里的 A 和 B 不再是正方形，而是长方形。因此从 global memory 读入到 shared memory 的时候会有一些变化。每次秩一修正也变成 8x8 的子块。</p>
+<p><img src="/2017/07/06/my-CUDA-SGEMM/1.jpg" alt="Fig.2"></p>
+<p>Kernel 6 和 7 的性能很接近，分别是 3102 GFlops 和 3280 GFlops。</p>
+<h2 id="Kernel-8-Vector-Read"><a href="#Kernel-8-Vector-Read" class="headerlink" title="Kernel 8: Vector Read"></a>Kernel 8: Vector Read</h2><p>这个 Kernel 对应 Ref No.2 里的 kernel 7，计算上和上面的 kernel 7 一致，只是使用了 float4 类型来进行读入。这样，GPU 可以使用 <code>LD.128</code> 这样的向量载入指令，每次读取更多数据，减少总的指令数，使得全局访问的速度更快（参见<a href="https://stackoverflow.com/questions/26676806/efficiency-of-cuda-vector-types-float2-float3-float4" target="_blank" rel="external">这个</a>）。然而读到寄存器里的 float4 再拆开写到 shared mem 里的时候免不了要出现一次 bank conflict。这个 Kernel 的速度可以达到 4807 GFlops。如果忽略掉填充 0 所需的时间，单纯是计算乘法的性能可以达到 5280 GFlops。</p>
+<h2 id="数据汇总"><a href="#数据汇总" class="headerlink" title="数据汇总"></a>数据汇总</h2><p>Kernel 8 与 CUBLAS sgemm 在不同尺寸下的对比：</p>
+<table>
+<thead>
+<tr>
+<th>n=m=k</th>
+<th style="text-align:right">1024</th>
+<th style="text-align:right">2048</th>
+<th style="text-align:right">3072</th>
+<th style="text-align:right">4096</th>
+<th style="text-align:right">5120</th>
+<th style="text-align:right">6144</th>
+<th style="text-align:right">7168</th>
+<th style="text-align:right">8192</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>CUBLAS</td>
+<td style="text-align:right">4276</td>
+<td style="text-align:right">5459</td>
+<td style="text-align:right">7016</td>
+<td style="text-align:right">7201</td>
+<td style="text-align:right">7118</td>
+<td style="text-align:right">7010</td>
+<td style="text-align:right">6861</td>
+<td style="text-align:right">7044</td>
+</tr>
+<tr>
+<td>Kernel 8</td>
+<td style="text-align:right">925</td>
+<td style="text-align:right">2546</td>
+<td style="text-align:right">3246</td>
+<td style="text-align:right">4100</td>
+<td style="text-align:right">4282</td>
+<td style="text-align:right">4509</td>
+<td style="text-align:right">4606</td>
+<td style="text-align:right">4807</td>
+</tr>
+<tr>
+<td>Ratio</td>
+<td style="text-align:right">21.63%</td>
+<td style="text-align:right">46.64%</td>
+<td style="text-align:right">46.26%</td>
+<td style="text-align:right">56.94%</td>
+<td style="text-align:right">60.16%</td>
+<td style="text-align:right">64.32%</td>
+<td style="text-align:right">67.28%</td>
+<td style="text-align:right">68.24%</td>
+</tr>
+</tbody>
+</table>
+<p>再来个横向对比，看看各个 kernel 的差别：</p>
+<table>
+<thead>
+<tr>
+<th>n=m=k=8K</th>
+<th style="text-align:right">1</th>
+<th style="text-align:right">2</th>
+<th style="text-align:right">3</th>
+<th style="text-align:right">4</th>
+<th style="text-align:right">5</th>
+<th style="text-align:right">6</th>
+<th style="text-align:right">7</th>
+<th style="text-align:right">8</th>
+<th style="text-align:right">CUBLAS</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>GFlops</td>
+<td style="text-align:right">186</td>
+<td style="text-align:right">202</td>
+<td style="text-align:right">1001</td>
+<td style="text-align:right">1801</td>
+<td style="text-align:right">2375</td>
+<td style="text-align:right">3102</td>
+<td style="text-align:right">3280</td>
+<td style="text-align:right">4807</td>
+<td style="text-align:right">7044</td>
+</tr>
+</tbody>
+</table>
+<h2 id="小结"><a href="#小结" class="headerlink" title="小结"></a>小结</h2><p>以下方法有助于提高 CUDA 程序的性能：</p>
+<ul>
+<li>避免分支，或者将分支转变为只有在某个 warp 中有不同值的情况；</li>
+<li>每个 warp 访问的内存地址连续，避免 shared memory bank conflict 和 global memory 不合并的访问；</li>
+<li>为每个 thread 分配更多的工作量，提高 SP 利用率；</li>
+<li>对循环进行多路展开以减少循环判断次数和增大指令吞吐量；</li>
+<li>利用 shared memory 来保存一个 thread block 共用的数据，利用寄存器来保存每个 thread 各自的计算结果和数据；</li>
+<li>适当调整指令顺序，以计算指令掩盖长延时的取数据指令。</li>
+</ul>
+<h2 id="References"><a href="#References" class="headerlink" title="References"></a>References</h2><ol>
+<li><a href="http://www.es.ele.tue.nl/~mwijtvliet/5KK73/?page=mmcuda" target="_blank" rel="external">5KK73 CUDA GEMM</a></li>
+<li><a href="https://cnugteren.github.io/tutorial/pages/page1.html" target="_blank" rel="external">OpenCL SGEMM Tutorial</a></li>
+<li><a href="http://icl.cs.utk.edu/projectsfiles/magma/pubs/fermi_gemm.pdf" target="_blank" rel="external">An Improved MAGMA GEMM for Fermi GPUs</a></li>
+<li><a href="http://www.ece.neu.edu/groups/nucar/NUCARTALKS/112_Lai.pdf" target="_blank" rel="external">Performance Upper Bound Analysis and Optimization of SGEMM on Fermi and Kepler GPUs</a></li>
+<li>Fast Implementation of DGEMM on Fermi GPU （sci-hub 链接已失效）</li>
+<li><a href="http://docs.nvidia.com/cuda/profiler-users-guide/index.html" target="_blank" rel="external">nvprof &amp; nvvp user guide</a></li>
+<li><a href="https://cs.famaf.unc.edu.ar/~nicolasw/Docencia/CP/2016/20-CUDA3.html#slide33" target="_blank" rel="external">nvprof metrics &amp; events meaning</a></li>
+</ol>
+
+
+      
+
+    </section>
+    
+      <section class='ArticleMeta'>
+          <div>
+            发布于&nbsp;
+            <time datetime="2017-07-06T14:11:21.000Z" itemprop="datePublished">
+              2017-07-06
+            </time>
+          </div>
+          
+            <div>
+              tags: 
+  <li class="meta-text">
+  { <a href="/tags/CUDA/">CUDA</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/GEMM/">GEMM</a> }
+  </li>
+
+
+            </div>
+          
+      </section>
+    
+    
+</article>
+
+  <link rel="stylesheet" href="https://unpkg.com/gitalk/dist/gitalk.css">
+<div id="gitalk-container"></div>
+<script src="https://unpkg.com/gitalk/dist/gitalk.min.js"></script>
+<script type="text/javascript">
+    var gitalk = new Gitalk({
+        clientID: '94e58ed5c77bee610a9d',
+        clientSecret: 'efd3e2f202755b7bad8c3f713b3b7b375daf5c5b',
+        id: window.location.pathname,
+        repo: 'enigmahuang.github.io',
+        owner: 'EnigmaHuang',
+        admin: 'EnigmaHuang'
+    })
+    gitalk.render('gitalk-container')
+</script>
+  <! -- mathjax config similar to math.stackexchange -->
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+          inlineMath: [ ['$','$'], ["\\(","\\)"]  ],
+                processEscapes: true
+                    
+}
+  
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+tex2jax: {
+            skipTags: ['script', 'noscript', 'style', 'textarea', 'pre', 'code']
+                  
+}
+    
+        });
+</script>
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Queue(function() {
+            var all = MathJax.Hub.getAllJax(), i;
+            for(i=0; i < all.length; i += 1) {
+                            all[i].SourceElement().parentNode.className += ' has-jax';
+                                    
+            }
+                
+        });
+</script>
+
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+</div>
+            <footer>
+    <div>© 2021 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>

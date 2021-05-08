@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="zh-cmn-Hans">
+<head>
+  <!-- hexo-inject:begin --><!-- hexo-inject:end --><meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Rainmaker&#39;s Notebook</title>
+  
+  
+  
+  <!--link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css"-->
+  <link rel="stylesheet" href="//cdn.jsdelivr.net/highlight.js/9.10.0/styles/github-gist.min.css">
+  <link rel="stylesheet" href="/css/style.css">
+<link rel="alternate" href="/atom.xml" title="Rainmaker's Notebook" type="application/atom+xml"><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</head>
+
+<body>
+<!-- hexo-inject:begin --><!-- hexo-inject:end --><div class="Shell">
+    <aside class='SideBar'>
+    <section class='avatar' style="background-image: url(undefined)">
+        <div class='av-pic' style="background-image: url(/assets/avatar.png)">
+        </div>
+    </section>
+    <section class='menu'>
+        <div>Rainmaker&#39;s Notebook</div>
+        
+            <div>『求雨巫师的神奇之处在于他总是躲着不见你，却总说刚下完的雨是拜他所赐。』——《天真的人类学家》</div>
+        
+        <ul>
+          
+            <a href="/" class="Btn">
+              <li>Home</li>
+            </a>  
+          
+            <a href="/archives" class="Btn">
+              <li>Archives</li>
+            </a>  
+          
+            <a href="/About" class="Btn">
+              <li>About</li>
+            </a>  
+          
+            <a href="/SiteXC" class="Btn">
+              <li>SiteXC</li>
+            </a>  
+          
+        </ul>
+    </section>
+    <section class="media">
+        
+    </section>
+</aside>
+
+    <div class="container">
+        <div data-pager-shell>
+            <ul class="Index">
+  
+    <header class='PageTitle'>
+        <h1>{ SIMD }</h1>
+    </header>
+  
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2018/05/24/Why_you_need_O3_and_ICC/">比起C++性能榨汁机，你可能更需要的是 -O3 和 ICC</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2018-05-24T15:45:14.000Z" itemprop="datePublished">
+    2018-05-24
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/SIMD/">SIMD</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/ICC/">ICC</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/C/">C</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>前两天看到一个文章系列：《C++性能榨汁机》，其中前面四篇（<a href="http://irootlee.com/juicer_branch_predictor4/" target="_blank" rel="external">第四篇</a>）在讲分支预测和如何避免分支预测带来的性能下降问题。文章大体的思路是对的，只是我觉得手写条件传送代码实在是有点奇技淫巧，在绝大部分的情况下是不应该提倡的。我觉得比起条件传送代码，用 SIMD 加上掩码才是更直观的操作。我还是用原文的代码来说明这个问题。<br></p>
+        
+          <div class="more-link">
+            <a href="/2018/05/24/Why_you_need_O3_and_ICC/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/09/29/AVX-SIMD/">使用 AVX 系列指令集进行向量化</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-09-29T19:45:10.000Z" itemprop="datePublished">
+    2017-09-29
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/SIMD/">SIMD</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/ICC/">ICC</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/C/">C</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>最近上课讲到了向量化的内容，我顺便整理了一下自己手头以前相关的资料。下面内容的主要关注点是在 x86 平台上让编译器进行自动向量化，但是第二部分所提到的一些原则在各个平台上都适用。</p>
+        
+          <div class="more-link">
+            <a href="/2017/09/29/AVX-SIMD/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+    <li>
+      <article class='ListView'>
+    <header class="title">
+      
+        <h1>
+          <a href="/2017/07/26/my-DGEMM-BLISLab/">CPU Case Study - Optimizing DGEMM</a>
+        </h1>
+      
+      <div class='ListMeta'>
+  <time datetime="2017-07-26T16:11:21.000Z" itemprop="datePublished">
+    2017-07-26
+  </time>
+  
+  | 
+  <ul>
+    
+  <li class="meta-text">
+  { <a href="/tags/SIMD/">SIMD</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/C/">C</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/GEMM/">GEMM</a> }
+  </li>
+
+  <li class="meta-text">
+  { <a href="/tags/Cache/">Cache</a> }
+  </li>
+
+
+  </ul>
+  
+  
+</div>
+
+    </header>
+    <div>
+      
+        <p>Yet Another GEMM Study.</p>
+<p>两年前我按 Ref. 1 的页面（以前还没有 GitHub Repo 和 Markdown pages 呢）做过一次 DGEMM Optimization，当时做的效果其实不是很好。去年叶老师给我看了一下 <a href="https://github.com/flame/blis" target="_blank" rel="external">BLIS</a> 这个项目，说里面分块和分级 Cache 的思路值得一看。前两天一搜，居然出了 Ref. 2 这个 Repo，有如此详细的指导和参考代码，不自己造一次轮子简直说不过去了。我最后撸出来的代码在 <a href="https://github.com/EnigmaHuang/my_DGEMM_BLISLab" target="_blank" rel="external">这里</a>。</p>
+        
+          <div class="more-link">
+            <a href="/2017/07/26/my-DGEMM-BLISLab/#more">Read On »</a>
+          </div>
+        
+      
+    </div>
+</article>
+
+    </li>
+  
+</ul>
+
+
+
+            <footer>
+    <div>© 2021 - Enigma Huang </div>
+    <div>
+        <span>
+            Powered by <a href="https://hexo.io">Hexo</a>
+        </span>
+        ,
+        <span>
+            Theme - <a href="https://github.com/nameoverflow/hexo-theme-icalm">Icalm</a>
+        </span>
+    </div>
+</footer>
+
+        </div>
+    </div>
+</div>
+<script src="/js/pager/dist/singlepager.js"></script>
+<script>
+var sp = new Pager('data-pager-shell')
+
+</script><!-- hexo-inject:begin --><!-- hexo-inject:end -->
+</body>
+</html>
