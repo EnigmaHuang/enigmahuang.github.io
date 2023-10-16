@@ -39,3 +39,12 @@
 @import "vendor/font-awesome/brands";
 @import "vendor/magnific-popup/magnific-popup";
 @import "print";
+
+// From https://github.com/Rainymood/rainymood.github.io/blob/master/assets/css/main.scss
+.highlight {
+    margin: 0;
+    padding: 0.2em;
+    font-family: $monospace;
+    font-size: $type-size-5b;
+    line-height: 1.5;
+}
