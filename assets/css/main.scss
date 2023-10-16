@@ -10,18 +10,6 @@
  *
 */
 
-@charset "utf-8";
-
-$type-size-1: 2.441em !default;
-$type-size-2: 1.953em !default;
-$type-size-3: 1.563em !default;
-$type-size-4: 1.25em !default;
-$type-size-5: 1.1em !default;
-$type-size-5b: 0.9em !default;
-$type-size-6: 0.8em !default;
-$type-size-7: 0.8em !default;
-$type-size-8: 0.625em !default;
-
 @import "vendor/breakpoint/breakpoint"; // media query mixins
 @import "variables";
 @import "mixins";
@@ -57,6 +45,6 @@ $type-size-8: 0.625em !default;
     margin: 0;
     padding: 0.2em;
     font-family: $monospace;
-    font-size: $type-size-5b;
+    font-size: 0.9em;
     line-height: 1.5;
 }
