@@ -12,13 +12,19 @@ redirect_from:
 
 ![删库跑路](https://enigmahuang.github.io/images/shankupaolu.png)
 
-之前的 blog 用的是 hexo, 源文件夹打包压缩以后移盘的过程中发生了损坏，无法重建，干脆砍掉重练。注意到 Academic Pages 这个模板 支持 Markdown LaTeX inline, 写完新的文章可以直接 git commit & git push 更新，且文章源文件一并会被保存到 git repo (hexo 的死于此处)，所以直接用这个模板进一步偷懒。希望以后不需要再次删库跑路。
+之前的 blog 用的是 hexo, 源文件夹打包压缩以后移盘的过程中发生了损坏，无法重建，干脆砍掉重练。注意到 Academic Pages 这个模板 支持 Markdown LaTeX inline, 写完新的文章可以直接 git commit & git push 更新，且文章源文件一并会被保存到 git repo (hexo 死于此处)，所以直接用这个模板进一步偷懒。希望以后不需要再次删库跑路。
+
+[部分历史博文链接](https://enigmahuang.me/posts/2023/10/old-blog-archive/)
+
+如欲发表评论，请到 [站点 GitHub Repo](https://github.com/EnigmaHuang/enigmahuang.github.io) 开新的 issue.
+
+如无单独说明，本站所有内容均使用 CC-BY 4.0 协议授权分发。
 
 ### Update: 2022-05-27
 
 本站点为微信认证之色情站点，立足美国，服务全球！
 
-欲进一步了解本站点所提供之色情服务，请点击以下免费链接：
+欲进一步了解本站所提供之色情服务，请点击以下免费链接：
 
 * [金发碧眼美女の热舞](https://www.youtube.com/watch?v=dQw4w9WgXcQ)
 

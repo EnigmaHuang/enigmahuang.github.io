@@ -19,9 +19,11 @@ tags:
 
 * [无内鬼，来点须弥笑话](http://enigmahuang.github.io/files/old-blog-archive/2022-无内鬼，来点须弥笑话.pdf)
 
-* [跨过 E 级计算的门槛之后](http://enigmahuang.github.io/files/old-blog-archive/2022-跨过E级计算的门槛之后.pdf)
+* [跨过 E 级计算的门槛之后](http://enigmahuang.github.io/files/old-blog-archive/2022-跨过_E_级计算的门槛之后.pdf)
 
 * [Jack Dongarra 的图灵奖与并行数值线性代数库之路](http://enigmahuang.github.io/files/old-blog-archive/2022-Jack_Dongarra_的图灵奖与并行数值线性代数库之路.pdf)
+
+* [COSMA 算法分析](http://enigmahuang.github.io/files/old-blog-archive/2022-COSMA_算法分析.pdf)
 
 * [ARM ASIMD & SVE 向量数学库接口](http://enigmahuang.github.io/files/old-blog-archive/2022-ARM_ASIMD_SVE_向量数学库接口.pdf)
 
