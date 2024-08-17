@@ -43,6 +43,8 @@ tags:
 
 ### 2018
 
+* [那些年数值计算教会我的事](http://enigmahuang.github.io/files/old-blog-archive/2018-那些年数值计算教会我的事.pdf)
+
 * [2D Poisson 方程与 Finite Element Method](http://enigmahuang.github.io/files/old-blog-archive/2018-2D_Poisson_方程与_Finite_Element_Method.pdf)
 
 * [代数多重网格（Algebraic Multigrid）简介](http://enigmahuang.github.io/files/old-blog-archive/2018-代数多重网格（Algebraic_Multigrid）简介.pdf)
