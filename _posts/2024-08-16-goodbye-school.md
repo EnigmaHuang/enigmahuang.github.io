@@ -3,6 +3,7 @@ title: '这个学就上到这里了'
 date: 2024-08-16
 permalink: /posts/2024/08/goodbye-school/
 tags: 
+  - Parallel Computing
 ---
 
 近日收到了博士学位证书，我的学生生涯如无意外的话就此结束了。借此机会，谈一点近来的思考。
