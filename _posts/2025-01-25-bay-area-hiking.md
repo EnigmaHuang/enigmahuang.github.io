@@ -13,6 +13,7 @@ tags:
 ## Rancho San Antonio County Park & Open Space Preserve
 
 停车和步行起始点：S Meadow Trail, Cupertino, CA 95014 (PG&E Trailhead)
+
 路径高点/折返点：High Meadow Vista Point
 
 到湾区以后爬的第一个小山头，学长带我去的。这座山的步行道估计是南湾周末最多人来的几个步行道之一，就像白云山之于广州人一样。这条步行道路好走，距离可长可短，有好几段路视野宽阔。夏天可能有几段路有点晒，不过湾区嘛晒一下问题不大。最大的问题是周末早上九点半以后可能不好找停车位。
@@ -32,6 +33,7 @@ tags:
 ## Mission Peak
 
 停车和步行起始点：680 Stanford Ave, Fremont, CA 94539 (Mission Peak Trail Head)
+
 路径高点/折返点：Mission Peak Pole
 
 『湾区三大俗』有好几个版本，无论哪个版本都少不了 hiking, 而 hiking 的典型代表就是 Mission Peak. 俗不俗啊，太俗了。景色好不好啊，确实好。几乎整条山路都有极其良好的视野，随时停下都能看景。接近山顶那一段比较陡峭，走起来要小心一点。Mission Peak 是我来湾区爬的第二座山，一个人爬山走得比较快，七十分钟登顶，六十分钟下来。后来又和其他朋友一起爬了一次，接近两个小时才走上去，一个半小时下来。
@@ -55,6 +57,7 @@ tags:
 ## Sierra Vista Open Space Preserve
 
 停车和步行起始点：Rustic Lands Parking / Alum Rock Park Parking
+
 路径高点/折返点：Boccardo Loop Trail 
 
 这座山不算很高，和 Mission Peak 相近。个人觉得爬起来比 Mission Peak 容易一点，然而这座山的视野比 Mission Peak 差一些，多少让我觉得有点一时瑜亮。但是我去的那一次着实被一场可遇不可求的景观惊艳到了。这条步行道在山谷中，容易起云雾。那天开始爬山的时候是阴天，在山脚下看山顶还有云雾（划重点，这个这个伏笔待会要回收）。爬到三分之一看到山顶亮了，云雾开始消散。爬到山顶，看到了半山腰高度一片绵延过去覆盖南湾的云海！我感觉这是非常可遇不可求的景色。这一次的观景体验可以位列我在湾区爬山观景体验的第一名。
@@ -72,6 +75,7 @@ tags:
 ## San Bruno Mountain State & County Park
 
 停车和步行起始点：谷歌地图搜公园同名地点
+
 路径高点/折返点：Kits-FM San Francisco
 
 SFO 机场北面的小山。不算高，有步行道和汽车道可以上到山顶。山顶视野极佳，有超过 270 度的视野。西面是 Daly City 和浩瀚无边的太平洋。
@@ -99,6 +103,7 @@ SFO 机场北面的小山。不算高，有步行道和汽车道可以上到山�
 ## Lands End - Golden Gate National Recreation Area
 
 停车和步行起始点：靠近 Seal Rocks 的停车场
+
 折返点：China Beach
 
 这个严格意义上不算山，不过考虑到是在海边而且高度落差达到了五十米，勉强将其划入爬山的行列。虽然名字是天涯海角，然而我觉得一点都不恰当，无论从哪个方向上都算不上 lands end. 这地方往南走一点是 Ocean Beach, 可能夏天适合玩水。走步行道则主要是看看金门海峡入口和金门大桥。
@@ -116,6 +121,7 @@ SFO 机场北面的小山。不算高，有步行道和汽车道可以上到山�
 ## Fremont Older Open Space Preserve
 
 停车和步行起始点：Stevens Creek Chestnut Parking Lot
+
 折返点：Maisie's Peak
 
 就在 Rancho San Antonio County Park 东南边不远处。如果 PG&E Trailhead 人太多了没有停车位可以来爬这座山。山下有个水库，还挺好看的。
@@ -133,6 +139,7 @@ SFO 机场北面的小山。不算高，有步行道和汽车道可以上到山�
 ## Mt El Sombroso
 
 停车和步行起始点：Alma Bridge Rd & Limekiln Trail
+
 路径高点/折返点：Mt El Sombroso
 
 这座山是湾区附近最高的几座山之一。这条路线也很长，来回十八公里。我一个人去，走了四个小时。此路线视线极差，几乎全程都被南北两面的山遮蔽，只有靠近山顶的一小段可以眺望南湾。部分路段比较陡，也比较晒。纯纯的体育锻炼路线。
