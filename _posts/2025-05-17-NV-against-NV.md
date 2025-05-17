@@ -42,7 +42,7 @@ tags:
 
 CUTLASS 有 Python DSL 是好事。毕竟如果延续现在这个学习难度和开发复杂度，加上 Blackwell 开始支持的 MX 数据类型和各种 sub-type 数据类型所需的操作，本就紧张的 CUTLASS 产能很可能会开始拖后腿。但是 CUTLASS Python DSL 似乎有些迟了，因为更激进的技术路线已经出现了：外有 [tile-lang](https://github.com/tile-ai/tilelang), 内有 GTC 25 上面公布的 [cuTile](https://www.linkedin.com/posts/brycelelbach_we-just-announced-cutile-a-tile-programming-activity-7308545706242306048-Lp_j/). 随着 cuTile 一起到来的还有 Tile IR, 这个东西看着可就有意思了：
 
-![Tile IR](http://enigmahuang.github.io/files/NV-against-NV/TileIR.png)
+![Tile IR](http://enigmahuang.github.io/files/NV-against-NV/TileIR.jpg)
 
 在这张示意图里面，cuTile -> Tile IR 被称为 Tile path, 完全和 SIMT path 不同，也不走 PTX. cuTile 这种 "array-based paradigm" 里面为传统 CUDA 编程范式留下了多少容身之地，我们可以暂且打个问号。如果以后 cuTile 发展顺利，能在性能上达到一流水平，那么绝大部分需要给 NVIDIA GPU 编程的程序员就只需要学习 cuTile, 不需要学习传统的 CUDA 编程就可以满足工作需求了。换言之，旧时代的 CUDA 生态护城河，可能就会变成一道马奇诺防线了。
 
