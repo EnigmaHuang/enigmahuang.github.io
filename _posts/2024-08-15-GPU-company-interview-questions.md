@@ -1,7 +1,7 @@
 ---
 title: '某显卡公司的面试题目'
 date: 2024-08-15
-permalink: /posts/2024/08/NV-interview-questions/
+permalink: /posts/2024/08/GPU-company-interview-questions/
 tags: 
   - Parallel Computing
   - GPU
