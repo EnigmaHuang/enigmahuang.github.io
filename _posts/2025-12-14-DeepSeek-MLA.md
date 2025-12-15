@@ -8,9 +8,9 @@ tags:
 
 近日因工作需要去学习了一下大名鼎鼎的 DeepSeek Multi-head Latent Attention. MLA 的计算流程比标准的 GQA 要复杂不少，主要是处理低秩压缩和 RoPE. 搜了一些网上的资料，没有看到非常满意的计算流程图，因此自己动手画了两个。下面两张图都是针对推理的，不考虑反向传播计算梯度。第一张图是不使用矩阵吸收时的计算流程（常用于 prefill），第二张图是使用矩阵吸收时的计算流程（常用于 decode）。图中各个张量的大小都做了标注，维度名字大部分遵循 [DeepSeek V3 官方参数名](https://huggingface.co/deepseek-ai/DeepSeek-V3/blob/main/config.json). 部分张量的 `head_dim` 和 `seq_len` 的位置可能会交换，不影响理解；矩阵乘法的内积维度未显式标出。
 
-![MLA without matrix absorb](http://enigmahuang.github.io/files/MLA/MLA-no-absorb.jpg)
+![MLA without matrix absorb](http://enigmahuang.github.io/files/MLA/MLA-no-absorb.png)
 
-![MLA with matrix absorb](http://enigmahuang.github.io/files/MLA/MLA-with-absorb.jpg)
+![MLA with matrix absorb](http://enigmahuang.github.io/files/MLA/MLA-with-absorb.png)
 
 DSv3 参数：
 
