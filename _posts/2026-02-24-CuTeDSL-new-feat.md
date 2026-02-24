@@ -15,13 +15,13 @@ tags:
 
 大部分 CUDA kernel 或者说几乎所有需要用 Tensor Core 的 kernel, 主要做三件事：1. 划分全局数据，把自己需要使用的数据从 gmem 读取到 smem 或者 reg 里 (prologue)；2. 用 smem / reg 里面的数据进行计算 (compute/mainloop)；3. 把计算得到的结果写回全局 gmem (epilogue). 选用 Blackwell 代码而非 Hopper 代码是因为我觉得 Blackwell 拆分 mainloop 和 epilogue 比 Hopper 不拆分的更合理和更好理解。大部分情况下，一个线程组 (CTA) 从 gmem 读写的数据都可以视作一个矩阵的子块。 Triton, cuTile 等 tile-based / array-based 编程语言基本上也是按这样来划分函数功能组别的。那么在 CuTeDSL 里面呢？以上面的代码为例，和输入矩阵 $A$ 直接相关的局部变量，分别有：`mA_mkl`, `gA`, `sA`, `tCgA`, `tCrA`, `tAsA`. 而和输出矩阵 $C$ 直接相关的局部变量，分别有：`mC_mnl`, `gC`, `tCtAcc`, `tCtAcc_epi`, `gC_epi`, `tDtC`, `tDgC`, `tCrAcc`, `tCrC`. 啊，为什么 `tCgA` 和 $A$ 相关但是不是和 $C$ 相关？`tCgA` 和 `tCrA` 的区别是什么？为了方便理解，我画了一张变量依赖关系图：
 
-![SM100-GEMM-dep-1](http://enigmahuang.github.io/files/CuTeDLS-new-feat/SM100-GEMM-dep-1.png)
+![SM100-GEMM-dep-1](http://enigmahuang.github.io/files/CuTeDSL-new-feat/SM100-GEMM-dep-1.png)
 
 实际上，CUTLASS 里面有大量形如的 `tXlY` 的变量命名，其中 `X` 和 `Y` 和划分对象有关，`l` 和存储位置有关，但是 CUTLASS 的文档里从来没有解释过应该如何解读这样的变量名。让我们暂时忍一下种类繁多的中间变量，进一步了解一下一些核心函数。比如最核心的变量之一，`tiled_mma = cute.make_tiled_mma(op)`. 查看 [CUTLASS 文档](https://docs.nvidia.com/cutlass/latest/media/docs/pythonDSL/cute_dsl_api/cute.html) 可知这个函数返回了一个 `TiledMma` 类，这个类派生自 `MmaAtom` 类, 包含 `get_slice`, `make_fragment_{A,B,C}` 等常见且核心的操作。然而官方文档里，这两个类的成员和方法函数没有任何说明：没有说明输入参数有什么要求，没有说明成员的功能和期待的输出是什么、满足什么条件。
 
-![CUTLASS-doc-1](http://enigmahuang.github.io/files/CuTeDLS-new-feat/CUTLASS-doc-1.png)
+![CUTLASS-doc-1](http://enigmahuang.github.io/files/CuTeDSL-new-feat/CUTLASS-doc-1.png)
 
-![CUTLASS-doc-2](http://enigmahuang.github.io/files/CuTeDLS-new-feat/CUTLASS-doc-2.png)
+![CUTLASS-doc-2](http://enigmahuang.github.io/files/CuTeDSL-new-feat/CUTLASS-doc-2.png)
 
 且慢， CuTeDSL 提供了一些调试用的打印功能，可以打印出一些变量信息帮助理解。比如下面这一段代码（148-155行）：
 
@@ -44,7 +44,7 @@ tCtAcc = tiled_mma.make_fragment_C(acc_shape)
 
 CUTLASS v4.4 带来了一些 CuTeDSL 的实验特性：数据划分逻辑简化、自动生成 TMA 描述符、无 fragment 编程模式、pipeline 接口简化等。这个 [新样例代码](https://github.com/NVIDIA/cutlass/blob/3476ddb7bd6ca4161a0169103ceaa20ce0eb891f/examples/python/CuTeDSL/experimental/blackwell/dense_gemm.py) 展现了大部分的新特性。这个新的样例代码写了大量的注释来解释这些操作，很值得一读，个人觉得比此前所有的样例代码都更有价值。在仔细阅读这个样例代码之前，不妨先看看下面这张变量关系依赖图：
 
-![SM100-GEMM-dep-2](http://enigmahuang.github.io/files/CuTeDLS-new-feat/SM100-GEMM-dep-2.png)
+![SM100-GEMM-dep-2](http://enigmahuang.github.io/files/CuTeDSL-new-feat/SM100-GEMM-dep-2.png)
 
 和上一张变量关系依赖图相比，可以看到新代码大幅减少了涉及的变量，而且 prologue 和 mainloop 部分的逻辑也大幅度简化了，以及数据流动的方向也用带箭头的虚线标记了出来。
 
